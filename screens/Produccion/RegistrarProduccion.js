@@ -1,0 +1,731 @@
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';
+import { Button } from 'react-native-elements';
+import { useFormik } from 'formik';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import 'expo-firestore-offline-persistence';
+import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import firebase from '../../database/firebase';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { format } from 'date-fns';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import ModalSelector from 'react-native-modal-selector';
+import { useRoute } from '@react-navigation/core';
+
+
+export default ({ navigation }) => {
+  const [fecha, setFecha] = useState(new Date());
+
+  const pickerStyle = {
+    inputIOS: {
+      color: 'white',
+      paddingTop: 13,
+      paddingHorizontal: 10,
+      paddingBottom: 12,
+    },
+    inputAndroid: {
+      color: 'white',
+    },
+    placeholderColor: 'white',
+    underline: { borderTopWidth: 0 },
+    icon: {
+      position: 'absolute',
+      backgroundColor: 'transparent',
+      borderTopWidth: 5,
+      borderTopColor: '#00000099',
+      borderRightWidth: 5,
+      borderRightColor: 'transparent',
+      borderLeftWidth: 5,
+      borderLeftColor: 'transparent',
+      width: 0,
+      height: 0,
+      top: 20,
+      right: 15,
+    },
+  };
+
+  const route = useRoute();
+  const {tambo} = route.params;
+
+  const [ent, setEnt] = useState({
+    man: 0,
+    tar: 0,
+    tot: 0
+  });
+  const [show, setShow] = useState(false);
+
+  const [alerta, setAlerta] = useState({
+    show: false,
+    titulo: '',
+    mensaje: '',
+    color: '#DD6B55',
+    vuelve: false
+  });
+
+  const options = [
+    { key: 1, value: 'Fabrica 1', label: 'FABRICA 1' },
+    { key: 2, value: 'Fabrica 2', label: 'FABRICA 2' },
+    { key: 3, value: 'Fabrica 3', label: 'FABRICA 3' }
+  ];
+
+  const validate = values => {
+    const errors = {}
+
+    if (isNaN(values.entM) ||values.entM<0 ) {
+      errors.entregados = "REVISE LOS DATOS INGRESADOS"
+    }
+    if (isNaN(values.entT) ||values.entT<0) {
+      errors.entregados = "REVISE LOS DATOS INGRESADOS"
+    }
+    
+    
+    if (isNaN(values.desM)||values.desM<0) {
+      errors.descarte = "REVISE LOS DATOS INGRESADOS"
+    }
+
+    if (isNaN(values.desT)||values.desT<0) {
+      errors.descarte = "REVISE LOS DATOS INGRESADOS"
+    }
+
+    if (isNaN(values.guaM)||values.guaM<0) {
+      errors.guachera = "REVISE LOS DATOS INGRESADOS"
+    }
+    if (isNaN(values.guaT)||values.guaT<0) {
+      errors.guachera = "REVISE LOS DATOS INGRESADOS"
+    }
+
+
+    if (values.produccion == 0 || !values.produccion) {
+      errors.produccion = "INGRESE PRODUCCION"
+    } else {
+
+      if (parseFloat(values.produccion) < (parseFloat(values.descarte) + parseFloat(values.guachera))) {
+        errors.entregados = "REVISE LOS DATOS INGRESADOS"
+      }
+    }
+
+    return errors
+  }
+
+  //La funcion validate debe estar declarada antes del form sino no funciona
+  const formProduccion = useFormik({
+    initialValues: {
+      fecha: new Date(),
+      prodM: 0,
+      prodT: 0,
+      produccion: 0,
+      descarte: 0,
+      desM: 0,
+      desT: 0,
+      guachera: 0,
+      guaM: 0,
+      guaT: 0,
+      entM: 0,
+      entT: 0,
+      ent: 0,
+      fabrica: 'Fabrica 1'
+
+    },
+    validate,
+    onSubmit: datos => guardar(datos)
+  });
+
+
+  function guardar(datos) {
+
+
+    //Formatea fecha 
+    const tipof = typeof datos.fecha;
+    let fstring;
+    let fdate;
+    if (tipof == 'string') {
+      let parts = datos.fecha.split('/');
+      fstring = (parts[2]) + '-' + (parts[1]) + '-' + parts[0];
+      let fs = fstring + 'T04:00:00';
+      fdate = new Date(fs);
+    } else {
+      fstring = format(datos.fecha, 'yyyy-MM-dd');
+      fdate = datos.fecha;
+
+    }
+
+    try {
+      firebase.db.collection('tambo').doc(tambo.id).collection('produccion').add({
+        fecha: fecha,
+        prodM: datos.prodM,
+        prodT: datos.prodT,
+        produccion: datos.produccion,
+        guaM: datos.guaM,
+        guaT: datos.guaT,
+        guachera: datos.guachera,
+        desM: datos.desM,
+        desT: datos.desT,
+        descarte: datos.descarte,
+        fabrica: datos.fabrica,
+        entregados: datos.ent
+      });
+      setAlerta({
+        show: true,
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'PRODUCCIÓN REGISTRADA CON ÉXITO',
+        color: '#3AD577',
+        vuelve: true
+      });
+
+    } catch (error) {
+      setAlerta({
+        show: true,
+        titulo: '¡ ERROR !',
+        mensaje: 'AL REGISTRAR LA PRODUCCIÓN',
+        color: '#DD6B55'
+      });
+    }
+
+  }
+  function producidos(campo, valor) {
+    //Controlo que el valor sea numerico
+    //entregados
+    let entM;
+    if (campo == 'entM') {
+      entM = valor;
+    } else {
+      entM = formProduccion.values.entM;
+      if (isNaN(parseFloat(entM))) {
+        entM = "0";
+      }
+    }
+
+    let entT;
+    if (campo == 'entT') {
+      entT = valor;
+    } else {
+      entT = formProduccion.values.entT;
+      if (isNaN(parseFloat(entT))) {
+        entT = "0";
+      }
+    }
+    //Descarte
+    let desM;
+    if (campo == 'desM') {
+      desM = valor;
+    } else {
+      desM = formProduccion.values.desM;
+      if (isNaN(parseFloat(desM))) {
+        desM = "0";
+      }
+    }
+
+    let desT;
+    if (campo == 'desT') {
+      desT = valor;
+    } else {
+      desT = formProduccion.values.desT;
+      if (isNaN(parseFloat(desT))) {
+        desT = "0";
+      }
+    }
+
+
+    //Guachera
+    let guaM;
+    if (campo == 'guaM') {
+      guaM = valor;
+    } else {
+      guaM = formProduccion.values.guaM;
+      if (isNaN(parseFloat(guaM))) {
+        guaM = "0";
+      }
+    }
+
+    let guaT;
+    if (campo == 'guaT') {
+      guaT = valor;
+    } else {
+      guaT = formProduccion.values.guaT;
+      if (isNaN(parseFloat(guaT))) {
+        guaT = "0";
+      }
+    }
+    //calculo producidos
+    const man = parseFloat(entM) + parseFloat(desM) + parseFloat(guaM);
+    const tar = parseFloat(entT) + parseFloat(desT) + parseFloat(guaT);
+    const tot = man + tar;
+    formProduccion.setFieldValue('prodM', man.toString());
+    formProduccion.setFieldValue('prodT', tar.toString());
+    formProduccion.setFieldValue('produccion', tot.toString());
+  }
+
+  function changeEntM(val) {
+    //Controlo que el valor sea numerico
+    let entM = val;
+    if (isNaN(parseFloat(entM))) {
+      entM = "0";
+    }
+    formProduccion.setFieldValue('entM', entM);
+
+    let entT = formProduccion.values.entT;
+    if (isNaN(parseFloat(entT))) {
+      entT = "0";
+    }
+
+    const tot = parseFloat(entT) + parseFloat(entM);
+    formProduccion.setFieldValue('ent', tot.toString());
+    producidos('entM', entM);
+
+  }
+
+  function changeEntT(val) {
+    //Controlo que el valor sea numerico
+    let entT = val;
+    if (isNaN(parseFloat(entT))) {
+      entT = "0";
+    }
+    formProduccion.setFieldValue('entT', entT);
+
+    let entM = formProduccion.values.entM;
+    if (isNaN(parseFloat(entM))) {
+      entM = "0";
+    }
+
+    const tot = parseFloat(entT) + parseFloat(entM);
+    formProduccion.setFieldValue('ent', tot.toString());
+    producidos('entT', entT);
+
+  }
+
+  function changeDesM(val) {
+    //Controlo que el valor sea numerico
+    let desM = val;
+    if (isNaN(parseFloat(desM))) {
+      desM = "0";
+    }
+    formProduccion.setFieldValue('desM', desM);
+
+    let desT = formProduccion.values.desT;
+    if (isNaN(parseFloat(desT))) {
+      desT = "0";
+    }
+
+    const tot = parseFloat(desT) + parseFloat(desM);
+    formProduccion.setFieldValue('descarte', tot.toString());
+    producidos('desM', desM);
+
+  }
+
+  function changeDesT(val) {
+    //Controlo que el valor sea numerico
+    let desT = val;
+    if (isNaN(parseFloat(desT))) {
+      desT = "0";
+    }
+    formProduccion.setFieldValue('desT', desT);
+
+    let desM = formProduccion.values.desM;
+    if (isNaN(parseFloat(desM))) {
+      desM = "0";
+    }
+
+    const tot = parseFloat(desT) + parseFloat(desM);
+    formProduccion.setFieldValue('descarte', tot.toString());
+    producidos('desT', desT);
+
+  }
+
+  function changeGuaM(val) {
+    //Controlo que el valor sea numerico
+    let guaM = val;
+    if (isNaN(parseFloat(guaM))) {
+      guaM = "0";
+    }
+    formProduccion.setFieldValue('guaM', guaM);
+
+    let guaT = formProduccion.values.guaT;
+    if (isNaN(parseFloat(guaT))) {
+      guaT = "0";
+    }
+
+    const tot = parseFloat(guaT) + parseFloat(guaM);
+    formProduccion.setFieldValue('guachera', tot.toString());
+    producidos('guaM', guaM);
+
+  }
+
+  function changeGuaT(val) {
+    //Controlo que el valor sea numerico
+    let guaT = val;
+    if (isNaN(parseFloat(guaT))) {
+      guaT = "0";
+    }
+    formProduccion.setFieldValue('guaT', guaT);
+
+    let guaM = formProduccion.values.guaM;
+    if (isNaN(parseFloat(guaM))) {
+      guaM = "0";
+    }
+
+    const tot = parseFloat(guaT) + parseFloat(guaM);
+    formProduccion.setFieldValue('guachera', tot.toString());
+    producidos('guaT', guaT);
+
+  }
+  function cambiarFecha(event, date) {
+    const currentDate = date;
+    setShow(false); 
+    setFecha(currentDate);
+    formProduccion.handleChange('fecha')
+  };
+const handlever = ()=> {
+  setShow(true);
+}
+let texto = format(fecha, 'yyyy-MM-dd');
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.form}>
+        <ScrollView>
+          <View style={styles.columnas}>
+
+            <View style={styles.col}>
+              <Text style={styles.texto2}>FECHA:</Text>
+              <TouchableHighlight style={styles.calendario} onPress={handlever}>
+          <View 
+          
+          ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
+              {show && (
+              <DateTimePicker
+                placeholder="Fecha"
+                dateFormat="DD/MM/YYYY"
+                maximumDate={new Date()}
+                showIcon={true}
+                androidMode="spinner"
+                style={styles.fecha}
+                value={fecha}
+                onChange={cambiarFecha}
+                customStyles={{
+                  dateInput: {
+                    borderColor: 'white',
+                    borderRadius: 10,
+                    backgroundColor: 'white',
+                    borderColor: 'grey',
+                    borderWidth: 1,
+                  }
+                }}
+              /> )}
+            </View>
+          </View>
+
+          <Text style={styles.texto2}>LITROS ENTREGADOS:</Text>
+          <View style={styles.columnas}>
+
+            <View style={styles.col}>
+              <Text style={styles.texto}>MAÑANA</Text>
+
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeEntM(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.entM.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TARDE</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeEntT(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.entT.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TOTAL</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.ent}
+              />
+            </View>
+
+          </View>
+          {formProduccion.errors.entregados ? <Text style={styles.error}>{formProduccion.errors.entregados}</Text> : null}
+          <Text style={styles.texto2}>FABRICA:</Text>
+          <View style={styles.columnas}>
+
+            <View style={styles.col}>
+
+              <ModalSelector
+               data={options}
+               onValueChange={formBaja.handleChange('fabrica')}
+               value={formBaja.values.motivo}
+   
+               placeholder={{}}
+               initValue="SELECCIONA UN FABRICA"
+               style={{backgroundColor: '#FDFFFF', }}
+                
+              />
+
+            </View>
+          </View>
+     
+          <Text></Text>
+          <Text style={styles.texto2}>LITROS DESCARTE:</Text>
+          <View style={styles.columnas}>
+
+            <View style={styles.col}>
+              <Text style={styles.texto}>MAÑANA</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeDesM(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.desM.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TARDE</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeDesT(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.desT.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TOTAL</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.descarte}
+              />
+            </View>
+            
+          </View>
+          {formProduccion.errors.descarte ? <Text style={styles.error}>{formProduccion.errors.descarte}</Text> : null}
+          <Text></Text>
+          <Text style={styles.texto2}>LITROS GUACHERA:</Text>
+          <View style={styles.columnas}>
+            <View style={styles.col}>
+              <Text style={styles.texto}>MAÑANA</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeGuaM(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.guaM.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TARDE</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={val => changeGuaT(val)}
+                keyboardType="numeric"
+                value={formProduccion.values.guaT.toString()} // CONVIERTE LA CADENA DE STRING 
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TOTAL</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.guachera}
+              />
+            </View>
+            
+          </View>
+          {formProduccion.errors.guachera ? <Text style={styles.error}>{formProduccion.errors.guachera}</Text> : null}
+          <Text></Text>
+          <Text style={styles.texto2}>LITROS PRODUCIDOS:</Text>
+          <View style={styles.columnas}>
+
+            <View style={styles.col}>
+              <Text style={styles.texto}>MAÑANA</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.prodM}
+              />
+
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TARDE</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.prodT}
+              />
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.texto}>TOTAL</Text>
+              <TextInput
+                style={styles.entradaRead}
+                editable={false}
+                value={formProduccion.values.produccion}
+              />
+            </View>
+
+          </View>
+          {formProduccion.errors.produccion ? <Text style={styles.error}>{formProduccion.errors.produccion}</Text> : null}
+          <Text></Text>
+          <Button
+            title="  ACEPTAR"
+            style={styles.boton}
+            icon={
+              <Icon
+                name="check-square"
+                size={35}
+                color="white"
+              />
+            }
+            onPress={formProduccion.handleSubmit}
+          />
+
+        </ScrollView>
+
+      </View>
+      <AwesomeAlert
+        show={alerta.show}
+        showProgress={false}
+        title={alerta.titulo}
+        message={alerta.mensaje}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="No, cancelar"
+        confirmText="ACEPTAR"
+        confirmButtonColor={alerta.color}
+        onCancelPressed={() => {
+          setAlerta({ show: false })
+        }}
+        onConfirmPressed={() => {
+          setAlerta({ show: false })
+          if (alerta.vuelve == true) {
+            navigation.popToTop();
+          }
+        }}
+      />
+    </View >
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+
+  },
+  form: {
+    flex: 5,
+    backgroundColor: '#e1e8ee',
+    flexDirection: 'column',
+    paddingTop: 5,
+
+  },
+  fecha: {
+    width: wp('100%'),
+    padding: 5,
+    height: 50
+
+
+  },
+  columnas: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  col: {
+    flex: 1,
+  },
+
+  fecha: {
+    width: wp('100%'),
+    padding: 5,
+
+  },
+  lista: {
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'grey',
+    paddingTop: 10,
+    height: 50
+
+  },
+  texto: {
+    marginLeft: 5,
+  },
+  texto2: {
+    marginLeft: 5,
+    marginTop: 10,
+    fontWeight: 'bold',
+
+  },
+  textocalendar:{
+    textAlign: "center"
+  },
+  calendario: {
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    padding: 5,
+    width: 200,
+   marginVertical: 10,
+    marginLeft: 10
+  },
+  error: {
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 13,
+    borderRadius: 5,
+    color: 'red',
+    backgroundColor: 'pink',
+    textAlign: 'center',
+    borderWidth: 1,
+    borderColor: 'red'
+
+  },
+
+  entrada: {
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    height: 50,
+    borderWidth: 1,
+    borderColor: 'grey',
+    paddingLeft: 5
+
+  },
+  entradaRead: {
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 10,
+    backgroundColor: '#DCDFE2',
+    height: 50,
+    borderWidth: 1,
+    borderColor: 'grey',
+    paddingLeft: 5
+
+  },
+  boton: {
+    margin: 5
+  },
+
+  pickerStyle: {
+    inputIOS: {
+      marginLeft: 5,
+      marginRight: 5,
+      backgroundColor: 'white',
+      height: 50
+    },
+    inputAndroid: {
+      marginLeft: 5,
+      marginRight: 5,
+      backgroundColor: 'white',
+      height: 50
+    },
+
+  }
+
+});
