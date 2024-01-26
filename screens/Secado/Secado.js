@@ -133,8 +133,8 @@ export default ({ navigation }) => {
           e = true;
           setAlerta({
             show: true,
-            titulo: 'Error!',
-            mensaje: 'No se puede secar el RP: ' + a.rp,
+            titulo: '¡ ERROR !',
+            mensaje: 'NO SE PUEDE SECAR EL RP: ' + a.rp,
             color: '#DD6B55'
           });
 
@@ -145,8 +145,8 @@ export default ({ navigation }) => {
     if (!e && haySecado) {
       setAlerta({
         show: true,
-        titulo: 'Atención!',
-        mensaje: 'Animales secados con éxito!',
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'ANIMALES SECADOS CON ÉXITO',
         color: '#3AD577',
         vuelve: true
       });

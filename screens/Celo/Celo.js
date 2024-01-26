@@ -119,8 +119,8 @@ export default ({ navigation }) => {
           e = true;
           setAlerta({
             show: true,
-            titulo: 'Error!',
-            mensaje: 'No se pudo registrar el celo',
+            titulo: '¡ ERROR !',
+            mensaje: 'NO SE PUDO REGISTRAR EL CELO',
             color: '#DD6B55'
           });
         }
@@ -129,8 +129,8 @@ export default ({ navigation }) => {
     if (!e && hayCelo) {
       setAlerta({
         show: true,
-        titulo: 'Atención!',
-        mensaje: 'Celos registrados con éxito!',
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'CELOS REGISTRADOS CON ÉXITO',
         color: '#3AD577',
         vuelve: true
       });
@@ -138,8 +138,8 @@ export default ({ navigation }) => {
     }else{
       setAlerta({
         show: true,
-        titulo: 'Atención!',
-        mensaje: 'No se registraron celos',
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'NO SE REGISTARON CELOS',
         color: '#3AD577',
         vuelve:true
       });

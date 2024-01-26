@@ -183,11 +183,11 @@ return (
      
           <ModalSelector
             data={enfermedad}
-            onValueChange={formTratamiento.handleChange('enfermedad')}
-            value={formTratamiento.values.enfermedad}
-
+            onValueChange={formBaja.handleChange('enfermedad')}
+            value={formBaja.values.motivo}
             placeholder={{}}
-            initValue="SELECCIONA UNA ENFERMEDAD"
+            cancelButtonAccessibilityLabel={'Cancelar'}
+            initValue="SELECCIONA UN MOTIVO"
             style={{backgroundColor: '#FDFFFF', }}
           />
           {formTratamiento.errors.enfermedad ? <Text style={styles.error}>{formTratamiento.errors.enfermedad}</Text> : null}
@@ -196,13 +196,13 @@ return (
           <Text style={styles.texto}>TRATAMIENTO:</Text>
       
           <ModalSelector
-           data={tratamientos}
-           onValueChange={formTratamiento.handleChange('tratamiento')}
-           value={formTratamiento.values.tratamiento}
-
-           placeholder={{}}
-           initValue="SELECCIONA UN TRATRAMIENTO"
-           style={{backgroundColor: '#FDFFFF', }}
+            data={tratamientos}
+            onValueChange={formBaja.handleChange('tratamiento')}
+            value={formBaja.values.motivo}
+            placeholder={{}}
+            cancelButtonAccessibilityLabel={'Cancelar'}
+            initValue="SELECCIONA UN MOTIVO"
+            style={{backgroundColor: '#FDFFFF', }}
           />
           {formTratamiento.errors.tratamiento ? <Text style={styles.error}>{formTratamiento.errors.tratamiento}</Text> : null}
         </View>
@@ -237,7 +237,7 @@ return (
       closeOnHardwareBackPress={false}
       showCancelButton={false}
       showConfirmButton={true}
-      cancelText="No, cancelar"
+      cancelText="No, cancel"
       confirmText="ACEPTAR"
       confirmButtonColor={alerta.color}
       onCancelPressed={() => {

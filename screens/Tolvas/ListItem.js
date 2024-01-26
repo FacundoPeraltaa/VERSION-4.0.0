@@ -38,7 +38,7 @@ export default function ListItem({ data, host,racionMotor }) {
       const t = await api.json();
       setAlerta({
         show: true,
-        titulo: 'Atención!',
+        titulo: '¡ ATENCIÓN !',
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
@@ -46,8 +46,8 @@ export default function ListItem({ data, host,racionMotor }) {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No se puede conectar al tambo',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });
     }
@@ -71,7 +71,7 @@ export default function ListItem({ data, host,racionMotor }) {
       setEstado('REVISADO');
       setAlerta({
         show: true,
-        titulo: 'Atención!',
+        titulo: '¡ ATENCIÓN !',
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
@@ -81,8 +81,8 @@ export default function ListItem({ data, host,racionMotor }) {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No se puede conectar al tambo',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });
 

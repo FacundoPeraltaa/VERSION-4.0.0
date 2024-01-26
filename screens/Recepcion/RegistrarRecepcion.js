@@ -237,11 +237,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
       
           <ModalSelector
             data={tipos}
-            onValueChange={formRecepcion.handleChange('tipo')}
-            value={formRecepcion.values.tipo}
-
+            onValueChange={formBaja.handleChange('tipo')}
+            value={formBaja.values.motivo}
             placeholder={{}}
-            initValue="SELECCIONA UN TIPO"
+            cancelButtonAccessibilityLabel={'Cancelar'}
+            initValue="SELECCIONA UN MOTIVO"
             style={{backgroundColor: '#FDFFFF', }}
           />
 

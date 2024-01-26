@@ -40,8 +40,8 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No se pueden obtener las recepciones',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO SE PUEDEN OBTENER LAS RECEPCIÓNES',
         color: '#DD6B55'
       });
     }
@@ -82,16 +82,16 @@ export default ({ navigation }) => {
       setRecepciones(recep);
       setAlerta({
         show: true,
-        titulo: 'Atención!',
-        mensaje: 'Recepción eliminada',
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'RECEPCIÓN ELIMINADA',
         color: '#3AD577'
       });
 
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No se puede eliminar la recepción',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO SE PUEDE ELIMINAR LA RECEPCIÓN',
         color: '#DD6B55'
       });
     }

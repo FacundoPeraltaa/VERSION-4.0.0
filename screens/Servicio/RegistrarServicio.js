@@ -41,7 +41,7 @@ export default ({ navigation }) => {
   };
 
 
-  const [tratamientoOptions, setTratamientoOptios] = useState([{ key: 1, value: '-', label: '' }]);
+  const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
   const [toros, setToros] = useState([{ key: 1, value: 'Robo', label: 'ROBO' }]);
   const tipo = [
     { key: 1, value: 'Convencional', label: 'CONVENCIONAL' },
@@ -252,23 +252,25 @@ let texto = format(fecha, 'yyyy-MM-dd');
             <Text style={styles.texto}>TRATAMIENTO:</Text>
     
             <ModalSelector
-              data={tratamientoOptions}
-              onValueChange={formServicio.handleChange('tratamiento')}
-              value={formServicio.values.tratamiento}
-              initValue="SELECCIONA UN TIPO DE TRATAMIENTO"
-              placeholder={{}} // Ajusta el marcador de posición si es necesario
-              style={{backgroundColor: '#FDFFFF', }}
+             data={tratamientoOptions}
+             onValueChange={formBaja.handleChange('tratamiento')}
+             value={formBaja.values.motivo}
+             placeholder={{}}
+             cancelButtonAccessibilityLabel={'Cancelar'}
+             initValue="SELECCIONA UN MOTIVO"
+             style={{backgroundColor: '#FDFFFF', }}
             />
           </View>
           <View>
             <Text style={styles.texto}>TORO:</Text>
           
             <ModalSelector
-          onValueChange={formServicio.handleChange('toro')}
-          value={formServicio.values.toro}
-          initValue="SELECCIONA UN TIPO TORO"
-          placeholder={{}} // Ajusta el marcador de posición si es necesario
+          data={toros}
+          onValueChange={formBaja.handleChange('toro')}
+          value={formBaja.values.motivo}
+          placeholder={{}}
           cancelButtonAccessibilityLabel={'Cancelar'}
+          initValue="SELECCIONA UN MOTIVO"
           style={{backgroundColor: '#FDFFFF', }}
         />
 
@@ -277,12 +279,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
             <Text style={styles.texto}>TIPO SEMEN:</Text>
       
             <ModalSelector
-           data={tipo}
-           onValueChange={handleChange('tipo')}
-           value={formServicio.values.tipo}
-           placeholder={{}}
-           initValue="SELECCIONA UN TIPO SEMEN"
-           style={{backgroundColor: '#FDFFFF', }}
+          data={tipo}
+          onValueChange={formBaja.handleChange('tipo')}
+          value={formBaja.values.motivo}
+          placeholder={{}}
+          cancelButtonAccessibilityLabel={'Cancelar'}
+          initValue="SELECCIONA UN MOTIVO"
+          style={{backgroundColor: '#FDFFFF', }}
            />
            
           </View>
@@ -317,7 +320,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {
@@ -405,7 +408,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#fdffff',
     height: 50,
     borderWidth: 1,
     borderColor: 'grey',
@@ -427,21 +430,5 @@ switchTexto: {
   paddingLeft: 5,
   fontSize: 13
 },
-  pickerStyle: {
-    inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
-    },
-    inputAndroid: {
-      
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
-    },
-
-  }
 
 });

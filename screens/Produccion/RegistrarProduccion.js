@@ -457,11 +457,10 @@ let texto = format(fecha, 'yyyy-MM-dd');
                data={options}
                onValueChange={formBaja.handleChange('fabrica')}
                value={formBaja.values.motivo}
-   
                placeholder={{}}
-               initValue="SELECCIONA UN FABRICA"
+               cancelButtonAccessibilityLabel={'Cancelar'}
+               initValue="SELECCIONA UN MOTIVO"
                style={{backgroundColor: '#FDFFFF', }}
-                
               />
 
             </View>
@@ -590,7 +589,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

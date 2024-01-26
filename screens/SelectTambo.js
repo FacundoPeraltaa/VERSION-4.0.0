@@ -34,8 +34,8 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
         } catch (error) {
           setAlerta({
             show: true,
-            titulo: 'Error!',
-            mensaje: 'No se pueden recuperar los tambos asociados al usuario',
+            titulo: '¡ ERROR !',
+            mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
             color: '#DD6B55'
           });
           setLoading(false);
@@ -45,8 +45,8 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No se pueden recuperar los tambos asociados al usuario',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
         color: '#DD6B55'
       });
       setLoading(false);
@@ -72,8 +72,8 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
     } else {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'No hay tambos asociados al usuario',
+        titulo: '¡ ERROR !',
+        mensaje: 'NO HAY TAMBOS ASOCIADOS AL USUARIO',
         color: '#DD6B55'
       });
       setShowTambos(false);

@@ -185,8 +185,8 @@ export default ({ navigation }) => {
     if (cria.length == 0) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
-        mensaje: 'Debe ingresar una cría',
+        titulo: '¡ ERROR !',
+        mensaje: 'DEBE INGRESAR UNA CRÍA',
         color: '#DD6B55'
       });
      
@@ -194,15 +194,15 @@ export default ({ navigation }) => {
       if (cria.length == 2 && datos.tipo != 'Mellizos') {
         setAlerta({
           show: true,
-          titulo: 'Error!',
-          mensaje: 'Debe ingresar sólo una cría',
+          titulo: '¡ ERROR !',
+          mensaje: 'DEBE INGRESAR SOLO UNA CRÍA',
           color: '#DD6B55'
         });
       } else if (cria.length != 2 && datos.tipo == 'Mellizos') {
         setAlerta({
           show: true,
-          titulo: 'Error!',
-          mensaje: 'Debe ingresar dos crías',
+          titulo: '¡ ERROR !',
+          mensaje: 'DEBE INGRESAR DOS CRÍAS',
           color: '#DD6B55'
         });
       } else {
@@ -309,8 +309,8 @@ export default ({ navigation }) => {
             hayError = true;
             setAlerta({
               show: true,
-              titulo: 'Error!',
-              mensaje: 'Al regsitrar la cría',
+              titulo: '¡ ERROR !',
+              mensaje: 'AL REGISTRAR LA CRÍA',
               color: '#DD6B55'
             });
           }
@@ -354,8 +354,8 @@ export default ({ navigation }) => {
             })
             setAlerta({
               show: true,
-              titulo: 'Atención!',
-              mensaje: 'Parto registrado con éxito',
+              titulo: '¡ ATENCIÓN !',
+              mensaje: 'PARTO REGISTRADO CON ÉXITO ',
               color: '#3AD577',
               vuelve: true
             });
@@ -363,8 +363,8 @@ export default ({ navigation }) => {
           } catch (error) {
             setAlerta({
               show: true,
-              titulo: 'Error!',
-              mensaje: 'No se puederegistrar el parto',
+              titulo: '¡ ERROR !',
+              mensaje: 'NO SE PUEDE REGISTRAR EL PARTO',
               color: '#DD6B55'
             });
 
@@ -407,7 +407,7 @@ export default ({ navigation }) => {
     if (errores) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
+        titulo: '¡ ERROR !',
         mensaje: descerror,
         color: '#DD6B55'
       });
@@ -474,24 +474,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
             <Text style={styles.texto}>TIPO:</Text>
 
             <ModalSelector
-             data={options}
-             onValueChange={formParto.handleChange('tipo')}
-             value={formParto.values.tipo}
-             placeholder={{}}
-             initValue="SELECCIONA UN TIPO"
-           style={{backgroundColor: '#FDFFFF', }}
+              data={options}
+              onValueChange={formBaja.handleChange('tipo')}
+              value={formBaja.values.motivo}
+              placeholder={{}}
+              cancelButtonAccessibilityLabel={'Cancelar'}
+              initValue="SELECCIONA UN MOTIVO"
+              style={{backgroundColor: '#FDFFFF', }}
             />
           </View>
           <View>
             <Text style={styles.texto}>TRATAMIENTO:</Text>
 
             <ModalSelector
-               data={tratamientoOptions}
-               onValueChange={formParto.handleChange('tratamiento')}
-               value={formParto.values.tratamiento}
-               placeholder={{}}
-               initValue="SELECCIONA UN TRATAMIENTO"
-             style={{backgroundColor: '#FDFFFF', }}
+              data={tratamientoOptions}
+              onValueChange={formBaja.handleChange('tratamiento')}
+              value={formBaja.values.motivo}
+              placeholder={{}}
+              cancelButtonAccessibilityLabel={'Cancelar'}
+              initValue="SELECCIONA UN MOTIVO"
+              style={{backgroundColor: '#FDFFFF', }}
             />
           </View>
           <View>
@@ -587,13 +589,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
                   <Text style={styles.texto}>SEXO:</Text>
 
                   <ModalSelector
-                     data={sexoOptions}
-                     onValueChange={formCria.handleChange('sexo')}
-                     value={formCria.values.sexo}
- 
-                     placeholder={{}}
-                     initValue="SELECCIONA UN TIPO DE SEXO"
-             style={{backgroundColor: '#FDFFFF', }}
+                    data={sexoOptions}
+                    onValueChange={formBaja.handleChange('sexo')}
+                    value={formBaja.values.motivo}
+                    placeholder={{}}
+                    cancelButtonAccessibilityLabel={'Cancelar'}
+                    initValue="SELECCIONA UN MOTIVO"
+                    style={{backgroundColor: '#FDFFFF', }}
                   />
                   <Text style={styles.texto}>RP:</Text>
                   <TextInput
@@ -612,13 +614,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
                   <Text style={styles.texto}>CALOSTRO:</Text>
 
                   <ModalSelector
-                     data={calostroOptions}
-                     onValueChange={formCria.handleChange('tratamiento')}
-                     value={formCria.values.tratamiento}
- 
-                     placeholder={{}}
-                     initValue="SELECCIONA UN TIPO DE CALOSTRO"
-                     style={{backgroundColor: '#FDFFFF',}}
+                    data={calostroOptions}
+                    onValueChange={formBaja.handleChange('tratamiento')}
+                    value={formBaja.values.motivo}
+                    placeholder={{}}
+                    cancelButtonAccessibilityLabel={'Cancelar'}
+                    initValue="SELECCIONA UN MOTIVO"
+                    style={{backgroundColor: '#FDFFFF', }}
                   />
                 </View>
                 <View>

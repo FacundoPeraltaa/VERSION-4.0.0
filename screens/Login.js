@@ -24,12 +24,12 @@ export default ({ navigation }) => {
 
     const errors = {}
     if (!values.usuario) {
-      errors.usuario = "Debe ingresar un usuario"
+      errors.usuario = "DEBE INGRESAR UN USUARIO"
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.usuario)) {
       errors.usuario = 'Formato incorrecto';
     }
     if (!values.clave) {
-      errors.clave = "Debe ingresar una contraseña"
+      errors.clave = "DEBE INGRESAR UNA CONTRASEÑA"
     }
     return errors
   }
@@ -38,8 +38,8 @@ export default ({ navigation }) => {
       .then(function (user) {
         setAlerta({
           show: true,
-          titulo: 'Atención',
-          mensaje: "Te hemos enviado un mail para restablecer tu contraseña, si no lo has recibido revisá en spam",
+          titulo: '¡ ATENCIÓN !',
+          mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
           color: '#DD6B55'
         })
       }).catch(function (e) {
@@ -61,11 +61,11 @@ export default ({ navigation }) => {
     try {
       await AsyncStorage.setItem('usuario', usuario);
       await AsyncStorage.setItem('nombre', nombreUsuario);
-      navigation.navigate('Recuperar');
+      navigation.navigate('EventosMenu');
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
+        titulo: '¡ ERROR !',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -97,8 +97,8 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: 'Error!',
-          mensaje: "Correo o Contraseña Incorrecta",
+          titulo: '¡ ERROR !',
+          mensaje: "CORREO O CONTRASEÑA INCORRECTOS",
           color: '#DD6B55'
         })
         setLoading(false);
@@ -143,7 +143,7 @@ export default ({ navigation }) => {
             />
             <Button
               title="REGISTRARSE"
-              onPress={()=>navigation.navigate('Registrarse')}
+              onPress={()=>navigation.navigate('Registrar')}
               buttonStyle={{height:50, backgroundColor:'#1988a5'}}
             />
             <View style={{display:"flex", alignItems:"center", marginTop:10}}>
@@ -217,7 +217,8 @@ const styles = StyleSheet.create({
   logo: {
     height: wp('20%'),
     width: wp('80%'),
-    margin: 20,
+    margin: 75,
+    alignSelf: 'center', 
   },
 
   entrada: {

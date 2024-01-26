@@ -22,15 +22,15 @@ export default ({ navigation }) => {
 
     const errors = {}
     if (!values.usuario) {
-      errors.usuario = "Debe ingresar un correo electronico"
+      errors.usuario = "DEBE INGRESAR UN CORREO ELECTRONICO"
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.usuario)) {
       errors.usuario = 'Formato incorrecto';
     }
     else if(!values.nombre) {
-      errors.nombre = "Debe ingresar un nombre"
+      errors.nombre = "DEBE INGRESAR UN NOMBRE"
     }
     if (!values.clave) {
-      errors.clave = "Debe ingresar una contraseña"
+      errors.clave = "DEBE INGRESAR UNA CONTRASEÑA"
     }
     return errors
   }
@@ -50,11 +50,11 @@ export default ({ navigation }) => {
     try {
       await AsyncStorage.setItem('usuario', usuario);
       await AsyncStorage.setItem('nombre', nombreUsuario);
-      navigation.navigate('MenuSesion');
+      navigation.navigate('CONFIGURACION');
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
+        titulo: '¡ ERROR !',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -64,11 +64,11 @@ export default ({ navigation }) => {
     try {
       await AsyncStorage.setItem('usuario', usuario);
       await AsyncStorage.setItem('nombre', nombreUsuario);
-      navigation.navigate('MenuSesion');
+      navigation.navigate('CONFIGURACION');
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: 'Error!',
+        titulo: '¡ ERROR !',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -99,7 +99,7 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: 'Error!',
+          titulo: '¡ ERROR !',
           mensaje: error.message + usuario1 + clave,
           color: '#DD6B55'
         })
@@ -227,7 +227,8 @@ const styles = StyleSheet.create({
   logo: {
     height: wp('20%'),
     width: wp('80%'),
-    margin: 20,
+    margin: 35,
+    alignSelf: 'center',  
   },
 
   entrada: {

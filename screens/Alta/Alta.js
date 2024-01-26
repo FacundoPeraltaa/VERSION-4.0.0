@@ -272,7 +272,7 @@ export default ({ navigation }) => {
     setAlerta({
       show: true,
       titulo: '¡ ATENCIÓN !',
-      mensaje: 'ANIMAL REGISTRADO CON ÉXITO',
+      mensaje: 'ANIMAL REGISTRADO CON ÉXITO ',
       color: '#3AD577',
       vuelve: true
     });
@@ -393,13 +393,13 @@ export default ({ navigation }) => {
               <Text style={styles.texto}>ESTADO REPRODUCTIVO:</Text>
 
               <ModalSelector
-             data={repOptions}
-             onValueChange={formAlta.handleChange('estrep')}
-             value={formAlta.values.estrep}
-
-             placeholder={{}}
-             initValue="SELECCIONA ESTADO REPRODUCTIVO"
-             style={{backgroundColor: '#FDFFFF', }}
+                data={repOptions}
+                onValueChange={formAlta.handleChange('estrep')}
+                value={formAlta.values.estrep}
+                placeholder={{}}
+                cancelButtonAccessibilityLabel={'Cancelar'}
+                initValue="SELECCIONA ESTADO REPRODUCTIVO"
+                style={{backgroundColor: '#FDFFFF', }}
               />
               {aviso ? <Text style={styles.error2}>RECUERDA INGRESAR LA FECHA DE SERVICIO</Text> : null}
             </View>
@@ -455,8 +455,8 @@ export default ({ navigation }) => {
                 data={prodOptions}
                 onValueChange={formAlta.handleChange('estpro')}
                 value={formAlta.values.estpro}
-
                 placeholder={{}}
+                cancelButtonAccessibilityLabel={'Cancelar'}
                 initValue="SELECCIONA ESTADO PRODUCTIVO"
                 style={{backgroundColor: '#FDFFFF', }}
               />

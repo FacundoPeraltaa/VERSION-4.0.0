@@ -140,7 +140,7 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ ERROR !',
-        mensaje: 'NO SE PUEDE OBTENER RACIÓN DE CALIBRACION'+error,
+        mensaje: 'NO SE PUEDE OBTENER RACIÓN DE CALIBRACION '+error,
         color: '#DD6B55'
       });
     }
@@ -163,7 +163,7 @@ export default ({ navigation }) => {
       const t = await api.json();
       setAlerta({
         show: true,
-        titulo: 'Atencion!',
+        titulo: '¡ATENCION!',
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
@@ -197,7 +197,7 @@ export default ({ navigation }) => {
         const t = await api.json();
         setAlerta({
           show: true,
-          titulo: 'Atencion!',
+          titulo: '¡ATENCION!',
           mensaje: t[0].mensaje,
           color: '#3AD577'
         });

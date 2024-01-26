@@ -80,7 +80,7 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ ATENCIÓN !',
-        mensaje: 'eRP CAMBIADO CON ÉXITO',
+        mensaje: 'eRP CAMBIADO CON ÉXITO ',
         color: '#3AD577',
         vuelve:true
       });

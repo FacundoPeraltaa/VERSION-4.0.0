@@ -32,7 +32,7 @@ export default function MyStack() {
      />
       
       <Stack.Screen 
-      name="Registrarse" 
+      name="Registrar" 
       component={Register} 
       options={{ title: 'REGISTRARSE', 
       headerTitleAlign: 'center'  

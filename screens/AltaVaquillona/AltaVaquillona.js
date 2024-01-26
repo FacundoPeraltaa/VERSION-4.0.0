@@ -129,7 +129,7 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ ATENCIÓN !',
-        mensaje: 'ANIMALES CAMBIADOS CON ÉXITO',
+        mensaje: 'ANIMALES CAMBIADOS CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
       });
@@ -137,8 +137,8 @@ export default ({ navigation }) => {
     }else{
       setAlerta({
         show: true,
-        titulo: 'Atención!',
-        mensaje: 'No se registraron altas',
+        titulo: '¡ ATENCIÓN !',
+        mensaje: 'NO SE REGISTRARON ALTAS',
         color: '#3AD577',
         vuelve:true
       });

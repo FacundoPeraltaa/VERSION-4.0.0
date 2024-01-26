@@ -1,85 +1,64 @@
 import 'react-native-gesture-handler';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import React from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import store from './src/store';
-import Eventos from './src/NavEventos';
-import Config from './src/NavConfiguracion';
 import { MovieProvider } from './screens/Contexto';
 import registerNNPushToken from 'native-notify';
 
-import Recuperar from './screens/Recuperar';
-import Register from './screens/Register';
-import LoginScreen from "./screens/Login";
 
+// Importa los stacks desde sus archivos correspondientes
+import HomeScreen from './src/NavEventos';
+import ConfigScreen from './src/NavConfiguracion';
+import LoginScreen from "./screens/Login"; // Asume que tienes un stack para LoginScreen
+import Recuperar from "./screens/Recuperar";
+import Register from "./screens/Register";
 
-
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-function MyAppNavigator() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-
-          if (route.name === 'Eventos') {
-            iconName = 'home';
-          } else if (route.name === 'Configuracion') {
-            iconName = 'cog';
-          }
-
-          return <MaterialCommunityIcons name={iconName} color={'#1888a4'} size={size} backgroundColor={'C2D300'} />
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: '#1888a4',
-        inactiveTintColor: '#1888a4',
-        backgroundColor: '#C2D300'
-      }}
-    >
-      <Tab.Screen
-        name="Eventos"
-        component={Eventos}
-        options={{ tabBarLabel: 'EVENTOS', headerShown: false }}
-      />
-      <Tab.Screen
-        name="Configuracion"
-        component={Config}
-        options={{ tabBarLabel: 'CONFIGURACIÓN ', headerShown: false}}
-      />
+function LoggedInTabs() {
+ return (
+    <Tab.Navigator>
+      <Tab.Screen name="Eventos" component={HomeScreen} />
+      <Tab.Screen name="Configuracion" component={ConfigScreen} />
     </Tab.Navigator>
-  );
+ );
 }
 
-
-const Navigation = () => {
-  return (
-    <NavigationContainer>
-      <MyAppNavigator >
-      </MyAppNavigator>
-    </NavigationContainer>
-  );
-};
-
 export default function App() {
-  registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
+ registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
 
-  return (
-    <Provider store={store}>
-      <MovieProvider>
-        <Navigation >
-       
-        </Navigation>
-      </MovieProvider>
-    </Provider>
-  );
+ // Define una variable de estado para manejar el estado de login
+ const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+ return (
+  <Provider store={store}>
+  <MovieProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isLoggedIn ? (
+            // Pantallas para usuarios logueados
+            <Stack.Screen name="LoggedInTabs" component={LoggedInTabs} />
+          ) : (
+            // Pantallas de autenticación
+            <Stack.Group screenOptions={{ headerShown: false }}>
+             <Stack.Screen name="Login" component={LoginScreen} />
+             <Stack.Screen name="Recuperar" component={Recuperar} />
+             <Stack.Screen name="Registrar" component={Register} />
+             <Stack.Screen name="EventosMenu" component={LoggedInTabs} />
+            </Stack.Group>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
+  </MovieProvider>
+</Provider>
+ );
 }

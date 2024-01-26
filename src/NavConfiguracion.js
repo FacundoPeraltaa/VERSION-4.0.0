@@ -16,10 +16,6 @@ import Logueos from '../screens/Preferencias/Logueos';
 import Notificaciones from '../screens/Preferencias/Notificaciones';
 import React from 'react';
 
-import LoginScreen from '../screens/Login';
-import Recuperar from '../screens/Recuperar';
-import Register from '../screens/Register';
-
 
 const Stack = createStackNavigator();
 
@@ -30,6 +26,7 @@ export default function MyConfigStack() {
     <Stack.Navigator
       initialRouteName="Configuracion"
       screenOptions={{
+        hideTabBar: true,
         headerTintColor: 'white',
         headerStyle: {
           backgroundColor: '#1889a4',
@@ -155,6 +152,7 @@ export default function MyConfigStack() {
           title: 'NOTIFICACION', 
         }}
       />
+      
       <Stack.Screen
         name="ControlLecheros"
         component={ListarControlesScreen}
@@ -163,16 +161,7 @@ export default function MyConfigStack() {
           title: 'CONTROLES LECHEROS',
         }}
       />
-
   
-    <Stack.Screen name="MenuSesion" component={LoginScreen} options={{title: ' INICIAR SESION ', headerTitleAlign: 'center', }} />
-      
-    <Stack.Screen name="Registrarse" component={Register} options={{ title: 'REGISTRARSE', headerTitleAlign: 'center',    tabBarVisible: false  }}/>
-
-    <Stack.Screen name="Recuperar" component={Recuperar} options={{ title: 'RECUPERAR CONTRASEÑA', headerTitleAlign: 'center',    tabBarVisible: false }}/>
-
-      
-
       
     </Stack.Navigator>
   );

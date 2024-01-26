@@ -115,7 +115,7 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ ATENCIÓN !',
-        mensaje: 'CELO REGISTRADO CON ÉXITO',
+        mensaje: 'CELO REGISTRADO CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
       });
@@ -179,13 +179,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <Text style={styles.texto}>TRATAMIENTO:</Text>
       
           <ModalSelector
-               data={tratamientoOptions}
-               onValueChange={formBaja.handleChange('tratamiento')}
-               value={formCelo.values.motivo}
-   
-               placeholder={{}}
-               initValue="SELECCIONA UN TRATAMIENTO"
-               style={{backgroundColor: '#FDFFFF', }}
+           data={tratamientoOptions}
+           onValueChange={formBaja.handleChange('tratamientos')}
+           value={formBaja.values.motivo}
+           placeholder={{}}
+           cancelButtonAccessibilityLabel={'Cancelar'}
+           initValue="SELECCIONA UN MOTIVO"
+           style={{backgroundColor: '#FDFFFF', }}
           />
 
         </View>

@@ -24,8 +24,8 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
   const {tambo} = route.params;
 
-  const [tambos, setTambos] = useState([{ key: 1, value: '0', label: 'OTRO' }]);
-  const [motivos, setMotivos] = useState([{ key: 0, value: '', label: '' }]);
+  const [tambos, setTambos] = useState([{ value: '0', label: 'OTRO' }]);
+  const [motivos, setMotivos] = useState([{ key: 1, value: '', label: '' }]);
   const [show, setShow] = useState(false);
 
   const [alerta, setAlerta] = useState({
@@ -256,13 +256,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <Text style={styles.texto}>MOTIVO:</Text>
 
           <ModalSelector
-              data={motivos}
-              onValueChange={formBaja.handleChange('motivo')}
-              value={formBaja.values.motivo}
-  
-              placeholder={{}}
-              initValue="SELECCIONA UN MOTIVO"
-              style={{backgroundColor: '#FDFFFF', }}
+            data={motivos}
+            onValueChange={formBaja.handleChange('motivo')}
+            value={formBaja.values.motivo}
+            placeholder={{}}
+            cancelButtonAccessibilityLabel={'Cancelar'}
+            initValue="SELECCIONA UN MOTIVO"
+            style={{backgroundColor: '#FDFFFF', }}
           />
 
         </View>
@@ -275,13 +275,13 @@ let texto = format(fecha, 'yyyy-MM-dd');
             <Text style={styles.texto}>TAMBO:</Text>
           
             <ModalSelector
-               data={tambos}
-               onValueChange={formBaja.handleChange('tambo')}
-               value={formBaja.values.motivo}
-   
-               placeholder={{}}
-               initValue="SELECCIONA UN TAMBO"
-               style={{backgroundColor: '#FDFFFF', }}
+             data={tambos}
+             onValueChange={formBaja.handleChange('tambo')}
+             value={formBaja.values.motivo}
+             placeholder={{}}
+             cancelButtonAccessibilityLabel={'Cancelar'}
+             initValue="SELECCIONA UN MOTIVO"
+             style={{backgroundColor: '#FDFFFF', }}
             />
 
           </View>
@@ -323,7 +323,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

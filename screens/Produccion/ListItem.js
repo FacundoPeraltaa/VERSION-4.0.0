@@ -43,8 +43,8 @@ export default function ListItem({ data,eliminarProduccion, info}) {
                 <AwesomeAlert
         show= {alerta}
         showProgress={false}
-        title="Atención!"
-        message="¿Desea eliminar esta producción?"
+        title="¡ ATENCIÓN !"
+        message="¿ DESEA ELIMINAR ESTA PRODUCCIÓN ?"
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}
         showCancelButton={true}

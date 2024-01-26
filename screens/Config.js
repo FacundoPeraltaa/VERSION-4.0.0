@@ -41,7 +41,7 @@ const Config = ({ navigation, tambo, selectTambo }) => {
    // { id: '8', nombre: 'PLATAFORMA WEB', accion: '' },
     { id: '9', nombre: 'AYUDA', accion: 'Ayuda' },
     { id: '10', nombre: 'PREFERENCIAS', accion: 'Preferencias' },
-    { id: '11', nombre: 'CERRAR SESION', accion: '' },
+    { id: '11', nombre: 'CERRAR SESION', accion: ' ' },
      
   ]; 
 
@@ -57,8 +57,8 @@ const Config = ({ navigation, tambo, selectTambo }) => {
 
         setAlerta({
           show: true,
-          titulo: 'Atención!',
-          mensaje: 'Desea cerrar Sesión?',
+          titulo: '¡ ATENCIÓN ! ',
+          mensaje: '¿ DESEA CERRAR SESION ?',
           color: '#3AD577'
         });
 

@@ -158,10 +158,10 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
           <ModalSelector
             data={options}
-            onValueChange={formRechazo.handleChange('motivo')}
-            value={formRechazo.values.motivo}
-
+            onValueChange={formBaja.handleChange('motivo')}
+            value={formBaja.values.motivo}
             placeholder={{}}
+            cancelButtonAccessibilityLabel={'Cancelar'}
             initValue="SELECCIONA UN MOTIVO"
             style={{backgroundColor: '#FDFFFF', }}
           />
@@ -195,7 +195,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

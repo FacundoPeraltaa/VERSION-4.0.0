@@ -21,12 +21,12 @@ export default ({ navigation }) => {
 
     const errors = {}
     if (!values.usuario) {
-      errors.usuario = "Debe ingresar un usuario"
+      errors.usuario = "DEBE INGRESAR UN USUARIO"
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.usuario)) {
       errors.usuario = 'Formato incorrecto';
     }
     if (!values.clave) {
-      errors.clave = "Debe ingresar una clave"
+      errors.clave = "DEBE INGRESAR UNA CLAVE"
     }
     return errors
   }
@@ -35,15 +35,15 @@ export default ({ navigation }) => {
       .then(function (user) {
         setAlerta({
           show: true,
-          titulo: 'Atención',
-          mensaje: "Te hemos enviado un mail para restablecer tu contraseña, si no lo has recibido revisá en spam",
+          titulo: '¡ ATENCIÓN ! ',
+          mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
           color: '#399dad'
         })
       }).catch(function (e) {
         setAlerta({
           show: true,
-          titulo: 'Atención',
-          mensaje: "El correo ingresado no se encuentra registrado en Farmerin",
+          titulo: '¡ ATENCIÓN !',
+          mensaje: "EL CORREO INGRESADO NO SE ENCUENTRA REGISTRADO EN FARMERIN",
           color: 'red'
         })      })
   }
@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
   logo: {
     height: wp('20%'),
     width: wp('80%'),
-    margin: 20,
+    margin: 80,
+    alignSelf: 'center', 
   },
 
   entrada: {

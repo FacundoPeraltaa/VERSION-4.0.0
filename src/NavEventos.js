@@ -25,6 +25,10 @@ import AltaVaquillonaScreen from '../screens/AltaVaquillona/AltaVaquillona';
 import React from 'react';
 
 
+import LoginScreen from '../screens/Login';
+import Recuperar from '../screens/Recuperar';
+import Register from '../screens/Register';
+
 
 
 
@@ -44,6 +48,7 @@ export default function MyStack() {
         },
       }}
     >
+      
       <Stack.Screen name="MenuEventos" component={HomeScreen} options={{headerTitleAlign: 'center', headerTitle: 'EVENTOS', headerShown: true}}/>
       
       <Stack.Screen name="Secado" component={SecadoScreen} options={ {headerTitleAlign: 'center', headerTitle: 'SECADO', headerBackTitle: 'Volver'}}/>
@@ -87,10 +92,10 @@ export default function MyStack() {
       <Stack.Screen name="Alta" component={AltaScreen} options={ {headerTitleAlign: 'center', headerTitle: 'ALTA'}}/>
 
       <Stack.Screen name="AltaVaquillona" component={AltaVaquillonaScreen} options={ {headerTitleAlign: 'center', headerTitle: 'ALTA VAQUILLONA',  headerBackTitle: 'Volver'}}/>
-
-
-      
-
+     
+   
     </Stack.Navigator>
+
+    
   );
 }
