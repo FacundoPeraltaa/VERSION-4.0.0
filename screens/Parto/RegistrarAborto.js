@@ -206,11 +206,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
        
           <ModalSelector
           data={options}
-          onValueChange={formBaja.handleChange('tipo')}
-          value={formBaja.values.motivo}
-          placeholder={{}}
+          onValueChange={formAborto.handleChange('tipo')}
+          value={formAborto.values.tipo}
+          placeholder={{}} // Ajusta el marcador de posición si es necesario
           cancelButtonAccessibilityLabel={'Cancelar'}
-          initValue="SELECCIONA UN MOTIVO"
+          initValue="SELECCIONA UN TIPO"
           style={{backgroundColor: '#FDFFFF', }}
           />
           <Text></Text>
@@ -218,11 +218,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
       
           <ModalSelector
            data={tratamientoOptions}
-           onValueChange={formBaja.handleChange('tratamiento')}
-           value={formBaja.values.motivo}
+           onValueChange={formAborto.handleChange('tratamiento')}
+           value={formAborto.values.tratamiento}
            placeholder={{}}
            cancelButtonAccessibilityLabel={'Cancelar'}
-           initValue="SELECCIONA UN MOTIVO"
+           initValue="SELECCIONA UN TRATAMIENTO"
            style={{backgroundColor: '#FDFFFF', }}
            />
         </View>

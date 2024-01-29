@@ -475,11 +475,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
             <ModalSelector
               data={options}
-              onValueChange={formBaja.handleChange('tipo')}
-              value={formBaja.values.motivo}
+              onValueChange={formParto.handleChange('tipo')}
+              value={formParto.values.tipo}
               placeholder={{}}
               cancelButtonAccessibilityLabel={'Cancelar'}
-              initValue="SELECCIONA UN MOTIVO"
+              initValue="SELECCIONA UN TIPO"
               style={{backgroundColor: '#FDFFFF', }}
             />
           </View>
@@ -488,11 +488,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
             <ModalSelector
               data={tratamientoOptions}
-              onValueChange={formBaja.handleChange('tratamiento')}
-              value={formBaja.values.motivo}
+              onValueChange={formParto.handleChange('tratamiento')}
+              value={formParto.values.tratamiento}
               placeholder={{}}
               cancelButtonAccessibilityLabel={'Cancelar'}
-              initValue="SELECCIONA UN MOTIVO"
+              initValue="SELECCIONA UN TRATAMIENTO"
               style={{backgroundColor: '#FDFFFF', }}
             />
           </View>
@@ -590,11 +590,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
                   <ModalSelector
                     data={sexoOptions}
-                    onValueChange={formBaja.handleChange('sexo')}
-                    value={formBaja.values.motivo}
+                    onValueChange={formCria.handleChange('sexo')}
+                    value={formCria.values.sexo}
                     placeholder={{}}
                     cancelButtonAccessibilityLabel={'Cancelar'}
-                    initValue="SELECCIONA UN MOTIVO"
+                    initValue="SELECCIONA UN TIPO DE SEXO"
                     style={{backgroundColor: '#FDFFFF', }}
                   />
                   <Text style={styles.texto}>RP:</Text>
@@ -615,11 +615,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
                   <ModalSelector
                     data={calostroOptions}
-                    onValueChange={formBaja.handleChange('tratamiento')}
-                    value={formBaja.values.motivo}
-                    placeholder={{}}
+                    onValueChange={formCria.handleChange('tratamiento')}
+                    value={formCria.values.tratamiento}
+                    placeholder={{}} // Ajusta el marcador de posición si es necesario
                     cancelButtonAccessibilityLabel={'Cancelar'}
-                    initValue="SELECCIONA UN MOTIVO"
+                    initValue="SELECCIONA UN TIPO DE CALOSTRO"
                     style={{backgroundColor: '#FDFFFF', }}
                   />
                 </View>

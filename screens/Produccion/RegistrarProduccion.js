@@ -455,11 +455,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
               <ModalSelector
                data={options}
-               onValueChange={formBaja.handleChange('fabrica')}
-               value={formBaja.values.motivo}
-               placeholder={{}}
+               onValueChange={formProduccion.handleChange('fabrica')}
+               value={formProduccion.values.fabrica}
+               placeholder={{}} // Ajusta el marcador de posición si es necesario
                cancelButtonAccessibilityLabel={'Cancelar'}
-               initValue="SELECCIONA UN MOTIVO"
+               initValue="SELECCIONA UNA FABRICA"
                style={{backgroundColor: '#FDFFFF', }}
               />
 

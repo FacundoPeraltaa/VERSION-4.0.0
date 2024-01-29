@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
   tambo: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#c7db35',
+    backgroundColor: '#B5CD00',
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     justifyContent: 'center'

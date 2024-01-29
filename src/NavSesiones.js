@@ -11,11 +11,11 @@ const Stack = createStackNavigator();
 export default function MyStack() {
   return (
     <Stack.Navigator
-      initialRouteName="Inicio"
+      initialRouteName="Login"
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#1889a4',
+          backgroundColor: '#B5CD00',
           shadowOffset: { width: 1, height: 1 },
           elevation: 3,
           borderBottomWidth: 1,

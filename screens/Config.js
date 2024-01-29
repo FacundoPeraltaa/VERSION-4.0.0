@@ -139,7 +139,7 @@ const Config = ({ navigation, tambo, selectTambo }) => {
           setAlerta({ show: false })
           AsyncStorage.removeItem('usuario');
           AsyncStorage.removeItem('nombre');
-          navigation.navigate('MenuSesion');
+          navigation.navigate('Inicio');
         }}
       />
     </View>

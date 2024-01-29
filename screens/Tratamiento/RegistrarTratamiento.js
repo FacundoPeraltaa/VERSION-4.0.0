@@ -183,11 +183,11 @@ return (
      
           <ModalSelector
             data={enfermedad}
-            onValueChange={formBaja.handleChange('enfermedad')}
-            value={formBaja.values.motivo}
-            placeholder={{}}
+            onValueChange={formTratamiento.handleChange('enfermedad')}
+            value={formTratamiento.values.enfermedad}
+            placeholder={{}} // Ajusta el marcador de posición si es necesario
             cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN MOTIVO"
+            initValue="SELECCIONA UNA ENFERMEDAD"
             style={{backgroundColor: '#FDFFFF', }}
           />
           {formTratamiento.errors.enfermedad ? <Text style={styles.error}>{formTratamiento.errors.enfermedad}</Text> : null}
@@ -197,11 +197,11 @@ return (
       
           <ModalSelector
             data={tratamientos}
-            onValueChange={formBaja.handleChange('tratamiento')}
-            value={formBaja.values.motivo}
+            onValueChange={formTratamiento.handleChange('tratamiento')}
+            value={formTratamiento.values.tratamiento}
             placeholder={{}}
             cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN MOTIVO"
+            initValue="SELECCIONA UN TRATRAMIENTO"
             style={{backgroundColor: '#FDFFFF', }}
           />
           {formTratamiento.errors.tratamiento ? <Text style={styles.error}>{formTratamiento.errors.tratamiento}</Text> : null}

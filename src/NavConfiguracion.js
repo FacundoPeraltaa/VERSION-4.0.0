@@ -29,7 +29,7 @@ export default function MyConfigStack() {
         hideTabBar: true,
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#1889a4',
+          backgroundColor: '#B5CD00',
           shadowOffset: { width: 1, height: 1 },
         },
         headerTintColor: '#fff',
@@ -38,13 +38,12 @@ export default function MyConfigStack() {
       }}
     >
       <Stack.Screen
-        name="CONFIGURACION"
+        name="ListaConfig"
         component={ConfigScreen}
         options={{
           headerBackTitle: 'Volver',
-          headerShown: false,
           title: 'CONFIGURACIÓN ', // Cambia el título de la pantalla
-          headerShown: true
+          headerShown: false
         }}
       />
       <Stack.Screen

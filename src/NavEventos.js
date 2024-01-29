@@ -37,11 +37,11 @@ const Stack = createStackNavigator();
 export default function MyStack() {
   return (
     <Stack.Navigator
-      initialRouteName="MenuEventos"
+      initialRouteName="EventosMenu"
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#1889a4',
+          backgroundColor: '#B5CD00',
           shadowOffset: { width: 1, height: 1 },
           elevation: 3,
           borderBottomWidth: 1,
@@ -49,7 +49,7 @@ export default function MyStack() {
       }}
     >
       
-      <Stack.Screen name="MenuEventos" component={HomeScreen} options={{headerTitleAlign: 'center', headerTitle: 'EVENTOS', headerShown: true}}/>
+      <Stack.Screen name="MenuEventos" component={HomeScreen} options={{headerTitleAlign: 'center', headerTitle: 'EVENTOS', headerShown: false}}/>
       
       <Stack.Screen name="Secado" component={SecadoScreen} options={ {headerTitleAlign: 'center', headerTitle: 'SECADO', headerBackTitle: 'Volver'}}/>
 
@@ -93,7 +93,7 @@ export default function MyStack() {
 
       <Stack.Screen name="AltaVaquillona" component={AltaVaquillonaScreen} options={ {headerTitleAlign: 'center', headerTitle: 'ALTA VAQUILLONA',  headerBackTitle: 'Volver'}}/>
      
-   
+     
     </Stack.Navigator>
 
     
