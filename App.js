@@ -21,15 +21,43 @@ import Register from "./screens/Register";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 function LoggedInTabs() {
- return (
-    <Tab.Navigator>
-      <Tab.Screen name="Eventos" component={HomeScreen} />
-      <Tab.Screen name="Configuracion" component={ConfigScreen} />
-    </Tab.Navigator>
- );
-}
+  return (
+     <Tab.Navigator>
+       <Tab.Screen 
+         name="BarraEventos" 
+         component={HomeScreen} 
+         options={{
+           headerTitleAlign: 'center', 
+           headerTitle: 'EVENTOS', 
+           headerTintColor: '#F9FFFF', 
+           headerStyle: {backgroundColor: '#2980B9'},
+           tabBarIcon: ({ color }) => (
+             <MaterialCommunityIcons name="calendar" size={26} color={color} />
+           ),
+           tabBarLabelStyle: { color: '#2A2A2A' }, 
+           tabBarLabel: 'EVENTOS'
+         }}
+       />
+       <Tab.Screen 
+         name="BarraConfig" 
+         component={ConfigScreen} 
+         options={{
+           headerTitleAlign: 'center', 
+           headerTitle: 'CONFIGURACION', 
+           headerTintColor: '#F9FFFF', 
+           headerStyle: {backgroundColor: '#2980B9'},
+           tabBarIcon: ({ color }) => (
+             <MaterialCommunityIcons name="cog" size={26} color={color} />
+           ),
+           tabBarLabelStyle: { color: '#2A2A2A' }, 
+           tabBarLabel: 'CONFIGURACION'
+         }}
+       />
+     </Tab.Navigator>
+  );
+ }
+ 
 
 export default function App() {
  registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
