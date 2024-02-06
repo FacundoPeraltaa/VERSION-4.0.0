@@ -38,7 +38,7 @@ export default ({ navigation }) => {
       .then(function (user) {
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN !',
+          titulo: '¡ATENCIÓN!',
           mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
           color: '#DD6B55'
         })
@@ -65,7 +65,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -97,7 +97,7 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: "CORREO O CONTRASEÑA INCORRECTOS",
           color: '#DD6B55'
         })

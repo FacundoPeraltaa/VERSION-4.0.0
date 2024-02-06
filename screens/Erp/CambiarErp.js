@@ -79,7 +79,7 @@ export default ({ navigation }) => {
       firebase.db.collection('animal').doc(animal.id).update({ erp: datos.erp });
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'eRP CAMBIADO CON ÉXITO ',
         color: '#3AD577',
         vuelve:true
@@ -95,7 +95,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUDO CAMBIAR EL eRP',
         color: '#DD6B55',
         vuelve:false

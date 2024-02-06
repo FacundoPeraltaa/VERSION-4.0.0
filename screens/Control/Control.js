@@ -53,7 +53,7 @@ export default ({ navigation }) => {
 
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER EL USUARIO',
         color: '#DD6B55'
       });
@@ -86,7 +86,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS CONTROLES',
         color: '#DD6B55'
       });
@@ -142,7 +142,7 @@ export default ({ navigation }) => {
     if (cont.length > 0) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'YA EXISTE UN CONTROL REGISTRADO EN ESTA FECHA '
       });
 
@@ -155,7 +155,7 @@ export default ({ navigation }) => {
         });
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN !',
+          titulo: '¡ATENCIÓN!',
           mensaje: 'CONTROL REGISTRADO CON ÉXITO ',
           color: '#3AD577'
         });
@@ -163,7 +163,7 @@ export default ({ navigation }) => {
       } catch (error) {
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: 'NO SE PUDO REGISTRAR EL CONTROL',
           color: '#DD6B55'
         });

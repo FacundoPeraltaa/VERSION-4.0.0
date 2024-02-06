@@ -99,7 +99,7 @@ export default ({ navigation }) => {
       setRacionMotor(2);
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER RACIÓN DE CALIBRACION '+error,
         color: '#DD6B55'
       });
@@ -123,7 +123,7 @@ export default ({ navigation }) => {
       const t = await api.json();
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: t[0].mensaje,
         color: '#97D7B0'
       })
@@ -132,7 +132,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO HAY CONEXIÓN CON EL TAMBO',
         color: '#DD6B55'
       })

@@ -51,7 +51,7 @@ export default ({ navigation }) => {
     if (isNaN(p)) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'INGRESE UN NUMERO',
         color: '#DD6B55'
       });
@@ -73,7 +73,7 @@ export default ({ navigation }) => {
       } else {
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: 'EL PESO DEBE SER MAYOR A CERO',
           color: '#DD6B55'
         });
@@ -107,7 +107,7 @@ export default ({ navigation }) => {
       setRelAct(0);
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO '+error,
         color: '#DD6B55'
       });
@@ -139,7 +139,7 @@ export default ({ navigation }) => {
       setRacion(2);
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER RACIÓN DE CALIBRACION '+error,
         color: '#DD6B55'
       });
@@ -171,7 +171,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });
@@ -205,7 +205,7 @@ export default ({ navigation }) => {
       } catch (error) {
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: 'NO SE PUDO MODIFICAR LA RELACIÓN',
           color: '#DD6B55'
         });
@@ -223,7 +223,7 @@ export default ({ navigation }) => {
     } else {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'LA RELACIÓN DEBE SER MAYOR A CERO',
         color: '#DD6B55'
       });

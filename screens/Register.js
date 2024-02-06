@@ -54,7 +54,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -68,7 +68,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -99,7 +99,7 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: error.message + usuario1 + clave,
           color: '#DD6B55'
         })

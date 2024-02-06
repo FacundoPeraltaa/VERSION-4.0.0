@@ -39,7 +39,7 @@ const confirmar = ()=>{
         <AwesomeAlert
         show= {alerta}
         showProgress={false}
-        title="¡ ATENCIÓN !"
+        title="¡ATENCIÓN!"
         message="¿ DESEA ELIMINAR ESTA RECEPCIÓN ?"
         closeOnTouchOutside={false}
         closeOnHardwareBackPress={false}

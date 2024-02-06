@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import 'expo-firestore-offline-persistence';
 import firebase from '../../database/firebase';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -25,8 +25,8 @@ export default ({ navigation }) => {
   const {usuario} = routeTratam.params;
   const {tratam} = routeTratam.params;
 
-  const [tratamientos, setTratamientos] = useState([{ key: 1, value: '', label: '' }]);
-  const [enfermedad, setEnfermedad] = useState([{ key: 1, value: '', label: '' }]);
+  const [tratamientos, setTratamientos] = useState([{ value: '', label: '' }]);
+  const [enfermedad, setEnfermedad] = useState([{ value: '', label: '' }]);
   const [alerta, setAlerta] = useState({
     show: false,
     titulo: '',
@@ -44,7 +44,6 @@ export default ({ navigation }) => {
   function obtenerTratamientos() {
     tratam.map(doc => {
       let tr = {
-        key: doc.descripcion,
         value: doc.descripcion,
         label: doc.descripcion
       }
@@ -113,7 +112,7 @@ export default ({ navigation }) => {
       })
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'TRATAMIENTO REGISTRADO CON ÉXITO',
         color: '#3AD577',
         vuelve: true,
@@ -181,29 +180,29 @@ return (
         <View>
           <Text style={styles.texto}>ENFERMEDAD:</Text>
      
-          <ModalSelector
-            data={enfermedad}
-            onValueChange={formTratamiento.handleChange('enfermedad')}
-            value={formTratamiento.values.enfermedad}
-            placeholder={{}} // Ajusta el marcador de posición si es necesario
-            cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UNA ENFERMEDAD"
-            style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={enfermedad}
+              onValueChange={formTratamiento.handleChange('enfermedad')}
+              value={formTratamiento.values.enfermedad}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
+
           {formTratamiento.errors.enfermedad ? <Text style={styles.error}>{formTratamiento.errors.enfermedad}</Text> : null}
         </View>
         <View>
           <Text style={styles.texto}>TRATAMIENTO:</Text>
       
-          <ModalSelector
-            data={tratamientos}
-            onValueChange={formTratamiento.handleChange('tratamiento')}
-            value={formTratamiento.values.tratamiento}
-            placeholder={{}}
-            cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN TRATRAMIENTO"
-            style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={tratamientos}
+              onValueChange={formTratamiento.handleChange('tratamiento')}
+              value={formTratamiento.values.tratamiento}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
+
           {formTratamiento.errors.tratamiento ? <Text style={styles.error}>{formTratamiento.errors.tratamiento}</Text> : null}
         </View>
         <View>

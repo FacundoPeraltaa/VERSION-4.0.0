@@ -116,7 +116,7 @@ export default ({ navigation }) => {
           e = true;
           setAlerta({
             show: true,
-            titulo: '¡ ERROR !',
+            titulo: '¡ERROR!',
             mensaje: 'AL PASAR EL ANIMAL P/SERVICIO',
             color: '#DD6B55'
           });
@@ -128,7 +128,7 @@ export default ({ navigation }) => {
     if (!e && hayCambio) {
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'ANIMALES CAMBIADOS CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
@@ -137,7 +137,7 @@ export default ({ navigation }) => {
     }else{
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'NO SE REGISTRARON ALTAS',
         color: '#3AD577',
         vuelve:true

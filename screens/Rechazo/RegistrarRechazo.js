@@ -10,7 +10,7 @@ import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/core';
 
 export default ({ navigation }) => {
@@ -22,14 +22,14 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
 
   const options = [
-    { key: 1, value: 'Infertil', label: 'INFERTIL' },
-    { key: 2, value: 'Baja Producción', label: 'BAJA PRODUCCION' },
-    { key: 3, value: 'Enf. Sanitarias', label: 'ENF. SANITARIAS' },
-    { key: 4, value: 'Fin de vida Útil', label: 'FIN VIDA UTIL' },
-    { key: 5, value: 'Mastitis', label: 'MASTITIS' },
-    { key: 6, value: 'Patas', label: 'PATAS' },
-    { key: 7, value: 'Ubre', label: 'UBRE' },
-    { key: 8, value: 'Otras causas', label: 'OTRAS CAUSAS' },
+    { value: 'Infertil', label: 'INFERTIL' },
+    { value: 'Baja Producción', label: 'BAJA PRODUCCION' },
+    { value: 'Enf. Sanitarias', label: 'ENF. SANITARIAS' },
+    { value: 'Fin de vida Útil', label: 'FIN VIDA UTIL' },
+    { value: 'Mastitis', label: 'MASTITIS' },
+    { value: 'Patas', label: 'PATAS' },
+    { value: 'Ubre', label: 'UBRE' },
+    { value: 'Otras causas', label: 'OTRAS CAUSAS' },
   ];
 
   const [alerta, setAlerta] = useState({
@@ -93,7 +93,7 @@ export default ({ navigation }) => {
       })
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'RECHAZO REGISTRADO CON ÉXITO',
         color: '#3AD577',
         vuelve: true
@@ -156,15 +156,15 @@ let texto = format(fecha, 'yyyy-MM-dd');
         <View>
           <Text style={styles.texto}>MOTIVO:</Text>
 
-          <ModalSelector
-            data={options}
-            onValueChange={formRechazo.handleChange('motivo')}
-            value={formRechazo.values.motivo}
-            placeholder={{}} // Ajusta el marcador de posición si es necesario
-            cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN MOTIVO"
-            style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={options}
+              onValueChange={formRechazo.handleChange('motivo')}
+              value={formRechazo.values.motivo}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
+
           <Text></Text>
           <Text style={styles.texto}>OBSERVACIONES:</Text>
           <TextInput

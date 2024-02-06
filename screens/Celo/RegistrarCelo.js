@@ -25,7 +25,7 @@ export default ({ navigation }) => {
 
   const [show, setShow] = useState(false);
 
-  const [tratamientoOptions, setTratamientoOptios] = useState([{ key: 1, value: '-', label: '' }]);
+  const [tratamientoOptions, setTratamientoOptios] = useState([{  value: '-', label: '' }]);
   const [alerta, setAlerta] = useState({
     show: false,
     titulo: '',
@@ -114,7 +114,7 @@ export default ({ navigation }) => {
       });
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'CELO REGISTRADO CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
@@ -124,7 +124,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUDO REGISTRAR EL CELO',
         color: '#DD6B55'
       });

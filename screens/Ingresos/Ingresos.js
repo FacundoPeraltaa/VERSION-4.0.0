@@ -13,7 +13,7 @@ import { useRoute } from '@react-navigation/core';
 export default ({ navigation }) => {
 
   const route = useRoute();
-  const tambo = route.params;
+  const {tambo} = route.params;
   
   const [show, setShow] = useState(false);
 

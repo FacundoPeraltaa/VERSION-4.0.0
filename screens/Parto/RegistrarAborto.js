@@ -10,7 +10,7 @@ import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
@@ -27,10 +27,10 @@ export default ({ navigation }) => {
 
   const {usuario} = route.params;
 
-  const [tratamientoOptions, setTratamientoOptios] = useState([{ key: 0, value: '-', label: '' }]);
+  const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
   const [options, setOptions] = useState([
-    { key: 1, value: 'Aborto', label: 'ABORTO' },
-    { key: 2, value: 'Aborto inicia lactancia', label: 'ABORTO INICIA LACTANCIA' },
+    { value: 'Aborto', label: 'ABORTO' },
+    { value: 'Aborto inicia lactancia', label: 'ABORTO INICIA LACTANCIA' },
   ]);
   const [alerta, setAlerta] = useState({
     show: false,
@@ -72,7 +72,6 @@ export default ({ navigation }) => {
   
     filtrado.forEach(doc => {
       let tr = {
-        key: doc.descripcion,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       };
@@ -144,7 +143,7 @@ export default ({ navigation }) => {
 
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'ABORTO REGISTRADO CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
@@ -204,27 +203,25 @@ let texto = format(fecha, 'yyyy-MM-dd');
         <View>
           <Text style={styles.texto}>TIPO:</Text>
        
-          <ModalSelector
-          data={options}
-          onValueChange={formAborto.handleChange('tipo')}
-          value={formAborto.values.tipo}
-          placeholder={{}} // Ajusta el marcador de posición si es necesario
-          cancelButtonAccessibilityLabel={'Cancelar'}
-          initValue="SELECCIONA UN TIPO"
-          style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={options}
+              onValueChange={formAborto.handleChange('tipo')}
+              value={formAborto.values.tipo}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
           <Text></Text>
           <Text style={styles.texto}>TRATAMIENTO:</Text>
       
-          <ModalSelector
-           data={tratamientoOptions}
-           onValueChange={formAborto.handleChange('tratamiento')}
-           value={formAborto.values.tratamiento}
-           placeholder={{}}
-           cancelButtonAccessibilityLabel={'Cancelar'}
-           initValue="SELECCIONA UN TRATAMIENTO"
-           style={{backgroundColor: '#FDFFFF', }}
-           />
+          <RNPickerSelect
+              items={tratamientoOptions}
+              onValueChange={formAborto.handleChange('tratamiento')}
+              value={formAborto.values.tratamiento}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
         </View>
 
       </View>

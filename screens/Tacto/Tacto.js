@@ -70,7 +70,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'No se pueden obtener los animales',
         color: '#DD6B55'
       });
@@ -109,7 +109,7 @@ export default ({ navigation }) => {
           e = true;
           setAlerta({
             show: true,
-            titulo: '¡ ERROR !',
+            titulo: '¡ERROR!',
             mensaje: 'NO SE PUEDE REGISTRAR LA PREÑEZ',
             color: '#DD6B55'
           });
@@ -121,7 +121,7 @@ export default ({ navigation }) => {
     if (!e && hayPre) {
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'CONFIRMACIÓN DE PREÑEZ REALIZADAS CON ÉXITO',
         color: '#3AD577',
         vuelve:true
@@ -130,7 +130,7 @@ export default ({ navigation }) => {
     }else{
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'NO SE REGISTRARON CONFIRMACIÓNES DE PREÑEZ',
         color: '#3AD577',
         vuelve:true

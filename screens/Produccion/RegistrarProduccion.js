@@ -10,7 +10,7 @@ import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/core';
 
 
@@ -64,9 +64,9 @@ export default ({ navigation }) => {
   });
 
   const options = [
-    { key: 1, value: 'Fabrica 1', label: 'FABRICA 1' },
-    { key: 2, value: 'Fabrica 2', label: 'FABRICA 2' },
-    { key: 3, value: 'Fabrica 3', label: 'FABRICA 3' }
+    { value: 'Fabrica 1', label: 'FABRICA 1' },
+    { value: 'Fabrica 2', label: 'FABRICA 2' },
+    { value: 'Fabrica 3', label: 'FABRICA 3' }
   ];
 
   const validate = values => {
@@ -167,7 +167,7 @@ export default ({ navigation }) => {
       });
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'PRODUCCIÓN REGISTRADA CON ÉXITO',
         color: '#3AD577',
         vuelve: true
@@ -453,15 +453,14 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
             <View style={styles.col}>
 
-              <ModalSelector
-               data={options}
-               onValueChange={formProduccion.handleChange('fabrica')}
-               value={formProduccion.values.fabrica}
-               placeholder={{}} // Ajusta el marcador de posición si es necesario
-               cancelButtonAccessibilityLabel={'Cancelar'}
-               initValue="SELECCIONA UNA FABRICA"
-               style={{backgroundColor: '#FDFFFF', }}
-              />
+            <RNPickerSelect
+              items={options}
+              onValueChange={formProduccion.handleChange('fabrica')}
+              value={formProduccion.values.fabrica}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
 
             </View>
           </View>

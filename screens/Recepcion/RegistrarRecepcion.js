@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import { Camera } from 'expo-camera';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/core';
 
 export default ({ navigation }) => {
@@ -23,10 +23,10 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
 
   const tipos = [
-    { key: 1, value: 'Racion', label: 'RACION' },
-    { key: 2, value: 'Art. Limpieza', label: 'ART. LIMPIEZA' },
-    { key: 3, value: 'Art. Veterinaria', label: 'ART. VETERINARIA' },
-    { key: 4, value: 'Semen', label: 'SEMEN' },
+    { value: 'Racion', label: 'RACION' },
+    { value: 'Art. Limpieza', label: 'ART. LIMPIEZA' },
+    { value: 'Art. Veterinaria', label: 'ART. VETERINARIA' },
+    { value: 'Semen', label: 'SEMEN' },
   ];
   const [show, setShow] = useState(false);
   const [permisos, setPermisos] = useState(null);
@@ -175,7 +175,7 @@ export default ({ navigation }) => {
       if (datos.tipo == 'Semen') registrarToro(datos);
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'RECEPCIÓN REGISTRADA CON ÉXITO',
         color: '#3AD577',
         vuelve: true
@@ -235,15 +235,14 @@ let texto = format(fecha, 'yyyy-MM-dd');
         <View>
           <Text style={styles.texto}>TIPO:</Text>
       
-          <ModalSelector
-            data={tipos}
-            onValueChange={formRecepcion.handleChange('tipo')}
-            value={formRecepcion.values.tipo}
-            placeholder={{}} // Ajusta el marcador de posición si es necesario
-            cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN TIPO"
-            style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={tipos}
+              onValueChange={formRecepcion.handleChange('tipo')}
+              value={formRecepcion.values.tipo}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
 
         </View>
         {formRecepcion.values.tipo == 'Semen' &&

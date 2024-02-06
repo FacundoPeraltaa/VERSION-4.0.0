@@ -77,10 +77,11 @@ export default function App() {
           ) : (
             // Pantallas de autenticación
             <Stack.Group screenOptions={{ headerShown: false }}>
-             <Stack.Screen name="Login" component={LoginScreen} />
+             <Stack.Screen name="MenuInicio" component={LoginScreen} />
              <Stack.Screen name="Recuperar" component={Recuperar} />
              <Stack.Screen name="Registrar" component={Register} />
              <Stack.Screen name="EventosMenu" component={LoggedInTabs} />
+             <Stack.Screen name="CerrarSesiones" component={LoginScreen} />
             </Stack.Group>
           )}
         </Stack.Navigator>

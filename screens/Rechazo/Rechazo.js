@@ -64,7 +64,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS ANIMALES',
         color: '#DD6B55'
       });

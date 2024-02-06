@@ -9,7 +9,7 @@ import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
@@ -40,16 +40,24 @@ export default ({ navigation }) => {
 
   const repOptions = [
 
-    { key: 1, value: 'vacia', label: 'VACIA' },
-    { key: 2,value: 'preñada', label: 'PREÑADA' }
+    { value: 'vacia', label: 'VACIA' },
+    { value: 'preñada', label: 'PREÑADA' }
   ];
 
   const prodOptions = [
 
-    { key: 1,value: 'seca', label: 'SECA' },
-    { key: 2,value: 'En Ordeñe', label: 'EN ORDEÑE' },
-    { key: 3,value: 'Vq.p/servicio', label: 'VAQ. P/SERVICIO' }
+    { value: 'seca', label: 'SECA' },
+    { value: 'En Ordeñe', label: 'EN ORDEÑE' },
+    { value: 'Vq.p/servicio', label: 'VAQ. P/SERVICIO' }
   ];
+
+  const handleChange = fieldName => option => {
+    // Actualiza el estado del formulario con el nuevo valor
+    setFormValues(prevValues => ({
+      ...prevValues,
+      [fieldName]: option.value,
+    }));
+};
 
   const validate = values => {
     const errors = {}
@@ -392,15 +400,14 @@ export default ({ navigation }) => {
             <View>
               <Text style={styles.texto}>ESTADO REPRODUCTIVO:</Text>
 
-              <ModalSelector
-                data={repOptions}
-                onValueChange={formAlta.handleChange('estrep')}
-                value={formAlta.values.estrep}
-                placeholder={{}}
-                cancelButtonAccessibilityLabel={'Cancelar'}
-                initValue="SELECCIONA ESTADO REPRODUCTIVO"
-                style={{backgroundColor: '#FDFFFF', }}
-              />
+              <RNPickerSelect
+              items={repOptions}
+              onValueChange={formAlta.handleChange('estrep')}
+              value={formAlta.values.estrep}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
               {aviso ? <Text style={styles.error2}>RECUERDA INGRESAR LA FECHA DE SERVICIO</Text> : null}
             </View>
             <View>
@@ -451,15 +458,14 @@ export default ({ navigation }) => {
             <View>
               <Text style={styles.texto}>ESTADO PRODUCTIVO:</Text>
 
-              <ModalSelector
-                data={prodOptions}
-                onValueChange={formAlta.handleChange('estpro')}
-                value={formAlta.values.estpro}
-                placeholder={{}}
-                cancelButtonAccessibilityLabel={'Cancelar'}
-                initValue="SELECCIONA ESTADO PRODUCTIVO"
-                style={{backgroundColor: '#FDFFFF', }}
-              />
+              <RNPickerSelect
+              items={prodOptions}
+              onValueChange={formAlta.handleChange('estpro')}
+              value={formAlta.values.estpro}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
 
             </View>
 

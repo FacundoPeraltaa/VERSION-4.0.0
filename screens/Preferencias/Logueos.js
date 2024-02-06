@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     linea: {
         height: 1,
-        backgroundColor: '#2980B9',
+        backgroundColor: '#070037',
         marginVertical: 25
     },
     listado: {

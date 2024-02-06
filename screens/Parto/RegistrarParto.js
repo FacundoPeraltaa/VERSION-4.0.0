@@ -13,7 +13,7 @@ import { format } from 'date-fns';
 import { Camera } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
@@ -41,29 +41,29 @@ export default ({ navigation }) => {
   const [cria, setCria] = useState([]);
   const [iden, setIden] = useState(0);
   const [modal, setModal] = useState(false);
-  const [tratamientoOptions, setTratamientoOptios] = useState([{ key: 1, value: '', label: '' }]);
+  const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '', label: '' }]);
   const [loading, setLoading] = useState(false);
 
   const options = [
-    { key: 1, value: 'Normal', label: 'NORMAL' },
-    { key: 2, value: 'Dif. Intensa', label: 'DIF. INTENSA' },
-    { key: 3, value: 'Dif. Leve', label: 'DIF. LEVE' },
-    { key: 4, value: 'Cesárea', label: 'CESAREA' },
-    { key: 5, value: 'No sabe', label: 'NO SABE' },
-    { key: 6, value: 'Mala Presentación', label: 'MALA PRESENTACION' },
-    { key: 7, value: 'Mellizos', label: 'MELLIZOS' }
+    { value: 'Normal', label: 'NORMAL' },
+    { value: 'Dif. Intensa', label: 'DIF. INTENSA' },
+    { value: 'Dif. Leve', label: 'DIF. LEVE' },
+    { value: 'Cesárea', label: 'CESAREA' },
+    { value: 'No sabe', label: 'NO SABE' },
+    { value: 'Mala Presentación', label: 'MALA PRESENTACION' },
+    { value: 'Mellizos', label: 'MELLIZOS' }
   ];
 
   const sexoOptions = [
-    { key: 1, value: 'Macho', label: 'MACHO' },
-    { key: 2, value: 'Hembra', label: 'HEMBRA' },
-    { key: 3, value: 'Macho Muerto', label: 'MACHO MUERTO' },
-    { key: 4, value: 'Hembra Muerta', label: 'HEMBRA MUERTA' },
+    { value: 'Macho', label: 'MACHO' },
+    { value: 'Hembra', label: 'HEMBRA' },
+    { value: 'Macho Muerto', label: 'MACHO MUERTO' },
+    { value: 'Hembra Muerta', label: 'HEMBRA MUERTA' },
   ];
 
   const calostroOptions = [
-    { key: 1, value: 'Calostro Madre', label: 'CALOSTRO MADRE' },
-    { key: 2, value: 'Calostro Congelado', label: 'CALOSTRO CONGELADO' }
+    { value: 'Calostro Madre', label: 'CALOSTRO MADRE' },
+    { value: 'Calostro Congelado', label: 'CALOSTRO CONGELADO' }
   ];
 
   useEffect(() => {
@@ -121,7 +121,6 @@ export default ({ navigation }) => {
   
     filtrado.forEach(doc => {
       let tr = {
-        key: doc.descripcion,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       };
@@ -354,7 +353,7 @@ export default ({ navigation }) => {
             })
             setAlerta({
               show: true,
-              titulo: '¡ ATENCIÓN !',
+              titulo: '¡ATENCION!',
               mensaje: 'PARTO REGISTRADO CON ÉXITO ',
               color: '#3AD577',
               vuelve: true
@@ -473,28 +472,28 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <View>
             <Text style={styles.texto}>TIPO:</Text>
 
-            <ModalSelector
-              data={options}
+            <RNPickerSelect
+              items={options}
               onValueChange={formParto.handleChange('tipo')}
               value={formParto.values.tipo}
+
               placeholder={{}}
-              cancelButtonAccessibilityLabel={'Cancelar'}
-              initValue="SELECCIONA UN TIPO"
-              style={{backgroundColor: '#FDFFFF', }}
+              style={styles.pickerStyle}
             />
+
           </View>
           <View>
             <Text style={styles.texto}>TRATAMIENTO:</Text>
 
-            <ModalSelector
-              data={tratamientoOptions}
+            <RNPickerSelect
+              items={tratamientoOptions}
               onValueChange={formParto.handleChange('tratamiento')}
               value={formParto.values.tratamiento}
+
               placeholder={{}}
-              cancelButtonAccessibilityLabel={'Cancelar'}
-              initValue="SELECCIONA UN TRATAMIENTO"
-              style={{backgroundColor: '#FDFFFF', }}
+              style={styles.pickerStyle}
             />
+
           </View>
           <View>
             <Text style={styles.texto}>OBSERVACIONES:</Text>
@@ -588,15 +587,15 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
                   <Text style={styles.texto}>SEXO:</Text>
 
-                  <ModalSelector
-                    data={sexoOptions}
-                    onValueChange={formCria.handleChange('sexo')}
-                    value={formCria.values.sexo}
-                    placeholder={{}}
-                    cancelButtonAccessibilityLabel={'Cancelar'}
-                    initValue="SELECCIONA UN TIPO DE SEXO"
-                    style={{backgroundColor: '#FDFFFF', }}
+                  <RNPickerSelect
+                   items={sexoOptions}
+                   onValueChange={formCria.handleChange('sexo')}
+                   value={formCria.values.sexo}
+
+                   placeholder={{}}
+                   style={styles.pickerStyle}
                   />
+
                   <Text style={styles.texto}>RP:</Text>
                   <TextInput
                     style={styles.entrada}
@@ -613,15 +612,15 @@ let texto = format(fecha, 'yyyy-MM-dd');
                   {formCria.errors.peso ? <Text style={styles.error}>{formCria.errors.peso}</Text> : null}
                   <Text style={styles.texto}>CALOSTRO:</Text>
 
-                  <ModalSelector
-                    data={calostroOptions}
-                    onValueChange={formCria.handleChange('tratamiento')}
-                    value={formCria.values.tratamiento}
-                    placeholder={{}} // Ajusta el marcador de posición si es necesario
-                    cancelButtonAccessibilityLabel={'Cancelar'}
-                    initValue="SELECCIONA UN TIPO DE CALOSTRO"
-                    style={{backgroundColor: '#FDFFFF', }}
+                  <RNPickerSelect
+                   items={calostroOptions}
+                   onValueChange={formCria.handleChange('tratamiento')}
+                   value={formCria.values.tratamiento}
+
+                   placeholder={{}}
+                   style={styles.pickerStyle}
                   />
+
                 </View>
                 <View>
                   <Text style={styles.texto}>OBSERVACIONES:</Text>

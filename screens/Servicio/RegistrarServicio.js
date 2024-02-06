@@ -13,7 +13,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { MovieContext } from "../Contexto"
 import { useRoute } from '@react-navigation/core';
 import ModalSelector from 'react-native-modal-selector';
-
+import RNPickerSelect from 'react-native-picker-select';
 
 export default ({ navigation }) => {
   const [show, setShow] = useState(false);
@@ -29,23 +29,25 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
 
   const [formValues, setFormValues] = useState({
-    tipo: '', // Inicializa el valor según tus necesidades
-  });
+    tratamientoOptions: '',
+    tipo: '',  // Inicializa el valor según tus necesidades
+    toros:'',
+  })
 
-  const handleChange = fieldName => value => {
+  const handleChange = fieldName => option => {
     // Actualiza el estado del formulario con el nuevo valor
     setFormValues(prevValues => ({
       ...prevValues,
-      [fieldName]: value,
+      [fieldName]: option.value,
     }));
-  };
+};
 
 
   const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
-  const [toros, setToros] = useState([{ key: 1, value: 'Robo', label: 'ROBO' }]);
+  const [toros, setToros] = useState([{ value: 'Robo', label: 'ROBO' }]);
   const tipo = [
-    { key: 1, value: 'Convencional', label: 'CONVENCIONAL' },
-    { key: 2, value: 'Sexado', label: 'SEXADO' }
+    { value: 'Convencional', label: 'CONVENCIONAL' },
+    { value: 'Sexado', label: 'SEXADO' }
   ];
   const [alerta, setAlerta] = useState({
     show: false,
@@ -90,7 +92,6 @@ export default ({ navigation }) => {
   
     filtrado.forEach(doc => {
       let tr = {
-        key: doc.id,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       };
@@ -106,7 +107,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS TOROS',
         color: '#DD6B55'
       });
@@ -116,7 +117,6 @@ export default ({ navigation }) => {
   function snapshotToro(snapshot) {
     snapshot.docs.map(doc => {
       let t = {
-        key: doc.id,
         value: doc.data().hba,
         label: doc.data().hba
       };
@@ -178,7 +178,7 @@ export default ({ navigation }) => {
       })
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'SERVICIO REGISTRADO CON ÉXITO',
         color: '#3AD577',
         vuelve: true,
@@ -187,7 +187,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE REGISTRAR EL SERVICIO',
         color: '#DD6B55',
         vuelve: false
@@ -253,7 +253,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
     
             <ModalSelector
              data={tratamientoOptions}
-             onValueChange={formServicio.handleChange('tratamiento')}
+             onValueChange={option => formServicio.handleChange('tratamiento')(option.value)}
              value={formServicio.values.tratamiento}
              placeholder={{}} // Ajusta el marcador de posición si es necesario
              cancelButtonAccessibilityLabel={'Cancelar'}
@@ -265,28 +265,27 @@ let texto = format(fecha, 'yyyy-MM-dd');
             <Text style={styles.texto}>TORO:</Text>
           
             <ModalSelector
-          data={toros}
-          onValueChange={formServicio.handleChange('toro')}
-          value={formServicio.values.toro}
-          placeholder={{}}
-          cancelButtonAccessibilityLabel={'Cancelar'}
-          initValue="SELECCIONA UN TORO"
-          style={{backgroundColor: '#FDFFFF', }}
+             data={toros}
+             onValueChange={option => formServicio.handleChange('toro')(option.value)}
+             value={formServicio.values.toro}
+             placeholder={{}}
+             cancelButtonAccessibilityLabel={'Cancelar'}
+             initValue="SELECCIONA UN TORO"
+             style={{backgroundColor: '#FDFFFF', }}
         />
 
           </View>
           <View>
             <Text style={styles.texto}>TIPO SEMEN:</Text>
       
-            <ModalSelector
-          data={tipo}
-          onValueChange={formServicio.handleChange('tipo')}
-          value={formServicio.values.tipo}
-          placeholder={{}}
-          cancelButtonAccessibilityLabel={'Cancelar'}
-          initValue="SELECCIONA UN TIPO SEMEN"
-          style={{backgroundColor: '#FDFFFF', }}
-           />
+            <RNPickerSelect
+              items={toros}
+              onValueChange={formServicio.handleChange('toro')}
+              value={formServicio.values.toro}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
            
           </View>
           <View>

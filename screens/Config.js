@@ -57,8 +57,8 @@ const Config = ({ navigation, tambo, selectTambo }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN ! ',
-          mensaje: '¿ DESEA CERRAR SESION ?',
+          titulo: '¡ATENCIÓN! ',
+          mensaje: '¿DESEA CERRAR SESION?',
           color: '#3AD577'
         });
 
@@ -139,7 +139,7 @@ const Config = ({ navigation, tambo, selectTambo }) => {
           setAlerta({ show: false })
           AsyncStorage.removeItem('usuario');
           AsyncStorage.removeItem('nombre');
-          navigation.navigate('Inicio');
+          navigation.navigate('CerrarSesiones');
         }}
       />
     </View>

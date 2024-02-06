@@ -78,7 +78,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER EL CONTROL',
         color: '#DD6B55'
       });
@@ -106,7 +106,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS ANIMALES EN ORDEÑE',
         color: '#DD6B55'
       });
@@ -210,7 +210,7 @@ export default ({ navigation }) => {
           }else{
             setAlerta({
               show: true,
-              titulo: '¡ ERROR !',
+              titulo: '¡ERROR!',
               mensaje: 'NO HAY ANIMALES PARA CONFIRMAR',
               color: '#DD6B55'
             });
@@ -228,7 +228,7 @@ export default ({ navigation }) => {
     if (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE CONFIRMAR EL COONTROL LECHERO',
         color: '#DD6B55'
       });
@@ -246,14 +246,14 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
+          titulo: '¡ERROR!',
           mensaje: 'NO SE PUEDE CONFIRMAR EL CONTROL LECHERO',
           color: '#DD6B55'
         });
       } else {
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN !',
+          titulo: '¡ATENCIÓN!',
           mensaje: 'CONTROL LECHERO CONFIRMADO CON ÉXITO ',
           color: '#3AD577',
           vuelve:true
@@ -277,7 +277,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'AL ACTUALIZAR EL CONTROL',
         color: '#DD6B55'
       });
@@ -294,7 +294,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'AL ACTUALIZAR EL CONTROL',
         color: '#DD6B55'
       });
@@ -316,7 +316,7 @@ export default ({ navigation }) => {
     if (existe.length > 0) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'EL ANIMAL YA ESTA REGISTRADO EN EL CONTROL',
         color: '#DD6B55'
       });
@@ -345,7 +345,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'Al agregar el animal',
         color: '#DD6B55'
       });
@@ -411,7 +411,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });

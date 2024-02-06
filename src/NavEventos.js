@@ -37,7 +37,7 @@ const Stack = createStackNavigator();
 export default function MyStack() {
   return (
     <Stack.Navigator
-      initialRouteName="EventosMenu"
+      initialRouteName="MenuEventos"
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: {

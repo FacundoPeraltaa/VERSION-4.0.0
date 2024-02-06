@@ -42,7 +42,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER LA PRODUCCIÓN',
         color: '#DD6B55'
       });
@@ -75,14 +75,14 @@ export default ({ navigation }) => {
       setProducciones(pr);
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCIÓN!',
         mensaje: 'PRODUCCIÓN ELIMINADA',
         color: '#3AD577'
       });
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'AL ELIMINAR LA PRODUCCIÓN',
         color: '#DD6B55'
       });

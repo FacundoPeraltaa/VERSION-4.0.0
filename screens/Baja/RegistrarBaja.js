@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import ModalSelector from 'react-native-modal-selector';
+import RNPickerSelect from 'react-native-picker-select';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
@@ -25,7 +25,7 @@ export default ({ navigation }) => {
   const {tambo} = route.params;
 
   const [tambos, setTambos] = useState([{ value: '0', label: 'OTRO' }]);
-  const [motivos, setMotivos] = useState([{ key: 1, value: '', label: '' }]);
+  const [motivos, setMotivos] = useState([{  value: '', label: '' }]);
   const [show, setShow] = useState(false);
 
   const [alerta, setAlerta] = useState({
@@ -99,7 +99,6 @@ export default ({ navigation }) => {
   function snapshotTambo(snapshot) {
     snapshot.docs.map(doc => {
       let t = {
-        key: doc.id,  // Utiliza el id del documento como clave única
         value: doc.id,
         label: doc.data().nombre
       }
@@ -122,7 +121,6 @@ export default ({ navigation }) => {
 
     motiv.map(doc => {
       let tr = {
-        key: doc.id,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       }
@@ -194,7 +192,7 @@ export default ({ navigation }) => {
       });
       setAlerta({
         show: true,
-        titulo: '¡ ATENCIÓN !',
+        titulo: '¡ATENCION!',
         mensaje: 'BAJA REGISTRADA CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
@@ -255,15 +253,14 @@ let texto = format(fecha, 'yyyy-MM-dd');
         <View>
           <Text style={styles.texto}>MOTIVO:</Text>
 
-          <ModalSelector
-            data={motivos}
-            onValueChange={formBaja.handleChange('motivo')}
-            value={formBaja.values.motivo}
-            placeholder={{}}
-            cancelButtonAccessibilityLabel={'Cancelar'}
-            initValue="SELECCIONA UN MOTIVO"
-            style={{backgroundColor: '#FDFFFF', }}
-          />
+          <RNPickerSelect
+              items={motivos}
+              onValueChange={formBaja.handleChange('motivo')}
+              value={formBaja.values.motivo}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
 
         </View>
         
@@ -274,16 +271,14 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <View>
             <Text style={styles.texto}>TAMBO:</Text>
           
-            <ModalSelector
-             data={tambos}
-             onValueChange={formBaja.handleChange('tambo')}
-             value={formBaja.values.motivo}
-             placeholder={{}}
-             cancelButtonAccessibilityLabel={'Cancelar'}
-             initValue="SELECCIONA UN MOTIVO"
-             style={{backgroundColor: '#FDFFFF', }}
-            />
+            <RNPickerSelect
+              items={tambos}
+              onValueChange={formBaja.handleChange('tambo')}
+              value={formBaja.values.tambo}
 
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
           </View>
 
 

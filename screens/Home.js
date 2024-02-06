@@ -66,7 +66,7 @@ const Home = ({ navigation, tambo, selectTambo }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS ANIMALES',
         color: '#DD6B55'
       });
@@ -95,7 +95,7 @@ const Home = ({ navigation, tambo, selectTambo }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDEN OBTENER LOS TRATAMIENTOS',
         color: '#DD6B55'
       });
@@ -122,7 +122,7 @@ function obtenerToros () {
   catch (error) {
     setAlerta({
       show: true,
-      titulo: '¡ ERROR !',
+      titulo: '¡ERROR!',
       mensaje: 'NO SE PUEDEN OBTENER LOS TOROS',
       color: '#DD6B55'
     });
@@ -140,7 +140,7 @@ function obtenerProduccion() {
   } catch (error) {
     setAlerta({
       show: true,
-      titulo: '¡ ERROR !',
+      titulo: '¡ERROR!',
       mensaje: 'NO SE PUEDE OBTENER LA PRODUCCIÓN',
       color: '#DD6B55'
     });
@@ -160,7 +160,7 @@ function obtenerRecepcion() {
   } catch (error) {
     setAlerta({
       show: true,
-      titulo: '¡ ERROR !',
+      titulo: '¡ERROR!',
       mensaje: 'NO SE PUEDEN OBTENER LAS RECEPCIONES',
       color: '#DD6B55'
     });
@@ -181,7 +181,7 @@ function obtenerMotivos() {
   } catch (error) {
     setAlerta({
       show: true,
-      titulo: '¡ ERROR !',
+      titulo: '¡ERROR!',
       mensaje: 'NO SE PUEDEN OBTENER LOS MOTIVOS DE BAJA',
       color: '#DD6B55'
     });
@@ -210,7 +210,7 @@ function snapshotMotivo(snapshot){
 
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
+        titulo: '¡ERROR!',
         mensaje: 'NO SE PUEDE OBTENER EL USUARIO',
         color: '#DD6B55'
       });

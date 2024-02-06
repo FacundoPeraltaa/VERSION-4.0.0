@@ -35,14 +35,14 @@ export default ({ navigation }) => {
       .then(function (user) {
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN ! ',
+          titulo: '¡ATENCIÓN! ',
           mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
           color: '#399dad'
         })
       }).catch(function (e) {
         setAlerta({
           show: true,
-          titulo: '¡ ATENCIÓN !',
+          titulo: '¡ATENCIÓN!',
           mensaje: "EL CORREO INGRESADO NO SE ENCUENTRA REGISTRADO EN FARMERIN",
           color: 'red'
         })      })
