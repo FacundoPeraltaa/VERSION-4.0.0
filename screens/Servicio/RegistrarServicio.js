@@ -251,37 +251,36 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <View>
             <Text style={styles.texto}>TRATAMIENTO:</Text>
     
-            <ModalSelector
-             data={tratamientoOptions}
-             onValueChange={option => formServicio.handleChange('tratamiento')(option.value)}
-             value={formServicio.values.tratamiento}
-             placeholder={{}} // Ajusta el marcador de posición si es necesario
-             cancelButtonAccessibilityLabel={'Cancelar'}
-             initValue="SELECCIONA UN TRATAMIENTO"
-             style={{backgroundColor: '#FDFFFF', }}
+           <RNPickerSelect
+              items={tratamientoOptions}
+              onValueChange={formServicio.handleChange('tratamiento')}
+              value={formServicio.values.tratamiento}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
             />
+
           </View>
           <View>
             <Text style={styles.texto}>TORO:</Text>
           
-            <ModalSelector
-             data={toros}
-             onValueChange={option => formServicio.handleChange('toro')(option.value)}
-             value={formServicio.values.toro}
-             placeholder={{}}
-             cancelButtonAccessibilityLabel={'Cancelar'}
-             initValue="SELECCIONA UN TORO"
-             style={{backgroundColor: '#FDFFFF', }}
-        />
+             <RNPickerSelect
+              items={toros}
+              onValueChange={formServicio.handleChange('toro')}
+              value={formServicio.values.toro}
+
+              placeholder={{}}
+              style={styles.pickerStyle}
+            />
 
           </View>
           <View>
             <Text style={styles.texto}>TIPO SEMEN:</Text>
       
             <RNPickerSelect
-              items={toros}
-              onValueChange={formServicio.handleChange('toro')}
-              value={formServicio.values.toro}
+              items={tipo}
+              onValueChange={formServicio.handleChange('tipo')}
+              value={formServicio.values.tipo}
 
               placeholder={{}}
               style={styles.pickerStyle}

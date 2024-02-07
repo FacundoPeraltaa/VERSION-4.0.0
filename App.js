@@ -71,19 +71,15 @@ export default function App() {
     <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
         <Stack.Navigator>
-          {isLoggedIn ? (
-            // Pantallas para usuarios logueados
-            <Stack.Screen name="LoggedInTabs" component={LoggedInTabs} />
-          ) : (
-            // Pantallas de autenticación
-            <Stack.Group screenOptions={{ headerShown: false }}>
-             <Stack.Screen name="MenuInicio" component={LoginScreen} />
-             <Stack.Screen name="Recuperar" component={Recuperar} />
-             <Stack.Screen name="Registrar" component={Register} />
-             <Stack.Screen name="EventosMenu" component={LoggedInTabs} />
-             <Stack.Screen name="CerrarSesiones" component={LoginScreen} />
+          
+            <Stack.Group >
+             <Stack.Screen name="MenuInicio" component={LoginScreen} options={{ headerShown: false }} />
+             <Stack.Screen name="Recuperar" component={Recuperar} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'RESTABLECER CONTRASEÑA ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#2980B9'},}}  />
+             <Stack.Screen name="Registrar" component={Register} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'REGISTRARSE EN FARMERIN ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#2980B9'},}} />
+             <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
+             <Stack.Screen name="CerrarSesiones" component={LoginScreen} options={{ headerShown: false }}/>
             </Stack.Group>
-          )}
+          
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
