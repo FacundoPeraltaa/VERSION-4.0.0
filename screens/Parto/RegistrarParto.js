@@ -477,8 +477,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formParto.handleChange('tipo')}
               value={formParto.values.tipo}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR TIPO ',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
 
           </View>
@@ -490,8 +508,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formParto.handleChange('tratamiento')}
               value={formParto.values.tratamiento}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR TRATAMIENTO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
 
           </View>
@@ -592,8 +628,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
                    onValueChange={formCria.handleChange('sexo')}
                    value={formCria.values.sexo}
 
-                   placeholder={{}}
-                   style={styles.pickerStyle}
+                   placeholder={{
+                    label: 'SELECCIONAR SEXO',
+                    value: null,
+                    color: '#9EA0A4',
+                  }}
+                  style={{
+                    inputIOS: styles.pickerStyle,
+                    inputAndroid: styles.pickerStyle,
+                    placeholder: {
+                      color: '#9EA0A4',
+                    },
+                  }}
+                  pickerContainerStyle={{
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: '#ccc',
+                    paddingVertical: 10,
+                    paddingHorizontal: 12,
+                    marginBottom: 10,
+                  }}
                   />
 
                   <Text style={styles.texto}>RP:</Text>
@@ -617,8 +671,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
                    onValueChange={formCria.handleChange('tratamiento')}
                    value={formCria.values.tratamiento}
 
-                   placeholder={{}}
-                   style={styles.pickerStyle}
+                   placeholder={{
+                    label: 'SELECCIONAR TIPO DE CALOSTRO',
+                    value: null,
+                    color: '#9EA0A4',
+                  }}
+                  style={{
+                    inputIOS: styles.pickerStyle,
+                    inputAndroid: styles.pickerStyle,
+                    placeholder: {
+                      color: '#9EA0A4',
+                    },
+                  }}
+                  pickerContainerStyle={{
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: '#ccc',
+                    paddingVertical: 10,
+                    paddingHorizontal: 12,
+                    marginBottom: 10,
+                  }}
                   />
 
                 </View>

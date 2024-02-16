@@ -24,7 +24,7 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
   const {tambo} = route.params;
 
-  const [tambos, setTambos] = useState([{ value: '0', label: 'OTRO' }]);
+  const [tambos, setTambos] = useState([{ value: '', label: 'OTRO' }]);
   const [motivos, setMotivos] = useState([{  value: '', label: '' }]);
   const [show, setShow] = useState(false);
 
@@ -258,8 +258,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formBaja.handleChange('motivo')}
               value={formBaja.values.motivo}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR MOTIVO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
 
         </View>
@@ -276,8 +294,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formBaja.handleChange('tambo')}
               value={formBaja.values.tambo}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR TAMBO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
           </View>
 

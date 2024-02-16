@@ -44,6 +44,7 @@ export default ({ navigation }) => {
   function obtenerTratamientos() {
     tratam.map(doc => {
       let tr = {
+        key: doc.descripcion,
         value: doc.descripcion,
         label: doc.descripcion
       }
@@ -185,7 +186,11 @@ return (
               onValueChange={formTratamiento.handleChange('enfermedad')}
               value={formTratamiento.values.enfermedad}
 
-              placeholder={{}}
+              placeholder={{
+                label: 'SELECCIONAR ENFERMEDAD',
+                value: null,
+                color: '#9EA0A4',
+              }}
               style={styles.pickerStyle}
             />
 
@@ -199,7 +204,11 @@ return (
               onValueChange={formTratamiento.handleChange('tratamiento')}
               value={formTratamiento.values.tratamiento}
 
-              placeholder={{}}
+              placeholder={{
+                label: 'SELECCIONAR TRATAMIENTO',
+                value: null,
+                color: '#9EA0A4',
+              }}
               style={styles.pickerStyle}
             />
 
@@ -335,15 +344,22 @@ const styles = StyleSheet.create({
   boton: {
     margin: 5
   },
-  dropdown: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: 'white',
-  },
-  dropdownText: {
-    fontSize: 16,
+
+  pickerStyle: {
+    inputIOS: {
+      marginLeft: 5,
+      marginRight: 5,
+      backgroundColor: 'white',
+      height: 50
+    },
+    inputAndroid: {
+  
+      marginLeft: 5,
+      marginRight: 5,
+      backgroundColor: 'white',
+      height: 50
+    },
+  
   },
 
 

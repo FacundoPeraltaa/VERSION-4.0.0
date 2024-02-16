@@ -161,8 +161,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formRechazo.handleChange('motivo')}
               value={formRechazo.values.motivo}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR MOTIVO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
 
           <Text></Text>

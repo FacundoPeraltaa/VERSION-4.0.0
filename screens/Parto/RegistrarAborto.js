@@ -208,8 +208,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formAborto.handleChange('tipo')}
               value={formAborto.values.tipo}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR TIPO ',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
           <Text></Text>
           <Text style={styles.texto}>TRATAMIENTO:</Text>
@@ -219,8 +237,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formAborto.handleChange('tratamiento')}
               value={formAborto.values.tratamiento}
 
-              placeholder={{}}
-              style={styles.pickerStyle}
+              placeholder={{
+                label: 'SELECCIONAR TRATAMIENTO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputIOS: styles.pickerStyle,
+                inputAndroid: styles.pickerStyle,
+                placeholder: {
+                  color: '#9EA0A4',
+                },
+              }}
+              pickerContainerStyle={{
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
             />
         </View>
 

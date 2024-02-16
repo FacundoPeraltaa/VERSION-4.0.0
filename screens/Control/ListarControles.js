@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Modal,  SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Modal,  SafeAreaView, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SearchBar } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -78,7 +78,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE OBTENER EL CONTROL',
         color: '#DD6B55'
       });
@@ -106,7 +106,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDEN OBTENER LOS ANIMALES EN ORDEÑE',
         color: '#DD6B55'
       });
@@ -210,7 +210,7 @@ export default ({ navigation }) => {
           }else{
             setAlerta({
               show: true,
-              titulo: '¡ERROR!',
+              titulo: '¡ ERROR !',
               mensaje: 'NO HAY ANIMALES PARA CONFIRMAR',
               color: '#DD6B55'
             });
@@ -228,7 +228,7 @@ export default ({ navigation }) => {
     if (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE CONFIRMAR EL COONTROL LECHERO',
         color: '#DD6B55'
       });
@@ -246,14 +246,14 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ERROR!',
+          titulo: '¡ ERROR !',
           mensaje: 'NO SE PUEDE CONFIRMAR EL CONTROL LECHERO',
           color: '#DD6B55'
         });
       } else {
         setAlerta({
           show: true,
-          titulo: '¡ATENCIÓN!',
+          titulo: '¡ATENCION!',
           mensaje: 'CONTROL LECHERO CONFIRMADO CON ÉXITO ',
           color: '#3AD577',
           vuelve:true
@@ -277,7 +277,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'AL ACTUALIZAR EL CONTROL',
         color: '#DD6B55'
       });
@@ -294,7 +294,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'AL ACTUALIZAR EL CONTROL',
         color: '#DD6B55'
       });
@@ -316,7 +316,7 @@ export default ({ navigation }) => {
     if (existe.length > 0) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'EL ANIMAL YA ESTA REGISTRADO EN EL CONTROL',
         color: '#DD6B55'
       });
@@ -345,7 +345,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'Al agregar el animal',
         color: '#DD6B55'
       });
@@ -411,7 +411,7 @@ export default ({ navigation }) => {
     } catch (e) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });
@@ -636,7 +636,21 @@ export default ({ navigation }) => {
                     <>
                       {(tolvasIzq.length < parseInt(tambo.bajadas)) && <Text style={styles.alertaLado}>CONTROLE EL ORDEN DE LOS ANIMALES</Text>}
 
-                      <FlatList
+                      <Button
+                       onPress={volverAnimalesOrd}
+                       type="outline"
+                       title=" VOLVER"
+                       icon={
+                       <Icon
+                        name="reply"
+                        size={30}
+                        color="#2980B9"
+                      />
+                      }
+                      buttonStyle={{ backgroundColor: '#FAF9FF' }} // Define el color de fondo del botón
+                    />
+
+                     <FlatList
                         data={tolvasDer}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) => (
@@ -648,11 +662,11 @@ export default ({ navigation }) => {
                           />
                         )
                         }
-
                       />
-
+                      
                     </>
                   }
+                  
                 </SafeAreaView>
                 :
                 <SafeAreaView>
@@ -662,6 +676,20 @@ export default ({ navigation }) => {
                     :
                     <>
                       {(tolvasIzq.length < parseInt(tambo.bajadas)) && <Text style={styles.alertaLado}>CONTROLE EL ORDEN DE LOS ANIMALES</Text>}
+
+                       <Button
+                       onPress={volverAnimalesOrd}
+                       type="outline"
+                       title=" VOLVER"
+                       icon={
+                       <Icon
+                        name="reply"
+                        size={30}
+                        color="#2980B9"
+                      />
+                      }
+                      buttonStyle={{ backgroundColor: '#FAF9FF' }} // Define el color de fondo del botón
+                    />
 
                       <FlatList
                         data={tolvasIzq}
@@ -681,23 +709,10 @@ export default ({ navigation }) => {
 
                     </>
                   }
+                  
                 </SafeAreaView>
               }
-              <Button
-                onPress={volverAnimalesOrd}
-                type="outline"
-                title=" VOLVER"
-                icon={
-                  <Icon
-                    name="reply"
-                    size={30}
-                    color="#2980B9"
-                  />
-                }
-              />
-
-
-
+              
             </View>
           </View>
         </Modal>
@@ -712,10 +727,12 @@ export default ({ navigation }) => {
               <Icon
                 name="th-large"
                 size={35}
-                color="#2980B9"
+                color="#FAF9FF"
               />
             }
             onPress={() => animalesEnTambo()}
+            buttonStyle={{ backgroundColor: '#2980B9' }}
+            titleStyle={{ color: '#FAF9FF' }}
           />
           <Text style={styles.text3}></Text>
           <Button
@@ -725,10 +742,12 @@ export default ({ navigation }) => {
               <Icon
                 name="plus-square"
                 size={35}
-                color="#2980B9"
+                color="#FAF9FF"
               />
             }
             onPress={() => setAddAnimal(true)}
+            buttonStyle={{ backgroundColor: '#2980B9' }}
+            titleStyle={{ color: '#FAF9FF' }}
           />
           {animalesControl.length > 0 &&
             <SafeAreaView>
@@ -740,15 +759,19 @@ export default ({ navigation }) => {
                   <Icon
                     name="check-square"
                     size={35}
-                    color="#2980B9"
+                    color="#FAF9FF"
                   />
                 }
                 onPress={() => mostrarConfirmacion(true)}
+                buttonStyle={{ backgroundColor: '#2980B9' }}
+                titleStyle={{ color: '#FAF9FF' }}
+
               />
             </SafeAreaView>
           }
         </View>
       }
+
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -790,7 +813,7 @@ const styles = StyleSheet.create({
   },
 
   botones: {
-    paddingTop: 5,
+    paddingTop: 10,
     flex: 2,
 
   },
@@ -837,15 +860,16 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    color: '#2980B9',
+    color: '#FAF9FF',
     textAlign: 'center',
     fontSize: 15,
     marginTop: 10,
-    marginBottom: 5
+    marginBottom: 5,
+    
 
   },
   text2: {
-    color: '#2980B9',
+    color: '#FAF9FF',
     textAlign: 'center',
     fontSize: 18,
     marginTop: 10,
@@ -935,6 +959,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: hp('90%')
   },
+ 
 
 
 });

@@ -12,8 +12,8 @@ import { format } from 'date-fns';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { MovieContext } from "../Contexto"
 import { useRoute } from '@react-navigation/core';
-import ModalSelector from 'react-native-modal-selector';
 import RNPickerSelect from 'react-native-picker-select';
+
 
 export default ({ navigation }) => {
   const [show, setShow] = useState(false);
@@ -29,25 +29,23 @@ export default ({ navigation }) => {
   const {usuario} = route.params;
 
   const [formValues, setFormValues] = useState({
-    tratamientoOptions: '',
-    tipo: '',  // Inicializa el valor según tus necesidades
-    toros:'',
-  })
+    tipo: '', // Inicializa el valor según tus necesidades
+  });
 
-  const handleChange = fieldName => option => {
+  const handleChange = fieldName => value => {
     // Actualiza el estado del formulario con el nuevo valor
     setFormValues(prevValues => ({
       ...prevValues,
-      [fieldName]: option.value,
+      [fieldName]: value,
     }));
-};
+  };
 
 
   const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
-  const [toros, setToros] = useState([{ value: 'Robo', label: 'ROBO' }]);
+  const [toros, setToros] = useState([{ key: 1, value: 'Robo', label: 'ROBO' }]);
   const tipo = [
-    { value: 'Convencional', label: 'CONVENCIONAL' },
-    { value: 'Sexado', label: 'SEXADO' }
+    { key: 1, value: 'Convencional', label: 'CONVENCIONAL' },
+    { key: 2, value: 'Sexado', label: 'SEXADO' }
   ];
   const [alerta, setAlerta] = useState({
     show: false,
@@ -92,6 +90,7 @@ export default ({ navigation }) => {
   
     filtrado.forEach(doc => {
       let tr = {
+        key: doc.id,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       };
@@ -107,7 +106,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDEN OBTENER LOS TOROS',
         color: '#DD6B55'
       });
@@ -117,6 +116,7 @@ export default ({ navigation }) => {
   function snapshotToro(snapshot) {
     snapshot.docs.map(doc => {
       let t = {
+        key: doc.id,
         value: doc.data().hba,
         label: doc.data().hba
       };
@@ -178,7 +178,7 @@ export default ({ navigation }) => {
       })
       setAlerta({
         show: true,
-        titulo: '¡ATENCIÓN!',
+        titulo: '¡ ATENCIÓN !',
         mensaje: 'SERVICIO REGISTRADO CON ÉXITO',
         color: '#3AD577',
         vuelve: true,
@@ -187,7 +187,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE REGISTRAR EL SERVICIO',
         color: '#DD6B55',
         vuelve: false
@@ -251,12 +251,16 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <View>
             <Text style={styles.texto}>TRATAMIENTO:</Text>
     
-           <RNPickerSelect
+            <RNPickerSelect
               items={tratamientoOptions}
               onValueChange={formServicio.handleChange('tratamiento')}
               value={formServicio.values.tratamiento}
 
-              placeholder={{}}
+              placeholder={{
+                label: 'SELECCIONAR TRATAMIENTO',
+                value: null,
+                color: '#9EA0A4',
+              }}
               style={styles.pickerStyle}
             />
 
@@ -264,12 +268,16 @@ let texto = format(fecha, 'yyyy-MM-dd');
           <View>
             <Text style={styles.texto}>TORO:</Text>
           
-             <RNPickerSelect
+            <RNPickerSelect
               items={toros}
               onValueChange={formServicio.handleChange('toro')}
               value={formServicio.values.toro}
 
-              placeholder={{}}
+              placeholder={{
+                label: 'SELECCIONAR TORO',
+                value: null,
+                color: '#9EA0A4',
+              }}
               style={styles.pickerStyle}
             />
 
@@ -282,7 +290,11 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formServicio.handleChange('tipo')}
               value={formServicio.values.tipo}
 
-              placeholder={{}}
+              placeholder={{
+                label: 'SELECCIONAR TIPO DE SEMEN',
+                value: null,
+                color: '#9EA0A4',
+              }}
               style={styles.pickerStyle}
             />
            
@@ -427,6 +439,22 @@ switchTexto: {
   fontWeight: "bold",
   paddingLeft: 5,
   fontSize: 13
+},
+pickerStyle: {
+  inputIOS: {
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: 'white',
+    height: 50
+  },
+  inputAndroid: {
+
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: 'white',
+    height: 50
+  },
+
 },
 
 });
