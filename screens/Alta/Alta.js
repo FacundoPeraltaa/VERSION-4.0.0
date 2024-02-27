@@ -351,7 +351,7 @@ export default ({ navigation }) => {
               <Text style={styles.texto}>FECHA INGRESO:</Text>
               <TouchableHighlight style={styles.calendario} onPress={handlever}>
                 <View
-
+                
                 ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
               {show && (
                 <DateTimePicker
@@ -375,7 +375,7 @@ export default ({ navigation }) => {
                   }}
                 />
               )}
-
+              
             </View>
             <View>
               <Text style={styles.texto}>RP:</Text>
@@ -577,7 +577,7 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancel"
+        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

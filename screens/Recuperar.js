@@ -89,7 +89,7 @@ setMailo(e)}
           closeOnHardwareBackPress={false}
           showCancelButton={false}
           showConfirmButton={true}
-          cancelText="No, cancelar"
+          cancelText="No, cancelarar"
           confirmText="ACEPTAR"
           confirmButtonTextStyle={{
             fontSize:20,
