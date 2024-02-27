@@ -119,7 +119,7 @@ export default ({ navigation }) => {
           displayName:nombre
         })
       }
-      ).then(()=>navigation.navigate('EVENTOS'))
+      ).then(()=>navigation.navigate('EventosMenu'))
   };
 
   return (

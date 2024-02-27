@@ -38,7 +38,7 @@ export default ({ navigation }) => {
       .then(function (user) {
         setAlerta({
           show: true,
-          titulo: '¡ATENCIÓN!',
+          titulo: '¡ATENCION!',
           mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
           color: '#DD6B55'
         })
@@ -65,7 +65,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: error,
         color: '#DD6B55'
       })
@@ -97,7 +97,7 @@ export default ({ navigation }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ERROR!',
+          titulo: '¡ ERROR !',
           mensaje: "CORREO O CONTRASEÑA INCORRECTOS",
           color: '#DD6B55'
         })
@@ -154,7 +154,7 @@ export default ({ navigation }) => {
             </View>
             </View>
             <View >
-            <Text style={styles.textVersion} > Version 3.2.6 </Text>
+            <Text style={styles.textVersion} > Version 3.2.7 </Text>
             <Text style={styles.textVersion} > Farmerin Division S.A. - &copy; 2020 </Text>
             </View>
           </>
@@ -236,6 +236,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     paddingLeft: 5,
     marginRight: 5,
+    borderBottomWidth: 1,
+    borderColor: '#B0BDB5',
   },
   contenedor:{
     display: 'flex',

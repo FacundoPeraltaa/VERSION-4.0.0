@@ -384,7 +384,7 @@ try{
           }
         </View>
         <View>
-          <Text style={styles.textVersion} > Version 3.2.6 </Text>
+          <Text style={styles.textVersion} > Version 3.2.7 </Text>
           <Text style={styles.textVersion} > Farmerin Division S.A. - &copy; 2020 </Text>
           </View>
 

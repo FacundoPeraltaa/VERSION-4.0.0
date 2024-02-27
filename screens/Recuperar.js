@@ -103,7 +103,7 @@ setMailo(e)}
           }}
           onConfirmPressed={() => {
             setAlerta({ show: false })
-            navigation.navigate('MenuSesion')
+            navigation.navigate('MenuInicio')
           }}
         />
       </>

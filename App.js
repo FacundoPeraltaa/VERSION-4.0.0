@@ -108,8 +108,8 @@ if (loading) {
             // Pantallas de autenticación
             <Stack.Group>
               <Stack.Screen name="MenuInicio" component={LoginScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Recuperar" component={Recuperar} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'RESTABLECER CONTRASEÑA ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#2980B9'},}}  />
-              <Stack.Screen name="Registrar" component={Register} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'REGISTRARSE EN FARMERIN ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#2980B9'},}} />
+              <Stack.Screen name="Recuperar" component={Recuperar} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'RESTABLECER CONTRASEÑA ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}}  />
+              <Stack.Screen name="Registrar" component={Register} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'REGISTRARSE EN FARMERIN ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}} />
               <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
               <Stack.Screen name="CerrarSesiones" component={LoginScreen} options={{ headerShown: false }}/>
             </Stack.Group>

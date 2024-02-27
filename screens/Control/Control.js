@@ -143,7 +143,8 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ERROR!',
-        mensaje: 'YA EXISTE UN CONTROL REGISTRADO EN ESTA FECHA '
+        mensaje: 'YA EXISTE UN CONTROL REGISTRADO EN ESTA FECHA ',
+        color: '#3AD577'
       });
 
     } else {
