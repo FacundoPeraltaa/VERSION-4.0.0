@@ -9,6 +9,7 @@ export default ({navigation}) => {
   console.log('HOST', host)
   const ip=host.slice(0,-4)
   console.log('IP', ip)
+  console.log('TAMBO', tambo)
   return (
       <WebView
         source={{ uri: `http://${ip}8080/react-responsive/` }}
