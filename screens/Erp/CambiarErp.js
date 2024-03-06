@@ -79,8 +79,8 @@ export default ({ navigation }) => {
       firebase.db.collection('animal').doc(animal.id).update({ erp: datos.erp });
       setAlerta({
         show: true,
-        titulo: '¡ATENCIÓN!',
-        mensaje: 'eRP CAMBIADO CON ÉXITO ',
+        titulo: '¡ATENCION!',
+        mensaje: ' BOTON (eRP) CAMBIADO CON ÉXITO ',
         color: '#3AD577',
         vuelve:true
       });
@@ -95,7 +95,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUDO CAMBIAR EL eRP',
         color: '#DD6B55',
         vuelve:false
@@ -127,9 +127,8 @@ export default ({ navigation }) => {
         />
         {formErp.errors.erp ? <Text style={styles.error}>{formErp.errors.erp}</Text> : null}
       </View>
-    </View>
-    <Button
-      style={styles.boton}
+      <Button
+      buttonStyle={{Color: '#e1e8ee', margin: 40}} 
       title="  ACEPTAR"
       icon={Platform.OS === 'ios' ? (
         <Icon
@@ -140,6 +139,8 @@ export default ({ navigation }) => {
       ) : null}
       onPress={formErp.handleSubmit}
     />
+    </View>
+   
     <AwesomeAlert
       show={alerta.show}
       showProgress={false}
@@ -149,7 +150,7 @@ export default ({ navigation }) => {
       closeOnHardwareBackPress={false}
       showCancelButton={false}
       showConfirmButton={true}
-      cancelText="No, cancelarar"
+      cancelText="No, cancelar"
       confirmText="ACEPTAR"
       confirmButtonColor={alerta.color}
       onCancelPressed={() => {
@@ -232,7 +233,8 @@ const styles = StyleSheet.create({
 
   },
   boton: {
-    margin: 5,
+    margin: 45,
+   
 
   }
 

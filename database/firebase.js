@@ -1,3 +1,16 @@
+/import 'expo-firestore-offline-persistence';/
+/*import firebase from 'firebase';
+import 'firebase/firestore';
+import 'firebase/storage';
+import 'firebase/auth';*/
+
+
+
+//VERSION 9
+/*
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore} from 'firebase/firestore';*/
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -15,12 +28,20 @@ const firebaseConfig = {
   };
 
 
+  /*
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore();
+  const autenticacion = getAuth(app);
+ */
+
+  
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
   }
   const db = firebase.firestore();
-  const autenticacion = firebase.auth();
+  firebase.firestore().enablePersistence();
   const almacenamiento=firebase.storage();
+  const autenticacion = firebase.auth();
 
  
 
@@ -31,4 +52,3 @@ const firebaseConfig = {
       almacenamiento
       
   }
-  

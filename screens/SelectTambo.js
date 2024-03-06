@@ -6,82 +6,86 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import ListItem from './ListItem';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-export default function ({ setShowTambos, showTambos, selectTambo }) {
+export default function App({ setShowTambos, showTambos, selectTambo }) {
   const [tambos, guardarTambos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alerta, setAlerta] = useState({
-    show: false,
-    titulo: '',
-    mensaje: '',
-    color: '#DD6B55'
+     show: false,
+     titulo: '',
+     mensaje: '',
+     color: '#DD6B55'
   });
-
-  useEffect(() => {
-
-    obtenerTambos();
-
-  }, []);
-
-
-  //obtiene los tambos al cargar el component
-  async function obtenerTambos() {
-    setLoading(true);
-    try {
-      AsyncStorage.getItem('usuario').then((keyValue) => {
-
-        try {
-          firebase.db.collection('tambo').where('usuarios', 'array-contains', keyValue).orderBy('nombre', 'desc').onSnapshot(snapshotTambo);
-        } catch (error) {
-          setAlerta({
-            show: true,
-            titulo: '¡ERROR!',
-            mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
-            color: '#DD6B55'
-          });
-          setLoading(false);
-          setShowTambos(false);
-        }
-      });
-    } catch (error) {
-      setAlerta({
-        show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
-        color: '#DD6B55'
-      });
-      setLoading(false);
-      setShowTambos(false);
-    }
-  }
-
-  function snapshotTambo(snapshot) {
-    const tambos = snapshot.docs.map(doc => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      }
-    })
-    guardarTambos(tambos);
-
-    if (tambos.length > 0) {
-      //si hay sólo un tambo, lo selecciono
-      if (tambos.length == 1) {
-        selectTambo(tambos[0]);
-        setShowTambos(false);
-      }
-    } else {
-      setAlerta({
-        show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO HAY TAMBOS ASOCIADOS AL USUARIO',
-        color: '#DD6B55'
-      });
-      setShowTambos(false);
  
-    }
-    setLoading(false);
+  useEffect(() => {
+     console.log('Iniciando la obtención de tambos');
+     obtenerTambos();
+  }, []);
+ 
+  async function obtenerTambos() {
+     setLoading(true);
+     console.log('Estado de carga:', loading);
+     try {
+       AsyncStorage.getItem('usuario').then((keyValue) => {
+         try {
+           firebase.db.collection('tambo').where('usuarios', 'array-contains', keyValue).orderBy('nombre', 'desc').onSnapshot(snapshotTambo);
+         } catch (error) {
+           setAlerta({
+             show: true,
+             titulo: '¡ ERROR !',
+             mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
+             color: '#DD6B55'
+           });
+           setLoading(false);
+           setShowTambos(false);
+         }
+       });
+     } catch (error) {
+       setAlerta({
+         show: true,
+         titulo: '¡ ERROR !',
+         mensaje: 'NO SE PUEDEN RECUPERAR LOS TAMBOS ASOCIADOS AL USUARIO',
+         color: '#DD6B55'
+       });
+       setLoading(false);
+       setShowTambos(false);
+     }
   }
-
+ 
+  function snapshotTambo(snapshot) {
+     const tambos = snapshot.docs.map(doc => {
+       return {
+         id: doc.id,
+         ...doc.data()
+       }
+     })
+     guardarTambos(tambos);
+     console.log('Estado de carga después de obtener los tambos:', loading);
+ 
+     if (tambos.length > 0) {
+       if (tambos.length == 1) {
+         selectTambo(tambos[0]);
+         setShowTambos(false);
+       }
+     } else {
+       setAlerta({
+         show: true,
+         titulo: '¡ ERROR !',
+         mensaje: 'NO HAY TAMBOS ASOCIADOS AL USUARIO',
+         color: '#DD6B55'
+       });
+       setShowTambos(false);
+     }
+     setLoading(false);
+  }
+ 
+  if (loading) {
+     return (
+       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+         <ActivityIndicator size="large" color="#0000ff" />
+       </View>
+     );
+  }
+ 
   return (
     <>
       <Modal
@@ -100,7 +104,6 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
                 <View style={styles.header}>
                   <Text style={styles.text2}>BUSCANDO TAMBOS...</Text>
                 </View>
-                <ActivityIndicator size="large" color='#1b829b' />
               </>
               :
               <>
@@ -138,7 +141,7 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {
@@ -152,6 +155,7 @@ export default function ({ setShowTambos, showTambos, selectTambo }) {
 
   );
 }
+
 
 
 
@@ -169,6 +173,8 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
+    paddingTop: Platform.OS === 'ios' ? 20 : 0, // Ajuste específico para iOS
+
   },
   header: {
 

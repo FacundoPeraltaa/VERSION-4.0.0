@@ -57,8 +57,8 @@ const Config = ({ navigation, tambo, selectTambo }) => {
 
         setAlerta({
           show: true,
-          titulo: '¡ATENCIÓN! ',
-          mensaje: '¿DESEA CERRAR SESION?',
+          titulo: '¡ATENCION! ',
+          mensaje: '¿ DESEA CERRAR SESION ?',
           color: '#3AD577'
         });
 

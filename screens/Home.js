@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View, ImageBackground, Text, Image, Activ
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import SelectTambo from './SelectTambo';
 import { selectTambo } from '../src/reducers/tambo';
+import 'expo-firestore-offline-persistence';   // Habilita offline persistence 
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';

@@ -10,6 +10,7 @@ import store from './src/store';
 import { MovieProvider } from './screens/Contexto';
 import registerNNPushToken from 'native-notify';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
+import 'expo-firestore-offline-persistence';   // Habilita offline persistence 
 
 
 
@@ -104,6 +105,7 @@ if (loading) {
           {isLoggedIn ? (
             // Pantallas para usuarios logueados
             <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
+            
           ) : (
             // Pantallas de autenticación
             <Stack.Group>
@@ -111,7 +113,8 @@ if (loading) {
               <Stack.Screen name="Recuperar" component={Recuperar} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'RESTABLECER CONTRASEÑA ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}}  />
               <Stack.Screen name="Registrar" component={Register} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'REGISTRARSE EN FARMERIN ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}} />
               <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
-              <Stack.Screen name="CerrarSesiones" component={LoginScreen} options={{ headerShown: false }}/>
+              <Stack.Screen name="CerrarSesiones" component={LoginScreen} options={{ headerShown: false }} />
+
             </Stack.Group>
           )}
         </Stack.Navigator>

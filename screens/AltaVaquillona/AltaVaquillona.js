@@ -129,7 +129,7 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ATENCIÓN!',
-        mensaje: 'ANIMALES CAMBIADOS CON ÉXITO ',
+        mensaje: 'ALTA REALIZADA CON ÉXITO ',
         color: '#3AD577',
         vuelve: true
       });

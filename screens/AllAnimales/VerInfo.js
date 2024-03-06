@@ -52,11 +52,6 @@ export default function ({ setShowTambos, showTambos, data }) {
                   <Text style={styles.backButtonText}> VOLVER </Text>
                   </View>
                   </TouchableOpacity>
-             
-                  
-                  
-
-          
                 </View>
               </>
             }

@@ -51,7 +51,7 @@ export default ({ navigation }) => {
     if (isNaN(p)) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'INGRESE UN NUMERO',
         color: '#DD6B55'
       });
@@ -73,7 +73,7 @@ export default ({ navigation }) => {
       } else {
         setAlerta({
           show: true,
-          titulo: '¡ERROR!',
+          titulo: '¡ ERROR !',
           mensaje: 'EL PESO DEBE SER MAYOR A CERO',
           color: '#DD6B55'
         });
@@ -107,7 +107,7 @@ export default ({ navigation }) => {
       setRelAct(0);
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO '+error,
         color: '#DD6B55'
       });
@@ -139,7 +139,7 @@ export default ({ navigation }) => {
       setRacion(2);
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE OBTENER RACIÓN DE CALIBRACION '+error,
         color: '#DD6B55'
       });
@@ -171,7 +171,7 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
         color: '#DD6B55'
       });
@@ -205,7 +205,7 @@ export default ({ navigation }) => {
       } catch (error) {
         setAlerta({
           show: true,
-          titulo: '¡ERROR!',
+          titulo: '¡ ERROR !',
           mensaje: 'NO SE PUDO MODIFICAR LA RELACIÓN',
           color: '#DD6B55'
         });
@@ -223,7 +223,7 @@ export default ({ navigation }) => {
     } else {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
+        titulo: '¡ ERROR !',
         mensaje: 'LA RELACIÓN DEBE SER MAYOR A CERO',
         color: '#DD6B55'
       });
@@ -237,15 +237,16 @@ export default ({ navigation }) => {
         <Text style={styles.alerta}>NO SE PUEDE OBTENER LA RELACION PASO/GRAMOS ACTUAL</Text>
         :
         <ScrollView>
-          <Text style={styles.textoEncabezado}>
-            MEDIR NUEVA RELACION PASO/GRAMOS
-          </Text>
+          
+           
 
           <Text style={styles.texto}>1 - PRESIONE "INICIAR"</Text>
           <Text style={styles.texto}>2 - DESCARGUE MOTOR 1 PARA PESAR</Text>
           <Text style={styles.texto}>3 - INTRODUZCA LOS GRAMOS PESADOS Y PRESIONE "+"</Text>
           <Text style={styles.texto}>4 - REPETIR DESDE EL PUNTO 2 TANTAS VECES COMO VEA NECESARIO (SE TOMAN SOLO 5 MUESTRAS).</Text>
           <Text style={styles.texto}>5 - PRESIONE FINALIZAR</Text>
+          <Text style={styles.textoA}> ¡ATENCION! </Text>
+          <Text style={styles.textoB}>  SE HARÁ LA DESCARGA EN MOTOR 1 - LADO IZQUIERDO </Text>
           {iniciar ?
 
             <Button
@@ -334,7 +335,7 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelarar"
+        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {
@@ -389,6 +390,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: '#002742',
 
+  },
+  textoA:{
+    marginLeft: 5,
+    marginTop: 10,
+    fontSize: 17,
+    backgroundColor: '#e1e8ee',
+    textAlign: 'center',
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    color: '#FF0000',
+  },
+
+  textoB:{
+    fontSize: 14,
+    backgroundColor: '#e1e8ee',
+    textAlign: 'center',
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    color: '#002742',
   },
   textoEncabezado: {
     marginLeft: 5,

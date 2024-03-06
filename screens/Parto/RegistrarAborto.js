@@ -60,6 +60,7 @@ export default ({ navigation }) => {
       formAborto.setFieldValue('tipo', 'Aborto');
       setOptions([
         { value: 'Aborto', label: 'ABORTO' }
+        
       ])
     }
     //busca los tratamientos de abortos
@@ -72,6 +73,7 @@ export default ({ navigation }) => {
   
     filtrado.forEach(doc => {
       let tr = {
+        key: doc.descripcion,  // Utiliza el id del documento como clave única
         value: doc.descripcion,
         label: doc.descripcion
       };
@@ -208,26 +210,8 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formAborto.handleChange('tipo')}
               value={formAborto.values.tipo}
 
-              placeholder={{
-                label: 'SELECCIONAR TIPO ',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={{
-                inputIOS: styles.pickerStyle,
-                inputAndroid: styles.pickerStyle,
-                placeholder: {
-                  color: '#9EA0A4',
-                },
-              }}
-              pickerContainerStyle={{
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#ccc',
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                marginBottom: 10,
-              }}
+              placeholder={{}}
+              style={styles.pickerStyle}
             />
           <Text></Text>
           <Text style={styles.texto}>TRATAMIENTO:</Text>
@@ -237,26 +221,8 @@ let texto = format(fecha, 'yyyy-MM-dd');
               onValueChange={formAborto.handleChange('tratamiento')}
               value={formAborto.values.tratamiento}
 
-              placeholder={{
-                label: 'SELECCIONAR TRATAMIENTO',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={{
-                inputIOS: styles.pickerStyle,
-                inputAndroid: styles.pickerStyle,
-                placeholder: {
-                  color: '#9EA0A4',
-                },
-              }}
-              pickerContainerStyle={{
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#ccc',
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                marginBottom: 10,
-              }}
+              placeholder={{}}
+              style={styles.pickerStyle}
             />
         </View>
 
@@ -281,7 +247,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {
