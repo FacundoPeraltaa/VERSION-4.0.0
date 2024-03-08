@@ -6,6 +6,8 @@ export default () => {
     let wsp = require('../../assets/whatsapp.png');
     let mail = require('../../assets/email.png');
     let yt = require('../../assets/yt.png');
+    let ig = require('../../assets/instagramicono.png');
+    let fb = require('../../assets/facebookicono.png');
 
 
     const DATA = [
@@ -47,14 +49,32 @@ export default () => {
         />
       </View>
       <View style={styles.linea}></View>
-      <View style={styles.titulo}><Text style={styles.textocon}>Ayuda</Text></View>
+      <View style={styles.titulo}><Text style={styles.textocon}>Redes</Text></View>
       <ListItem
         data={{
-          title: "Canal de YouTube",
+          title: "YouTube",
           logo: yt,
         }}
         linkeo={() =>
           navegar("https://www.youtube.com/channel/UCPG5tI4805MPm6jshejr5vA")
+        }
+      />
+       <ListItem
+        data={{
+          title: "Facebook",
+          logo: fb,
+        }}
+        linkeo={() =>
+          navegar("https://www.facebook.com/farmerinarg")
+        }
+      />
+       <ListItem
+        data={{
+          title: "Instagram",
+          logo: ig,
+        }}
+        linkeo={() =>
+          navegar("https://www.instagram.com/farmerinar/")
         }
       />
     </View>
@@ -68,7 +88,7 @@ const styles = StyleSheet.create({
 linea:{
     height: 1, 
     backgroundColor: '#2980B9',
-    marginVertical: 25
+    marginVertical: 5,
 },
   listado: {
   },
@@ -79,7 +99,7 @@ linea:{
   textocon:{
     backgroundColor: '#e1e8ee',
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: 'left',
     textTransform: "uppercase",
     fontWeight: "bold",
     color: '#002742',
