@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#2980B9'
+    color: '#070037'
   },
   textSecar: {
     fontSize: 16,

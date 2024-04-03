@@ -4,11 +4,11 @@
     "slug": "farmerinApps",
     "version": "3.2.7",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/NUEVOICONOBLANCO2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/NUEVOICONOBLANCO2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1b8aa5",
+      "backgroundColor": "#fefeff",
       "text": "AS"
     },
     "assetBundlePatterns": [
@@ -16,16 +16,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ar.com.farmerinasd",
-      "buildNumber": "37"
+      "bundleIdentifier": "ar.com.farmerin",
+      "buildNumber": "38"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1b8aa5"
+        "foregroundImage": "./assets/NUEVOICONOBLANCO2.png",
+        "backgroundColor": "#fefeff"
       },
-      "package": "com.farmerin.farmerinasd",
-      "versionCode": 38,
+      "package": "com.farmerin.farmerin",
+      "versionCode": 39,
       "permissions": [
         "CAMERA",
         "NOTIFICATIONS"
@@ -36,9 +36,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "12c2e49a-9520-4b2a-aead-4635f4b7a8de"
+        "projectId": "cf595672-6573-4ffa-8520-d2eee9199c1f"
       }
     },
-    "owner": "f4cund0"
+    "owner": "farmerinfacup"
   }
 }
