@@ -4,7 +4,6 @@ import { Button } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from '../database/firebase';
 //import { signInWithEmailAndPassword } from "firebase/auth"
-import Icon from 'react-native-vector-icons/FontAwesome'
 import { useFormik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PasswordInputText from 'react-native-hide-show-password-input';

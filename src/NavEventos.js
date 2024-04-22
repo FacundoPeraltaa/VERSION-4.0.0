@@ -25,13 +25,6 @@ import AltaVaquillonaScreen from '../screens/AltaVaquillona/AltaVaquillona';
 import React from 'react';
 
 
-import LoginScreen from '../screens/Login';
-import Recuperar from '../screens/Recuperar';
-import Register from '../screens/Register';
-
-
-
-
 const Stack = createStackNavigator();
 
 export default function MyStack() {
