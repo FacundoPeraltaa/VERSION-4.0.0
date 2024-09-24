@@ -19,7 +19,7 @@ export default function ListItem({ data,seleccionar}) {
 
   )
 }
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#399dad' }}></View>
+const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#287fb9' }}></View>
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e1e8ee',

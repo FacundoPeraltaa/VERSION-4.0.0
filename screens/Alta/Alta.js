@@ -342,81 +342,81 @@ export default ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-        <View style={styles.form}>
-          <ScrollView>
-            <View>
-              <Text style={styles.texto}>FECHA INGRESO:</Text>
-              <TouchableHighlight style={styles.calendario} onPress={handlever}>
-                <View
-                
-                ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
-              {show && (
-                <DateTimePicker
-                  placeholder="Fecha"
-                  dateFormat="DD/MM/YYYY"
-                  maximumDate={new Date()}
-                  showIcon={true}
-                  androidMode="spinner"
-                  style={styles.fecha}
-                  value={fecha}
-                  onChange={cambiarFecha}
-
-                  customStyles={{
-                    dateInput: {
-                      borderColor: 'white',
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      borderColor: 'grey',
-                      borderWidth: 1,
-                    }
-                  }}
-                />
-              )}
-              
-            </View>
-            <View>
-              <Text style={styles.texto}>RP:</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('rp')}
-                value={formAlta.values.rp}
+    {loading ? (
+      <ActivityIndicator size="large" color='#1b829b' />
+    ) : (
+      <View style={styles.form}>
+        <ScrollView>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>FECHA INGRESO:</Text>
+            <TouchableHighlight style={styles.calendar} onPress={handlever}>
+              <View>
+                <Text style={styles.calendarText}>{texto}</Text>
+              </View>
+            </TouchableHighlight>
+            {show && (
+              <DateTimePicker
+                placeholder="Fecha"
+                dateFormat="DD/MM/YYYY"
+                maximumDate={new Date()}
+                showIcon={true}
+                androidMode="spinner"
+                style={styles.datePicker}
+                value={fecha}
+                onChange={cambiarFecha}
+                customStyles={{
+                  dateInput: {
+                    borderColor: '#d0d0d0',
+                    borderRadius: 12,
+                    backgroundColor: '#ffffff',
+                    borderWidth: 1,
+                  },
+                }}
               />
-              {formAlta.errors.rp ? <Text style={styles.error}>{formAlta.errors.rp}</Text> : null}
-            </View>
-            <View>
-              <Text style={styles.texto}>eRP:</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('erp')}
-                value={formAlta.values.erp}
-                keyboardType="numeric"
-              />
-              {formAlta.errors.erp ? <Text style={styles.error}>{formAlta.errors.erp}</Text> : null}
-            </View>
+            )}
+          </View>
 
-            <View>
-              <Text style={styles.texto}>ESTADO REPRODUCTIVO:</Text>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>RP:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('rp')}
+              value={formAlta.values.rp}
+            />
+            {formAlta.errors.rp && <Text style={styles.error}>{formAlta.errors.rp}</Text>}
+          </View>
 
-              <RNPickerSelect
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>eRP:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('erp')}
+              value={formAlta.values.erp}
+              keyboardType="numeric"
+            />
+            {formAlta.errors.erp && <Text style={styles.error}>{formAlta.errors.erp}</Text>}
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>ESTADO REPRODUCTIVO:</Text>
+            <RNPickerSelect
               items={repOptions}
               onValueChange={formAlta.handleChange('estrep')}
               value={formAlta.values.estrep}
-
               placeholder={{}}
-              style={styles.pickerStyle}
+              style={styles.picker}
             />
-              {aviso ? <Text style={styles.error2}>RECUERDA INGRESAR LA FECHA DE SERVICIO</Text> : null}
-            </View>
-            <View>
-              <Text style={styles.texto}>ULTIMO SERVICIO:</Text>
-              <View style={styles.row}>
-              <TouchableHighlight style={styles.calendario} onPress={handlever2}>
-                <View 
+            {aviso && <Text style={styles.warning}>RECUERDA INGRESAR LA FECHA DE SERVICIO</Text>}
+          </View>
 
-                ><Text style={styles.textocalendar}>{texto2}</Text></View></TouchableHighlight>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>ULTIMO SERVICIO:</Text>
+            <View style={styles.row}>
+              <TouchableHighlight style={styles.calendar} onPress={handlever2}>
+                <View>
+                  <Text style={styles.calendarText}>{texto2}</Text>
+                </View>
+              </TouchableHighlight>
               {show2 && (
                 <DateTimePicker
                   placeholder="DD/MM/AAAA"
@@ -424,58 +424,49 @@ export default ({ navigation }) => {
                   maximumDate={new Date()}
                   showIcon={true}
                   androidMode="spinner"
-                  style={styles.fecha}
+                  style={styles.datePicker}
                   value={fecha2}
                   onChange={cambiarFecha2}
                   customStyles={{
                     dateInput: {
-                      borderColor: 'white',
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      borderColor: 'grey',
+                      borderColor: '#d0d0d0',
+                      borderRadius: 12,
+                      backgroundColor: '#ffffff',
                       borderWidth: 1,
-                    }
+                    },
                   }}
-                />)}
-              {texto2 !== "-- / -- / --" ?
+                />
+              )}
+              {texto2 !== "-- / -- / --" && (
                 <Button
-                  style={styles.botonBorrar}
+                  style={styles.deleteButton}
                   type="clear"
-                  icon={
-                    <Icon
-                      name="trash"
-                      size={25}
-                      color="red"
-                    />
-                  }
+                  icon={<Icon name="trash" size={25} color="red" />}
                   onPress={borrarFservicio}
                 />
-                :
-                null
-              }
-              </View>
+              )}
             </View>
-            <View>
-              <Text style={styles.texto}>ESTADO PRODUCTIVO:</Text>
+          </View>
 
-              <RNPickerSelect
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>ESTADO PRODUCTIVO:</Text>
+            <RNPickerSelect
               items={prodOptions}
               onValueChange={formAlta.handleChange('estpro')}
               value={formAlta.values.estpro}
-
               placeholder={{}}
-              style={styles.pickerStyle}
+              style={styles.picker}
             />
+          </View>
 
-            </View>
-
-            <Text style={styles.texto}>ULTIMO PARTO:</Text>
-
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>ULTIMO PARTO:</Text>
             <View style={styles.row}>
-              <TouchableHighlight style={styles.calendario} onPress={handlever3}>
-                <View
-
-                ><Text style={styles.textocalendar}>{texto3}</Text></View></TouchableHighlight>
+              <TouchableHighlight style={styles.calendar} onPress={handlever3}>
+                <View>
+                  <Text style={styles.calendarText}>{texto3}</Text>
+                </View>
+              </TouchableHighlight>
               {show3 && (
                 <DateTimePicker
                   placeholder="DD/MM/AAAA"
@@ -483,226 +474,225 @@ export default ({ navigation }) => {
                   maximumDate={new Date()}
                   showIcon={true}
                   androidMode="spinner"
-                  style={styles.fecha}
+                  style={styles.datePicker}
                   value={fecha3}
                   onChange={cambiarFecha3}
                   customStyles={{
                     dateInput: {
-                      borderColor: 'grey',
+                      borderColor: '#d0d0d0',
+                      borderRadius: 12,
+                      backgroundColor: '#ffffff',
                       borderWidth: 1,
-                      borderRadius: 10,
-                      backgroundColor: 'white'
-                    }
+                    },
                   }}
-                />)}
-              {texto3 !== "-- / -- / --" ?
+                />
+              )}
+              {texto3 !== "-- / -- / --" && (
                 <Button
-                  style={styles.botonBorrar}
+                  style={styles.deleteButton}
                   type="clear"
-                  icon={
-                    <Icon
-                      name="trash"
-                      size={25}
-                      color="red"
-                    />
-                  }
+                  icon={<Icon name="trash" size={25} color="red" />}
                   onPress={borrarFparto}
                 />
-                :
-                null
-              }
+              )}
             </View>
-            <View>
-              <Text style={styles.texto}>LACTANCIA:</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('lactancia')}
-                value={formAlta.values.lactancia}
-                keyboardType="numeric"
-              />
-              {formAlta.errors.lactancia ? <Text style={styles.error}>{formAlta.errors.lactancia}</Text> : null}
-            </View>
-            <View>
-              <Text style={styles.texto}>ULTIMO CONTROL(LTS):</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('uc')}
-                value={formAlta.values.uc}
-                keyboardType="numeric"
-              />
-              {formAlta.errors.uc ? <Text style={styles.error}>{formAlta.errors.uc}</Text> : null}
-            </View>
-            <View>
-              <Text style={styles.texto}>RACION(KGS):</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('racion')}
-                value={formAlta.values.racion}
-                keyboardType="numeric"
-              />
-              {formAlta.errors.racion ? <Text style={styles.error}>{formAlta.errors.racion}</Text> : null}
-            </View>
-            <View>
-              <Text style={styles.texto}>OBSERVACIONES:</Text>
-              <TextInput
-                style={styles.entrada}
-                onChangeText={formAlta.handleChange('observaciones')}
-                value={formAlta.values.observaciones}
+          </View>
 
-              />
-            </View>
-            <Text></Text>
-            {Object.entries(formAlta.errors).length !== 0 ? <Text style={styles.error}>REVISE LOS ERRORES</Text> : null}
-            <Button
-              style={styles.boton}
-              title="  ACEPTAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={35}
-                  color="white"
-                />
-              }
-              onPress={formAlta.handleSubmit}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>LACTANCIA:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('lactancia')}
+              value={formAlta.values.lactancia}
+              keyboardType="numeric"
             />
-          </ScrollView>
-        </View>
-      }
-      <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        showConfirmButton={true}
-        cancelText="No, cancelar"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve == true) {
-            navigation.popToTop();
-          }
-        }}
-      />
+            {formAlta.errors.lactancia && <Text style={styles.error}>{formAlta.errors.lactancia}</Text>}
+          </View>
 
-    </View >
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>ULTIMO CONTROL(LTS):</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('uc')}
+              value={formAlta.values.uc}
+              keyboardType="numeric"
+            />
+            {formAlta.errors.uc && <Text style={styles.error}>{formAlta.errors.uc}</Text>}
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>RACION(KGS):</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('racion')}
+              value={formAlta.values.racion}
+              keyboardType="numeric"
+            />
+            {formAlta.errors.racion && <Text style={styles.error}>{formAlta.errors.racion}</Text>}
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>OBSERVACIONES:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={formAlta.handleChange('observaciones')}
+              value={formAlta.values.observaciones}
+            />
+          </View>
+
+          <Text></Text>
+          {Object.entries(formAlta.errors).length !== 0 && <Text style={styles.error}>REVISE LOS ERRORES</Text>}
+          <Button
+            style={styles.submitButton}
+            title="ACEPTAR"
+            icon={<Icon name="check-square" size={35} color="white" />}
+            onPress={formAlta.handleSubmit}
+          />
+        </ScrollView>
+      </View>
+    )}
+    <AwesomeAlert
+      show={alerta.show}
+      showProgress={false}
+      title={alerta.titulo}
+      message={alerta.mensaje}
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      cancelText="No, cancelar"
+      confirmText="ACEPTAR"
+      confirmButtonColor={alerta.color}
+      onCancelPressed={() => setAlerta({ show: false })}
+      onConfirmPressed={() => {
+        setAlerta({ show: false });
+        if (alerta.vuelve) {
+          navigation.popToTop();
+        }
+      }}
+    />
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    backgroundColor: '#f5f7f9',
   },
   form: {
-    flex: 5,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  fecha: {
-    width: wp('100%'),
-    padding: 5,
-    height: 50
+  inputGroup: {
+    marginBottom: 15,
   },
-  lista: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 5,
+  },
+  input: {
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
     borderWidth: 1,
-    borderColor: 'grey',
-    height: 50
-
-  },
-  texto: {
-    marginLeft: 5,
-    marginTop: 10,
-
-  },
-  header: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#399dad'
-  },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
-
-  },error2: {
-    marginTop: 5,
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: '#1434A4',
-    backgroundColor: '#89CFF0',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: '#1434A4'
-
-  },
-  textocalendar: {
-    textAlign: "center"
-  },
-  calendario: {
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    padding: 5,
-    width: 200,
-    marginVertical: 10,
-    marginLeft: 10
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
+    borderColor: '#ccc',
+    paddingLeft: 10,
     height: 50,
+  },
+  calendar: {
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
-
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    width: wp('90%'),
+    alignSelf: 'center',
+    marginVertical: 10,
   },
-  boton: {
-    margin: 5
+  calendarText: {
+    fontSize: 16,
+    color: '#333',
   },
-  pickerStyle: {
+  datePicker: {
+    width: '100%',
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
+  },
+  picker: {
     inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
     inputAndroid: {
-
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
-
+    placeholder: {
+      color: '#9EA0A4',
+    },
+    iconContainer: {
+      top: 10,
+      right: 10,
+    },
   },
-
+  error: {
+    fontSize: 12,
+    color: 'red',
+    marginTop: 5,
+    textAlign: 'center',
+  },
+  warning: {
+    fontSize: 12,
+    color: '#0056b3',
+    backgroundColor: '#e3f2fd',
+    borderRadius: 5,
+    padding: 10,
+    textAlign: 'center',
+  },
+  deleteButton: {
+    marginLeft: 10,
+  },
+  submitButton: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginTop: 20,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
+
+

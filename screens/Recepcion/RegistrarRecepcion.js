@@ -279,7 +279,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
                 <Icon
                   name="camera"
                   size={35}
-                  color="#3390FF"
+                  color="#4db150"
                 />
               }
               type="outline"
@@ -299,7 +299,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
                   <Icon
                     name="trash"
                     size={35}
-                    color="#3390FF"
+                    color="#B00202"
                   />
                 }
                 type="outline"
@@ -332,7 +332,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
                       <Icon
                         name="camera"
                         size={35}
-                        color="#3390FF"
+                        color="#4db150"
                       />
                     }
                     type="outline"
@@ -346,7 +346,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
                       <Icon
                         name="window-close"
                         size={35}
-                        color="#3390FF"
+                        color="#B00202"
                       />
                     }
                     type="outline"
@@ -400,16 +400,19 @@ let texto = format(fecha, 'yyyy-MM-dd');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-
-
+    backgroundColor: '#e1e8ee',
   },
   form: {
-    flex: 5,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+    marginHorizontal: 10,
   },
   fecha: {
     width: wp('100%'),
@@ -432,10 +435,11 @@ const styles = StyleSheet.create({
 
   },
   header: {
+    marginTop: 5,
     marginLeft: 10,
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#399dad'
+    color: '#2980B9'
   },
   error: {
     marginLeft: 5,
@@ -451,18 +455,27 @@ const styles = StyleSheet.create({
   },
 
   entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 10,
+    color: '#333',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
 
   },
   boton: {
-    margin: 5
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    paddingTop: 5,
   },
   foto: {
     marginTop: 15,
@@ -495,14 +508,14 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   calendario: {
-    borderColor: 'grey',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    padding: 5,
-    width: 200,
-   marginVertical: 10,
-    marginLeft: 10
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    width: wp('90%'),
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   colizq: {
     marginTop: 2,
@@ -528,18 +541,43 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
-    
     inputAndroid: {
-
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
+    },
+    placeholder: {
+      color: '#9EA0A4',
+    },
+    iconContainer: {
+      top: 10,
+      right: 10,
     },
 
   }

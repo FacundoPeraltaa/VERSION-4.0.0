@@ -128,7 +128,7 @@ export default ({ navigation }) => {
         {formErp.errors.erp ? <Text style={styles.error}>{formErp.errors.erp}</Text> : null}
       </View>
       <Button
-      buttonStyle={{Color: '#e1e8ee', margin: 40}} 
+      buttonStyle={{Color: '#e1e8ee', margin: 40, backgroundColor: '#4db150'}} 
       title="  ACEPTAR"
       icon={Platform.OS === 'ios' ? (
         <Icon
@@ -171,16 +171,19 @@ export default ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-
-
+    backgroundColor: '#e1e8ee',
   },
   form: {
-    flex: 5,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+    marginHorizontal: 10,
   },
   fecha: {
     width: wp('100%'),
@@ -222,20 +225,18 @@ const styles = StyleSheet.create({
   },
 
   entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
+    borderColor: '#ccc',
+    paddingLeft: 10,
+    height: 50,
 
   },
   boton: {
-    margin: 45,
-   
-
+    backgroundColor: '#4db150',
+    borderRadius: 8,
+    marginTop: 15,
   }
 
 });

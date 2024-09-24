@@ -68,77 +68,70 @@ export default function ({ setShowTambos, showTambos, data }) {
 
 const styles = StyleSheet.create({
 
-  text2: {
-    color: '#e1e8ee',
-    textAlign: 'center',
-    fontSize: 18,
-    marginTop: 10,
-
-    fontWeight: "bold"
-  },
-
   center: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  info:{
-    paddingTop: 5,
-    paddingBottom: 8,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center"
+  content: {
+    width: '85%',
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  textoinfo: {
-    textTransform: "uppercase",
-    fontSize: 18,
-    marginBottom: 3,
-    fontWeight: "bold",
-    color: "#696969"
-  },
-  textoinfo2:{
-  textTransform: "uppercase",
-  fontSize: 18,
-  flexDirection: "row",
-  justifyContent: "space-between"
-},
-separator: {
-  borderBottomWidth: 1,
-  borderBottomColor: '#ccc',
-  marginVertical: 10,
-},
-
-backButton: {
-  backgroundColor: '#2980B9',
-  borderRadius: 5,
-  alignItems: 'center',
-  marginTop: 0,
-  marginBottom: 0,
-  alignItems: "center",
-},
-
-backButtonText: {
-  textTransform: "uppercase",
-    fontSize: 18,
-    marginBottom: 3,
-    fontWeight: "bold",
-    color: "#F3FAFF"
-},
   header: {
-
     backgroundColor: '#2980B9',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    paddingBottom: 7
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
-  content: {
-    backgroundColor: '#e1e8ee',
-    borderWidth: 1,
-    borderColor: 'white',
-    margin: 20,
-    marginTop: hp('30%'),
-    borderRadius: 15,
-    height: 270,
-    paddingBottom: 10
+  text2: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  info: {
+    marginTop: 20,
+  },
+  textoinfo: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+  },
+  textoinfo2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  separator: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginVertical: 8,
+  },
+  backButton: {
+    backgroundColor: '#2980B9',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+  },
+  backButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textTransform: 'uppercase',
   },
 
 });

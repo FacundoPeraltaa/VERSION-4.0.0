@@ -22,71 +22,73 @@ const confirmar = ()=>{
   setAlerta(true)
 }
   return (
-      <View style={styles.container}>
-        <Text style={styles.text}>FECHA: {fechaRecep} - {tipo} </Text>
-        <Button
-                  style={styles.botonBorrar}
-                  type="clear"
-                  icon={
-                    <Icon
-                      name="trash"
-                      size={35}
-                      color="#2980B9"
-                      onPress={confirmar}
-                    />
-                  }
-                />
-        <AwesomeAlert
-        show= {alerta}
-        showProgress={false}
-        title="¡ATENCIÓN!"
-        message="¿ DESEA ELIMINAR ESTA RECEPCIÓN ?"
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={true}
-        showConfirmButton={true}
-        cancelText="CANCELAR"
-        confirmText="ACEPTAR"
-        confirmButtonColor="#3AD577"
-        cancelButtonColor="#DD6B55"
-        onCancelPressed={() => {
-          setAlerta(false)
-        }}
-        onConfirmPressed={() => {
-          setAlerta(false)
-          eliminarRecepcion()
-        }}
+    <View style={styles.container}>
+    <View style={styles.contentContainer}>
+      <Text style={styles.text}>FECHA: {fechaRecep} - {tipo}</Text>
+      <Button
+        style={styles.botonBorrar}
+        type="clear"
+        icon={
+          <Icon
+            name="trash"
+            size={35}
+            color="#B00202"
+            onPress={confirmar}
+          />
+        }
       />
-      </View>
+    </View>
+    <AwesomeAlert
+      show={alerta}
+      showProgress={false}
+      title="¡ATENCIÓN!"
+      message="¿DESEA ELIMINAR ESTA RECEPCIÓN?"
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={true}
+      showConfirmButton={true}
+      cancelText="CANCELAR"
+      confirmText="ACEPTAR"
+      confirmButtonColor="#3AD577"
+      cancelButtonColor="#DD6B55"
+      onCancelPressed={() => {
+        setAlerta(false);
+      }}
+      onConfirmPressed={() => {
+        setAlerta(false);
+        eliminarRecepcion();
+      }}
+    />
+  </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e1e8ee',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    display: "flex",
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  contentContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    flexDirection: "row",
-    alignItems: "center"
+    alignItems: 'center',
   },
   text: {
     fontSize: 16,
-    color: '#070037'
-  },
-  leftAction: { 
-    backgroundColor: '#FF0000',
-    justifyContent: 'center',
+    color: '#333',
     flex: 1,
   },
-  actionText: {
-    fontSize: 16,
-    color: '#FFF',
-    padding: 15,
-  },
-  botonBorrar:{
+  botonBorrar: {
     margin: 0,
     padding: 0,
-  }
+  },
 });

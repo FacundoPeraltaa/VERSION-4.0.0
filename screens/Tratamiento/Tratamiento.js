@@ -96,37 +96,38 @@ export default ({ navigation }) => {
         onChangeText={updateSearch}
         value={rp}
         lightTheme
+        containerStyle={styles.searchBarContainer}
+        inputContainerStyle={styles.searchBarInput}
       />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
+     {loading || animalesFilter.length === 0 ?(
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color='#1b829b' />
+            <Text style={styles.loaderText}>Cargando animales...</Text>
+          </View>
+        ) :  (animalesFilter.length === 0 && !animales.length) ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
-
-          <FlatList
-            data={animalesFilter}
-            keyExtractor={item => item.id}
-            initialNumToRender={100}
-            renderItem={({ item }) => (
-              <ListItem
-                data={item}
-                registrarTratamiento={() => {
-                  navigation.push('RegistrarTratamiento', {
-                    animal: item,
-                    tambo: tambo,
-                    usuario: usuario,
-                    tratam: tratam
-                  })
-                }}
-
-              />
-            )
-            }
-            ItemSeparatorComponent={() => <Separator />}
-          />
-      }
+        ) : (
+        <FlatList
+          data={animalesFilter}
+          keyExtractor={item => item.id}
+          initialNumToRender={100}
+          renderItem={({ item }) => (
+            <ListItem
+              data={item}
+              registrarTratamiento={() => {
+                navigation.push('RegistrarTratamiento', {
+                  animal: item,
+                  tambo: tambo,
+                  usuario: usuario,
+                  tratam: tratam
+                });
+              }}
+            />
+          )}
+          ItemSeparatorComponent={() => <Separator />}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -136,34 +137,67 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {
-          setAlerta({ show: false })
+          setAlerta({ show: false });
         }}
         onConfirmPressed={() => {
-          setAlerta({ show: false })
+          setAlerta({ show: false });
         }}
       />
     </View>
   );
-}
+};
 
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#e1e8ee',
-
+     flex: 1,
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+  },
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchBarInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
     fontSize: 15,
     color: '#868584',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 15,
-
+    borderRadius: 5,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

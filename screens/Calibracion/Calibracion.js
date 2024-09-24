@@ -233,51 +233,40 @@ export default ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {relAct == 0 ?
-        <Text style={styles.alerta}>NO SE PUEDE OBTENER LA RELACION PASO/GRAMOS ACTUAL</Text>
-        :
+      {relAct === 0 ? (
+        <Text style={styles.alerta}>
+          NO SE PUEDE OBTENER LA RELACION PASO/GRAMOS ACTUAL
+        </Text>
+      ) : (
         <ScrollView>
-          
-           
-
           <Text style={styles.texto}>1 - PRESIONE "INICIAR"</Text>
           <Text style={styles.texto}>2 - DESCARGUE MOTOR 1 PARA PESAR</Text>
           <Text style={styles.texto}>3 - INTRODUZCA LOS GRAMOS PESADOS Y PRESIONE "+"</Text>
-          <Text style={styles.texto}>4 - REPETIR DESDE EL PUNTO 2 TANTAS VECES COMO VEA NECESARIO (SE TOMAN SOLO 5 MUESTRAS).</Text>
+          <Text style={styles.texto}>
+            4 - REPETIR DESDE EL PUNTO 2 TANTAS VECES COMO VEA NECESARIO (SE TOMAN SOLO 5 MUESTRAS).
+          </Text>
           <Text style={styles.texto}>5 - PRESIONE FINALIZAR</Text>
-          <Text style={styles.textoA}> ¡ATENCION! </Text>
-          <Text style={styles.textoB}>  SE HARÁ LA DESCARGA EN MOTOR 1 - LADO IZQUIERDO </Text>
-          {iniciar ?
-
+          <Text style={styles.textoA}>¡ATENCION!</Text>
+          <Text style={styles.textoB}>
+            SE HARÁ LA DESCARGA EN MOTOR 1 - LADO IZQUIERDO
+          </Text>
+  
+          {iniciar ? (
             <Button
               style={styles.boton}
-              title=" INICIAR"
-              icon={
-                <Icon
-                  name="play-circle"
-                  size={35}
-                  color="#FCFAFA"
-                />
-              }
+              title="INICIAR"
+              icon={<Icon name="play-circle" size={35} color="#FCFAFA" />}
               onPress={() => setIniciar(false)}
             />
-            :
+          ) : (
             <>
               <View style={styles.form}>
-
                 <Button
                   style={styles.boton}
-                  title=" DESCARGA MOTOR 1"
-                  icon={
-                    <Icon
-                      name="refresh"
-                      size={35}
-                      color="#FCFAFA"
-                    />
-                  }
+                  title="DESCARGA MOTOR 1"
+                  icon={<Icon name="refresh" size={35} color="#FCFAFA" />}
                   onPress={moverMotor}
                 />
-                <Text></Text>
                 <View style={styles.peso}>
                   <TextInput
                     placeholder="INGRESE LOS GRAMOS MEDIDOS"
@@ -288,19 +277,10 @@ export default ({ navigation }) => {
                     min="0"
                     required
                   />
-
-
                   <Button
                     style={styles.boton}
                     title=""
-
-                    icon={
-                      <Icon
-                        name="plus-square"
-                        size={35}
-                        color="#FCFAFA"
-                      />
-                    }
+                    icon={<Icon name="plus-square" size={35} color="#FCFAFA" />}
                     onPress={handleSubmit}
                   />
                 </View>
@@ -308,24 +288,19 @@ export default ({ navigation }) => {
                 <Text style={styles.texto}>PROMEDIO: {promedio}</Text>
                 <Text style={styles.texto}>NUEVA RELACION GR/P: {relacion}</Text>
                 <Text style={styles.texto}>RELACION ACTUAL GR/P: {relAct}</Text>
-
               </View>
+  
               <Button
                 style={styles.boton}
-                title=" FINALIZAR"
-                icon={
-                  <Icon
-                    name="check-square"
-                    size={35}
-                    color="#FCFAFA"
-                  />
-                }
+                title="FINALIZAR"
+                icon={<Icon name="check-square" size={35} color="#FCFAFA" />}
                 onPress={finalizar}
               />
             </>
-          }
+          )}
         </ScrollView>
-      }
+      )}
+  
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -335,140 +310,78 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-        }}
+        onConfirmPressed={() => setAlerta({ show: false })}
       />
-    </View >
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#e1e8ee',
-
-
+    padding: 15,
+    backgroundColor: '#f2f4f8',
   },
   form: {
-    flex: 5,
+    paddingVertical: 10,
     backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
-  },
-  fecha: {
-    width: wp('100%'),
-    padding: 5,
-    height: 50
-  },
-  lista: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'grey',
-    height: 50
-
+    borderRadius: 8,
+    marginVertical: 10,
   },
   texto: {
-    marginLeft: 5,
-    marginTop: 10,
-    marginBottom: 10,
+    marginVertical: 5,
     fontSize: 13,
-    backgroundColor: '#e1e8ee',
     textAlign: 'center',
-    textTransform: "uppercase",
-    fontWeight: "bold",
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
     color: '#002742',
-
   },
-  textoA:{
-    marginLeft: 5,
-    marginTop: 10,
+  textoA: {
+    marginVertical: 10,
     fontSize: 17,
-    backgroundColor: '#e1e8ee',
     textAlign: 'center',
-    textTransform: "uppercase",
-    fontWeight: "bold",
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
     color: '#FF0000',
   },
-
-  textoB:{
+  textoB: {
     fontSize: 14,
-    backgroundColor: '#e1e8ee',
     textAlign: 'center',
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    color: '#002742',
-  },
-  textoEncabezado: {
-    marginLeft: 5,
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 15,
-    backgroundColor: '#e1e8ee',
-    textAlign: 'center',
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    color: '#002742',
-
-  },
-  header: {
-    marginLeft: 10,
-    fontSize: 18,
+    textTransform: 'uppercase',
     fontWeight: 'bold',
-    color: '#399dad'
+    color: '#002742',
   },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red',
-
-  },
-
   entrada: {
-    flex: 2,
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 8,
+    backgroundColor: '#fff',
     height: 50,
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5,
-
+    borderColor: '#ddd',
+    paddingHorizontal: 10,
+    marginVertical: 5,
   },
   boton: {
     margin: 5,
-    padding: 5,
-    
+    paddingVertical: 10,
+    backgroundColor: '#297fb8',
+    borderRadius: 8,
   },
   peso: {
     flexDirection: 'row',
-
+    alignItems: 'center',
+    marginVertical: 10,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
     fontSize: 15,
-    color: '#868584',
+    color: '#444',
+    textAlign: 'center',
     paddingHorizontal: 10,
     paddingVertical: 15,
-
+    borderRadius: 8,
+    marginVertical: 10,
   },
-
 });

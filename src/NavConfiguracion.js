@@ -4,7 +4,6 @@ import ErpScreen from '../screens/Erp/Erp';
 import CambiarErpScreen from '../screens/Erp/CambiarErp';
 import TolvaScreen from '../screens/Tolvas/Tolva';
 import LadoTolvaScreen from '../screens/Tolvas/LadoTolva';
-import IngresosScreen from '../screens/Ingresos/Ingresos';
 import CalibracionScreen from '../screens/Calibracion/Calibracion';
 import ControlScreen from '../screens/Control/Control';
 import ListarControlesScreen from '../screens/Control/ListarControles';
@@ -14,6 +13,7 @@ import Monitor from '../screens/Monitor';
 import Preferencias from '../screens/Preferencias/Preferencias';
 import Logueos from '../screens/Preferencias/Logueos';
 import Notificaciones from '../screens/Preferencias/Notificaciones';
+import Grafico from '../screens/GraficoIngreso/IngresoControl'
 import React from 'react';
 
 
@@ -29,7 +29,7 @@ export default function MyConfigStack() {
         hideTabBar: true,
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#B5CD00',
+          backgroundColor: '#4cb050',
           shadowOffset: { width: 1, height: 1 },
         },
         headerTintColor: '#fff',
@@ -89,7 +89,7 @@ export default function MyConfigStack() {
       />
       <Stack.Screen
         name="ControlDeIngreso"
-        component={IngresosScreen}
+        component={Grafico}
         options={{
           headerBackTitle: 'Volver',
           title: 'CONTROL DE INGRESO',

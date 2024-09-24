@@ -99,8 +99,8 @@ export default function ListAnimales({ data,obtenerRegistros,updateControl,contr
           <View style={styles.content}>
 
             <View style={styles.header}>
-              <Text style={styles.text2}>RP:{rp}</Text>
-              <Text style={styles.text2}>eRP:{erp}</Text>
+              <Text style={styles.text2}>RP: {rp}</Text>
+              <Text style={styles.text2}>eRP: {erp}</Text>
             </View>
 
             <View style={styles.columnas}>
@@ -123,7 +123,9 @@ export default function ListAnimales({ data,obtenerRegistros,updateControl,contr
                 />
               </View>
             </View>
+
             {formControl.errors.lts ? <Text style={styles.error}>{formControl.errors.lts}</Text> : null}
+            
             <Text style={styles.texto}>ANORMALIDAD:</Text>
             <TextInput
               style={styles.entrada}
@@ -131,78 +133,54 @@ export default function ListAnimales({ data,obtenerRegistros,updateControl,contr
               onChangeText={formControl.handleChange('anorm')}
             />
 
-            <Text></Text>
-            <Button
-              onPress={formControl.handleSubmit}
+            <View style={styles.buttonContainer}>
+              <Button
+                onPress={formControl.handleSubmit}
+                title="GUARDAR"
+                color="#1b829b" // Color de fondo del botón
+              />
+            </View>
 
-              title=" GUARDAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={30}
-                  color="white"
-                />
-              }
-            />
-            <Text></Text>
-            <Button
-              onPress={eliminarAnimalControl}
-              type="outline"
-              title=" QUITAR ANIMAL"
-              icon={
-                <Icon
-                  name="trash"
-                  size={30}
-                  color="#2980B9"
-                />
-              }
-            />
-            <Text></Text>
-            <Button
-              onPress={cerrar}
-              type="outline"
-              title=" CERRAR"
-              icon={
-                <Icon
-                  name="window-close"
-                  size={30}
-                  color="#2980B9"
-                />
-              }
-            />
+            <View style={styles.buttonContainer}>
+              <Button
+                onPress={eliminarAnimalControl}
+                title="QUITAR ANIMAL"
+                color="#FF0000" // Color de fondo del botón
+              />
+            </View>
 
+            <View style={styles.buttonContainer}>
+              <Button
+                onPress={cerrar}
+                title="CERRAR"
+                color="#2980B9" // Color de fondo del botón
+              />
+            </View>
           </View>
         </View>
       </Modal>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e1e8ee',
     paddingHorizontal: 10,
-    paddingVertical:15,
+    paddingVertical: 15,
+    borderRadius: 8, // Añadido para mejorar el diseño
+    marginBottom: 10, // Añadido para separar los elementos
   },
   text: {
     fontSize: 16,
-    color: '#2980B9'
-  },
-  leftAction: {
-    backgroundColor: '#FF0000',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  actionText: {
-    fontSize: 16,
-    color: '#FFF',
-    padding: 20,
+    color: '#2980B9',
+    fontWeight: 'bold', // Añadido para destacar el texto
   },
   header: {
     backgroundColor: '#2980B9',
     borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-
+    borderTopRightRadius: 15,
+    padding: 15, // Añadido para padding interno del header
   },
   content: {
     backgroundColor: '#e1e8ee',
@@ -212,35 +190,32 @@ const styles = StyleSheet.create({
     marginTop: hp('10%'),
     borderRadius: 15,
     height: hp('70%'),
-
+    padding: 15, // Añadido para padding interno del contenido
   },
   center: {
     flex: 1,
+    justifyContent: 'center', // Añadido para centrar verticalmente el modal
     backgroundColor: 'rgba(0,0,0,0.3)',
-
   },
   text2: {
     color: '#e1e8ee',
     textAlign: 'center',
     fontSize: 18,
-    marginTop: 5,
-    marginBottom: 5
-
+    marginVertical: 5,
+    fontWeight: 'bold', // Añadido para destacar el texto
   },
   entrada: {
-    marginLeft: 5,
-    marginRight: 5,
+    marginHorizontal: 5, // Simplificado usando marginHorizontal
     borderRadius: 10,
     backgroundColor: 'white',
     height: 50,
     borderWidth: 1,
     borderColor: 'grey',
-    paddingLeft: 5
-
+    paddingLeft: 5,
   },
   columnas: {
-
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginVertical: 10, // Añadido para separar las columnas
   },
   colder: {
     flex: 1,
@@ -253,19 +228,20 @@ const styles = StyleSheet.create({
   texto: {
     fontSize: 16,
     paddingLeft: 5,
-    color: 'black'
+    color: 'black',
   },
   error: {
-    marginLeft: 5,
-    marginRight: 5,
+    marginHorizontal: 5, // Simplificado usando marginHorizontal
     fontSize: 13,
     borderRadius: 5,
     color: 'red',
     backgroundColor: 'pink',
     textAlign: 'center',
     borderWidth: 1,
-    borderColor: 'red'
-
+    borderColor: 'red',
+    padding: 5, // Añadido para mejor padding interno del error
   },
-
+  buttonContainer: {
+    marginVertical: 5, // Añadido para separar los botones
+  },
 });

@@ -13,7 +13,7 @@ export default function App({ setShowTambos, showTambos, selectTambo }) {
      show: false,
      titulo: '',
      mensaje: '',
-     color: '#DD6B55'
+     color: '#287fb9'
   });
  
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function App({ setShowTambos, showTambos, selectTambo }) {
   if (loading) {
      return (
        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-         <ActivityIndicator size="large" color="#0000ff" />
+         <ActivityIndicator size="large" color="#287fb9" />
        </View>
      );
   }
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
 
   text2: {
     color: '#e1e8ee',
+    backgroundColor:'#287fb9',
     textAlign: 'center',
     fontSize: 18,
     marginTop: 10,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   },
   header: {
 
-    backgroundColor: '#2980B9',
+    backgroundColor: '#287fb9',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15
 

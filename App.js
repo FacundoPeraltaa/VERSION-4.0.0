@@ -12,8 +12,6 @@ import registerNNPushToken from 'native-notify';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
 import 'expo-firestore-offline-persistence';   // Habilita offline persistence 
 
-
-
 // Importa los stacks desde sus archivos correspondientes
 import HomeScreen from './src/NavEventos';
 import ConfigScreen from './src/NavConfiguracion';
@@ -25,102 +23,140 @@ import WelcomeScreen from './src/Welcome';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function LoggedInTabs() {
+const LoggedInTabs = () => {
   return (
-     <Tab.Navigator>
-       <Tab.Screen 
-         name="BarraEventos" 
-         component={HomeScreen} 
-         options={{
-           headerTitleAlign: 'center', 
-           headerTitle: 'EVENTOS', 
-           headerTintColor: '#F9FFFF', 
-           headerStyle: {backgroundColor: '#2980B9'},
-           tabBarIcon: ({ color }) => (
-             <MaterialCommunityIcons name="calendar" size={26} color={color} />
-           ),
-           tabBarLabelStyle: { color: '#2A2A2A' }, 
-           tabBarLabel: 'EVENTOS'
-         }}
-       />
-       <Tab.Screen 
-         name="BarraConfig" 
-         component={ConfigScreen} 
-         options={{
-           headerTitleAlign: 'center', 
-           headerTitle: 'CONFIGURACION', 
-           headerTintColor: '#F9FFFF', 
-           headerStyle: {backgroundColor: '#2980B9'},
-           tabBarIcon: ({ color }) => (
-             <MaterialCommunityIcons name="cog" size={26} color={color} />
-           ),
-           tabBarLabelStyle: { color: '#2A2A2A' }, 
-           tabBarLabel: 'CONFIGURACION'
-         }}
-       />
-     </Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name === 'BarraEventos') {
+            iconName = 'calendar';
+          } else if (route.name === 'BarraConfig') {
+            iconName = 'cog';
+          }
+          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#2980B9',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: '#F9F9F9',
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 5,
+        },
+        headerStyle: {
+          backgroundColor: '#287fb9',
+        },
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 18,
+          color: '#F9FFFF',
+        },
+        headerTintColor: '#F9FFFF',
+      })}
+    >
+      <Tab.Screen name="BarraEventos" component={HomeScreen} options={{ title: 'EVENTOS' }} />
+      <Tab.Screen name="BarraConfig" component={ConfigScreen} options={{ title: 'CONFIGURACIÓN' }} />
+    </Tab.Navigator>
   );
- }
- 
-
-export default function App() {
- registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
-
- // Define una variable de estado para manejar el estado de login
- const [isLoggedIn, setIsLoggedIn] = useState(false);
- const [loading, setLoading] = useState(true);
-
- // Verifica la autenticación al iniciar la app
- useEffect(() => {
-   checkAuthentication();
- }, []);
-
- // Función para verificar la autenticación
- const checkAuthentication = async () => {
-  try {
-    const usuario = await AsyncStorage.getItem('usuario');
-    if (usuario !== null) {
-      setIsLoggedIn(true);
-    }
-  } catch (error) {
-    console.error("Error al verificar la autenticación: ", error);
-  } finally {
-    // Asegúrate de establecer loading en falso al final
-    setLoading(false);
-  }
 };
 
-// Si loading es verdadero, muestra la pantalla de bienvenida
-if (loading) {
-  return <WelcomeScreen  />; // Pasa el nombre de usuario como prop
-}
+export default function App() {
+  registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
 
+  // Define una variable de estado para manejar el estado de login
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
- return (
-  <Provider store={store}>
-  <MovieProvider>
-    <GestureHandlerRootView style={{flex:  1}}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {isLoggedIn ? (
-            // Pantallas para usuarios logueados
-            <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
-            
-          ) : (
-            // Pantallas de autenticación
-            <Stack.Group>
-              <Stack.Screen name="MenuInicio" component={LoginScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Recuperar" component={Recuperar} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'RESTABLECER CONTRASEÑA ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}}  />
-              <Stack.Screen name="Registrar" component={Register} options={{ headerShown: true, headerTitleAlign: 'center',  headerTitle: 'REGISTRARSE EN FARMERIN ', headerTintColor: '#F9FFFF', headerStyle: {backgroundColor: '#1988A5'},}} />
-              <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
-              <Stack.Screen name="CerrarSesiones" component={LoginScreen} options={{ headerShown: false }} />
+  // Verifica la autenticación al iniciar la app
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
 
-            </Stack.Group>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </GestureHandlerRootView>
-  </MovieProvider>
-</Provider>
- );
+  // Función para verificar la autenticación
+  const checkAuthentication = async () => {
+    try {
+      const usuario = await AsyncStorage.getItem('usuario');
+      if (usuario !== null) {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error("Error al verificar la autenticación: ", error);
+    } finally {
+      // Asegúrate de establecer loading en falso al final
+      setLoading(false);
+    }
+  };
+
+  // Si loading es verdadero, muestra la pantalla de bienvenida
+  if (loading) {
+    return <WelcomeScreen />;
+  }
+
+  return (
+    <Provider store={store}>
+      <MovieProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: '#4cb050',
+                },
+                headerTitleAlign: 'center',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                  color: '#F9FFFF',
+                },
+                headerTintColor: '#F9FFFF',
+              }}
+            >
+              {isLoggedIn ? (
+                // Pantallas para usuarios logueados
+                <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
+              ) : (
+                // Pantallas de autenticación
+                <Stack.Group>
+                  <Stack.Screen
+                    name="MenuInicio"
+                    component={LoginScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Recuperar"
+                    component={Recuperar}
+                    options={{
+                      title: 'RESTABLECER CONTRASEÑA',
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Registrar"
+                    component={Register}
+                    options={{
+                      title: 'REGISTRARSE EN FARMERIN',
+                    }}
+                  />
+                  <Stack.Screen
+                    name="EventosMenu"
+                    component={LoggedInTabs}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="CerrarSesiones"
+                    component={LoginScreen}
+                    options={{ headerShown: false }}
+                  />
+                </Stack.Group>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </MovieProvider>
+    </Provider>
+  );
 }

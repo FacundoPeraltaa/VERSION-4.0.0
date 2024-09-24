@@ -150,22 +150,26 @@ export default ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+    <SearchBar
+      placeholder="Buscar por RP"
+      onChangeText={updateSearch}
+      value={rp}
+      lightTheme
+      containerStyle={styles.searchContainer}
+      inputContainerStyle={styles.searchInput}
+    />
 
-      <SearchBar
-        placeholder="Buscar por RP "
-        onChangeText={updateSearch}
-        value={rp}
-        lightTheme
-      />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
-          <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
-          <>
-            <FlatList
+    <View style={styles.listado}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color='#1b829b' />
+          <Text style={styles.loaderText}>Cargando animales...</Text>
+        </View>
+      ) : animalesFilter.length === 0 && !animales.length ? (
+        <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+      ) : (
+        <>
+           <FlatList
               data={animalesFilter}
               keyExtractor={item => item.id}
               initialNumToRender={100}
@@ -180,54 +184,69 @@ export default ({ navigation }) => {
               ItemSeparatorComponent={() => <Separator />}
             />
 
-
-            <Button
-              title="  ACEPTAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={35}
-                  color="white"
-                />
-              }
-              onPress={cambiarAnimales}
+           <Button
+           title="  ACEPTAR"
+           icon={
+             <Icon
+               name="check-square"
+               size={35}
+               color="white"
+             />
+           }
+           onPress={cambiarAnimales}
             />
-          </>
-      }
-      <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        showConfirmButton={true}
-        cancelText="No, cancelar"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve==true){
 
-            navigation.popToTop();
-          }
-        }}
-      />
+        </>
+      )}
     </View>
-  );
-}
+
+    <AwesomeAlert
+      show={alerta.show}
+      showProgress={false}
+      title={alerta.titulo}
+      message={alerta.mensaje}
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="ACEPTAR"
+      confirmButtonColor={alerta.color}
+      onCancelPressed={() => setAlerta({ show: false })}
+      onConfirmPressed={() => {
+        setAlerta({ show: false });
+        if (alerta.vuelve) {
+          navigation.popToTop();
+        }
+      }}
+    />
+  </View>
+);}
 
 const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
 
+  },
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  separator: {
+    height: 10,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
@@ -236,5 +255,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
 
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

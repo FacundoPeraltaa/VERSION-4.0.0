@@ -436,410 +436,353 @@ const handlever = ()=> {
 }
 let texto = format(fecha, 'yyyy-MM-dd');
 
-
-  return (
-    <View style={styles.container}>
-      <InfoAnimal
-        animal={animal}
-      />
-      <View style={styles.form}>
-        <ScrollView>
-          <Text style={styles.texto}>FECHA:</Text>
-          <TouchableHighlight style={styles.calendario} onPress={handlever}>
-          <View 
-          
-          ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
-          {showfecha && (
-          <DateTimePicker
-            placeholder="Fecha"
-            dateFormat="DD/MM/YYYY"
-            maximumDate={new Date()}
-            showIcon={true}
-            androidMode="spinner"
-            style={styles.fecha}
-            value={fecha}
-            onChange={cambiarFecha}
-            customStyles={{
-              dateInput: {
-                borderColor: 'white',
-                borderRadius: 10,
-                backgroundColor: 'white',
-                borderColor: 'grey',
-                borderWidth: 1,
-              }
-            }}
-          /> )}
-          <View>
-            <Text style={styles.texto}>TIPO:</Text>
-
-            <RNPickerSelect
-              items={options}
-              onValueChange={formParto.handleChange('tipo')}
-              value={formParto.values.tipo}
-
-              placeholder={{
-                label: 'SELECCIONAR TIPO ',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={{
-                inputIOS: styles.pickerStyle,
-                inputAndroid: styles.pickerStyle,
-                placeholder: {
-                  color: '#9EA0A4',
-                },
-              }}
-              pickerContainerStyle={{
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#ccc',
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                marginBottom: 10,
-              }}
-            />
-
-          </View>
-          <View>
-            <Text style={styles.texto}>TRATAMIENTO:</Text>
-
-            <RNPickerSelect
-              items={tratamientoOptions}
-              onValueChange={formParto.handleChange('tratamiento')}
-              value={formParto.values.tratamiento}
-
-              placeholder={{
-                label: 'SELECCIONAR TRATAMIENTO',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={{
-                inputIOS: styles.pickerStyle,
-                inputAndroid: styles.pickerStyle,
-                placeholder: {
-                  color: '#9EA0A4',
-                },
-              }}
-              pickerContainerStyle={{
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: '#ccc',
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                marginBottom: 10,
-              }}
-            />
-
-          </View>
-          <View>
-            <Text style={styles.texto}>OBSERVACIONES:</Text>
-            <TextInput
-              style={styles.entrada}
-              onChangeText={formParto.handleChange('obs')}
-              value={formParto.values.obs}
-            />
-          </View>
-          <Text></Text>
-          {cria.length < 2 &&
-            <Button
-              title="  AGREGAR CRIA"
-              icon={
-                <Icon
-                  name="plus-square"
-                  size={35}
-                  color="#3390FF"
-                />
-              }
-              type="outline"
-              onPress={() => cerrar()}
-            />
+return (
+  <View style={styles.container}>
+  <InfoAnimal
+    animal={animal}
+  />
+  <View style={styles.form}>
+    <ScrollView>
+      <Text style={styles.texto}>FECHA:</Text>
+      <TouchableHighlight style={styles.calendario} onPress={handlever}>
+      <View 
+      
+      ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
+      {showfecha && (
+      <DateTimePicker
+        placeholder="Fecha"
+        dateFormat="DD/MM/YYYY"
+        maximumDate={new Date()}
+        showIcon={true}
+        androidMode="spinner"
+        style={styles.fecha}
+        value={fecha}
+        onChange={cambiarFecha}
+        customStyles={{
+          dateInput: {
+            borderColor: 'white',
+            borderRadius: 10,
+            backgroundColor: 'white',
+            borderColor: 'grey',
+            borderWidth: 1,
           }
+        }}
+      /> )}
+      <View>
+        <Text style={styles.texto}>TIPO:</Text>
 
-          {cria.length != 0 &&
-            <>
-              <Text style={styles.texto}>CRIAS:</Text>
-              <FlatList
-                data={cria}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                  <CriaItem
-                    data={item}
-                    cria={cria}
-                    setCria={setCria}
-                  />
-                )
-                }
-                ItemSeparatorComponent={() => <Separator />}
-              />
-            </>
+        <RNPickerSelect
+          items={options}
+          onValueChange={formParto.handleChange('tipo')}
+          value={formParto.values.tipo}
 
-          }
-        </ScrollView>
+          placeholder={{
+            label: 'SELECCIONAR TIPO ',
+            value: null,
+            color: '#9EA0A4',
+          }}
+          style={styles.pickerStyle}
+        />
+
       </View>
-      <Button
-        title="  ACEPTAR"
-        icon={
-          <Icon
-            name="check-square"
-            size={35}
-            color="white"
-          />
-        }
-        onPress={
-          formParto.handleSubmit}
-      />
+      <View>
+        <Text style={styles.texto}>TRATAMIENTO:</Text>
 
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={modal}
-      >
-        {loading ?
-          <ActivityIndicator size="large" color='#1b829b' />
-          :
-          <View style={styles.center}>
-            <View style={styles.content}>
+        <RNPickerSelect
+          items={tratamientoOptions}
+          onValueChange={formParto.handleChange('tratamiento')}
+          value={formParto.values.tratamiento}
 
-              <ScrollView>
-                <View>
-                  <View style={styles.columnas}>
-                    <View style={styles.colizq}>
-                      <Text style={styles.header}>DATOS DE LA CRIA</Text>
-                    </View>
-                    <View style={styles.colder}>
-                      <Button
-                        onPress={() => setModal(false)}
-                        type="clear"
-                        icon={
-                          <Icon
-                            name="window-close"
-                            size={30}
-                            color="#3390FF"
-                          />
-                        }
-                      />
-                    </View>
-                  </View>
+          placeholder={{
+            label: 'SELECCIONAR TRATAMIENTO',
+            value: null,
+            color: '#9EA0A4',
+          }}
+          style={styles.pickerStyle}
+        />
 
-                  <Text style={styles.texto}>SEXO:</Text>
+      </View>
+      <View>
+        <Text style={styles.texto}>OBSERVACIONES:</Text>
+        <TextInput
+          style={styles.entrada}
+          onChangeText={formParto.handleChange('obs')}
+          value={formParto.values.obs}
+        />
+      </View>
+      <Text></Text>
+      {cria.length < 2 &&
+        <Button
+          title="  AGREGAR CRIA"
+          icon={
+            <Icon
+              name="plus-square"
+              size={35}
+              color="#4db150"
+            />
+          }
+          type="outline"
+          onPress={() => cerrar()}
+        />
+      }
 
-                  <RNPickerSelect
-                   items={sexoOptions}
-                   onValueChange={formCria.handleChange('sexo')}
-                   value={formCria.values.sexo}
-
-                   placeholder={{
-                    label: 'SELECCIONAR SEXO',
-                    value: null,
-                    color: '#9EA0A4',
-                  }}
-                  style={{
-                    inputIOS: styles.pickerStyle,
-                    inputAndroid: styles.pickerStyle,
-                    placeholder: {
-                      color: '#9EA0A4',
-                    },
-                  }}
-                  pickerContainerStyle={{
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderColor: '#ccc',
-                    paddingVertical: 10,
-                    paddingHorizontal: 12,
-                    marginBottom: 10,
-                  }}
-                  />
-
-                  <Text style={styles.texto}>RP:</Text>
-                  <TextInput
-                    style={styles.entrada}
-                    onChangeText={formCria.handleChange('rp')}
-                  />
-                  {formCria.errors.rp ? <Text style={styles.error}>{formCria.errors.rp}</Text> : null}
-
-                  <Text style={styles.texto}>PESO:</Text>
-                  <TextInput
-                    style={styles.entrada}
-                    onChangeText={formCria.handleChange('peso')}
-                    keyboardType="numeric"
-                  />
-                  {formCria.errors.peso ? <Text style={styles.error}>{formCria.errors.peso}</Text> : null}
-                  <Text style={styles.texto}>CALOSTRO:</Text>
-
-                  <RNPickerSelect
-                   items={calostroOptions}
-                   onValueChange={formCria.handleChange('tratamiento')}
-                   value={formCria.values.tratamiento}
-
-                   placeholder={{
-                    label: 'SELECCIONAR TIPO DE CALOSTRO',
-                    value: null,
-                    color: '#9EA0A4',
-                  }}
-                  style={{
-                    inputIOS: styles.pickerStyle,
-                    inputAndroid: styles.pickerStyle,
-                    placeholder: {
-                      color: '#9EA0A4',
-                    },
-                  }}
-                  pickerContainerStyle={{
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderColor: '#ccc',
-                    paddingVertical: 10,
-                    paddingHorizontal: 12,
-                    marginBottom: 10,
-                  }}
-                  />
-
-                </View>
-                <View>
-                  <Text style={styles.texto}>OBSERVACIONES:</Text>
-                  <TextInput
-                    style={styles.entrada}
-                    onChangeText={formCria.handleChange('obs')}
-                    value={formCria.values.obs}
-                  />
-                </View>
-                <Text></Text>
-                <View style={styles.foto}>
-                  {!formCria.values.foto ?
-                    <Button
-                      title="  TOMAR FOTO"
-                      icon={
-                        <Icon
-                          name="camera"
-                          size={35}
-                          color="#3390FF"
-                        />
-                      }
-                      type="outline"
-                      onPress={() => setShow(true)}
-                    />
-                    :
-                    <>
-                      <View style={styles.vistaMiniatura}>
-                        <Image
-                          style={styles.miniatura}
-                          source={{ uri: formCria.values.foto }}
-                        />
-                      </View>
-                      <Button
-                        title="  ELIMINAR FOTO"
-                        icon={
-                          <Icon
-                            name="trash"
-                            size={35}
-                            color="#3390FF"
-                          />
-                        }
-                        type="outline"
-                        onPress={() => eliminarFoto()}
-                      />
-                    </>
-                  }
-
-                </View>
-                {formCria.errors.foto ? <Text style={styles.error}>{formCria.errors.foto}</Text> : null}
-                <Text></Text>
-
-
-
-              </ScrollView>
-              <Button
-                title="  ACEPTAR"
-                style={styles.boton}
-                icon={
-                  <Icon
-                    name="check-square"
-                    size={35}
-                    color="white"
-                  />
-                }
-                onPress={formCria.handleSubmit}
+      {cria.length != 0 &&
+        <>
+          <Text style={styles.texto}>CRIAS:</Text>
+          <FlatList
+            data={cria}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <CriaItem
+                data={item}
+                cria={cria}
+                setCria={setCria}
               />
-              <Text></Text>
+            )
+            }
+            ItemSeparatorComponent={() => <Separator />}
+          />
+        </>
+
+      }
+    </ScrollView>
+  </View>
+  <Button
+    title="  ACEPTAR"
+    icon={
+      <Icon
+        name="check-square"
+        size={35}
+        color="white"
+      />
+    }
+    onPress={
+      formParto.handleSubmit}
+  />
+
+  <Modal
+    animationType='fade'
+    transparent={true}
+    visible={modal}
+  >
+    {loading ?
+      <ActivityIndicator size="large" color='#1b829b' />
+      :
+      <View style={styles.center}>
+        <View style={styles.content}>
+
+          <ScrollView>
+            <View>
+              <View style={styles.columnas}>
+                <View style={styles.colizq}>
+                  <Text style={styles.header}>DATOS DE LA CRIA</Text>
+                </View>
+                <View style={styles.colder}>
+                  <Button
+                    onPress={() => setModal(false)}
+                    type="clear"
+                    icon={
+                      <Icon
+                        name="window-close"
+                        size={30}
+                        color="#B00202"
+                      />
+                    }
+                  />
+                </View>
+              </View>
+
+              <Text style={styles.texto}>SEXO:</Text>
+
+              <RNPickerSelect
+               items={sexoOptions}
+               onValueChange={formCria.handleChange('sexo')}
+               value={formCria.values.sexo}
+
+               placeholder={{
+                label: 'SELECCIONAR SEXO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={styles.pickerStyle}
+              />
+
+              <Text style={styles.texto}>RP:</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={formCria.handleChange('rp')}
+              />
+              {formCria.errors.rp ? <Text style={styles.error}>{formCria.errors.rp}</Text> : null}
+
+              <Text style={styles.texto}>PESO:</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={formCria.handleChange('peso')}
+                keyboardType="numeric"
+              />
+              {formCria.errors.peso ? <Text style={styles.error}>{formCria.errors.peso}</Text> : null}
+              <Text style={styles.texto}>CALOSTRO:</Text>
+
+              <RNPickerSelect
+               items={calostroOptions}
+               onValueChange={formCria.handleChange('tratamiento')}
+               value={formCria.values.tratamiento}
+
+               placeholder={{
+                label: 'SELECCIONAR TIPO DE CALOSTRO',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={styles.pickerStyle}
+              />
+
             </View>
-
-          </View>
-        }
-      </Modal>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={show}
-      >
-        <View style={styles.center}>
-          <View style={styles.content}>
-            <Camera
-              style={styles.camara}
-              type={Camera.Constants.Type.back}
-              ref={ref => (cam = ref)}
-            >
-
-            </Camera>
+            <View>
+              <Text style={styles.texto}>OBSERVACIONES:</Text>
+              <TextInput
+                style={styles.entrada}
+                onChangeText={formCria.handleChange('obs')}
+                value={formCria.values.obs}
+              />
+            </View>
             <Text></Text>
-            <View style={styles.columnas}>
-              <View style={styles.colder}>
+            <View style={styles.foto}>
+              {!formCria.values.foto ?
                 <Button
-                  style={styles.boton}
-                  type="outline"
+                  title="  TOMAR FOTO"
                   icon={
                     <Icon
                       name="camera"
                       size={35}
-                      color="#3390FF"
+                      color="#4db150"
                     />
                   }
-                  onPress={() => tomarFoto()}
-                />
-              </View>
-
-              <View style={styles.colder}>
-                <Button
-                  style={styles.boton}
                   type="outline"
-                  icon={
-                    <Icon
-                      name="window-close"
-                      size={35}
-                      color="#3390FF"
-                    />
-                  }
-                  onPress={() => setShow(false)}
+                  onPress={() => setShow(true)}
                 />
-              </View>
+                :
+                <>
+                  <View style={styles.vistaMiniatura}>
+                    <Image
+                      style={styles.miniatura}
+                      source={{ uri: formCria.values.foto }}
+                    />
+                  </View>
+                  <Button
+                    title="  ELIMINAR FOTO"
+                    icon={
+                      <Icon
+                        name="trash"
+                        size={35}
+                        color="#B00202"
+                      />
+                    }
+                    type="outline"
+                    onPress={() => eliminarFoto()}
+                  />
+                </>
+              }
+
             </View>
-          </View>
+            {formCria.errors.foto ? <Text style={styles.error}>{formCria.errors.foto}</Text> : null}
+            <Text></Text>
+
+
+
+          </ScrollView>
+          <Button
+            title="  ACEPTAR"
+            style={styles.boton}
+            icon={
+              <Icon
+                name="check-square"
+                size={35}
+                color="white"
+              />
+            }
+            onPress={formCria.handleSubmit}
+          />
+          <Text></Text>
         </View>
 
-      </Modal>
-      <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        showConfirmButton={true}
-        cancelText="No, cancelar"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve == true) {
-            navigation.popToTop();
-          }
-        }}
-      />
+      </View>
+    }
+  </Modal>
+  <Modal
+    animationType='fade'
+    transparent={true}
+    visible={show}
+  >
+    <View style={styles.center}>
+      <View style={styles.content}>
+        <Camera
+          style={styles.camara}
+          type={Camera.Constants.Type.back}
+          ref={ref => (cam = ref)}
+        >
 
-    </View >
-  );
+        </Camera>
+        <Text></Text>
+        <View style={styles.columnas}>
+          <View style={styles.colder}>
+            <Button
+              style={styles.boton}
+              type="outline"
+              icon={
+                <Icon
+                  name="camera"
+                  size={35}
+                  color="#4db150"
+                />
+              }
+              onPress={() => tomarFoto()}
+            />
+          </View>
+
+          <View style={styles.colder}>
+            <Button
+              style={styles.boton}
+              type="outline"
+              icon={
+                <Icon
+                  name="window-close"
+                  size={35}
+                  color="#B00202"
+                />
+              }
+              onPress={() => setShow(false)}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+
+  </Modal>
+  <AwesomeAlert
+    show={alerta.show}
+    showProgress={false}
+    title={alerta.titulo}
+    message={alerta.mensaje}
+    closeOnTouchOutside={false}
+    closeOnHardwareBackPress={false}
+    showCancelButton={false}
+    showConfirmButton={true}
+    cancelText="No, cancelar"
+    confirmText="ACEPTAR"
+    confirmButtonColor={alerta.color}
+    onCancelPressed={() => {
+      setAlerta({ show: false })
+    }}
+    onConfirmPressed={() => {
+      setAlerta({ show: false })
+      if (alerta.vuelve == true) {
+        navigation.popToTop();
+      }
+    }}
+  />
+
+</View >
+);
 }
 const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#399dad' }}></View>
 
@@ -851,16 +794,21 @@ const styles = StyleSheet.create({
 
   },
   form: {
-    flex: 5,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+    marginHorizontal: 10,
 
   },
   fecha: {
-    width: wp('100%'),
-    padding: 5,
-    height: 50
+    width: '100%',
+    marginTop: 10,
   },
   lista: {
     marginLeft: 5,
@@ -885,43 +833,47 @@ const styles = StyleSheet.create({
     color: '#2980B9'
   },
   error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
     color: 'red',
-    backgroundColor: 'pink',
+    fontSize: 13,
+    marginTop: 5,
     textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
 
   },
   textocalendar:{
     textAlign: "center"
   },
   calendario: {
-    borderColor: 'grey',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    padding: 5,
-    width: 200,
-   marginVertical: 10,
-    marginLeft: 10
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    width: wp('90%'),
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 10,
+    color: '#333',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
 
   },
   boton: {
-    margin: 5
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    paddingTop: 5,
   },
   center: {
     flex: 1,
@@ -966,17 +918,43 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
     inputAndroid: {
-
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
+    },
+    placeholder: {
+      color: '#9EA0A4',
+    },
+    iconContainer: {
+      top: 10,
+      right: 10,
     },
 
   }

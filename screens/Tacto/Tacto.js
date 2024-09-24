@@ -203,18 +203,22 @@ export default ({ navigation }) => {
         onChangeText={updateSearch}
         value={rp}
         lightTheme
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.searchInput}
       />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
+      <View style={styles.listado}>
+        {loading ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color='#1b829b' />
+            <Text style={styles.loaderText}>Cargando animales...</Text>
+          </View>
+        ) : animalesFilter.length === 0 && !animales.length ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
+        ) : (
           <>
             <FlatList
               data={animalesFilter}
-              keyExtractor={item => item.id}
+              keyExtractor={(item) => item.id}
               initialNumToRender={100}
               renderItem={({ item }) => (
                 <ListItem
@@ -222,25 +226,28 @@ export default ({ navigation }) => {
                   animales={animales}
                   guardarAnimales={guardarAnimales}
                 />
-              )
-              }
-              ItemSeparatorComponent={() => <Separator />}
+              )}
+              ItemSeparatorComponent={Separator}
+              contentContainerStyle={styles.listContainer}
             />
-            {botonConf && 
-            <Button
-              title="  ACEPTAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={35}
-                  color="white"
-                />
-              }
-              onPress={confirmarAnimales}
-            />
-            }
+            {botonConf && (
+              <Button
+                title="ACEPTAR"
+                icon={
+                  <Icon
+                    name="check-square"
+                    size={25}
+                    color="white"
+                    style={styles.buttonIcon}
+                  />
+                }
+                onPress={confirmarAnimales}
+                buttonStyle={styles.button}
+              />
+            )}
           </>
-      }
+        )}
+      </View>
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -250,37 +257,83 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
+        onCancelPressed={() => setAlerta({ show: false })}
         onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve==true){
+          setAlerta({ show: false });
+          if (alerta.vuelve) {
             navigation.popToTop();
           }
         }}
       />
     </View>
   );
-}
-
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+}  
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
-
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+  },
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-
+    fontSize: 16,
+    color: '#444',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  listado: {
+    flex: 1,
+    paddingTop: 10,
+    borderRadius: 20,
+  },
+  button: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  buttonIcon: {
+    marginRight: 10,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

@@ -626,122 +626,137 @@ let texto = format(fecha, 'yyyy-MM-dd');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-
+    backgroundColor: '#f5f5f5',
   },
   form: {
-    flex: 5,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   fecha: {
-    width: wp('100%'),
-    padding: 5,
-    height: 50
-
-
+    width: '100%',
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
   },
   columnas: {
-    flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
   },
   col: {
     flex: 1,
-  },
-
-  fecha: {
-    width: wp('100%'),
-    padding: 5,
-
-  },
-  lista: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'grey',
-    paddingTop: 10,
-    height: 50
-
+    marginRight: 10,
   },
   texto: {
-    marginLeft: 5,
+    fontSize: 16,
+    color: '#333',
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   texto2: {
-    marginLeft: 5,
-    marginTop: 10,
+    fontSize: 18,
+    color: '#333',
     fontWeight: 'bold',
-
+    marginBottom: 10,
   },
-  textocalendar:{
-    textAlign: "center"
+  textocalendar: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#666',
   },
   calendario: {
-    borderColor: 'grey',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    padding: 5,
-    width: 200,
-   marginVertical: 10,
-    marginLeft: 10
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    width: wp('80%'),
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
+    fontSize: 14,
+    color: '#721c24',
+    backgroundColor: '#f8d7da',
+    padding: 5,
     borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
-
+    marginTop: 5,
   },
-
   entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
-
+    borderColor: '#ced4da',
+    fontSize: 16,
   },
   entradaRead: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: '#DCDFE2',
-    height: 50,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#e9ecef',
     borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
-
+    borderColor: '#ced4da',
+    fontSize: 16,
   },
   boton: {
-    margin: 5
+    marginTop: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: '#007bff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
   pickerStyle: {
     inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
     inputAndroid: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
+    },
+    placeholder: {
+      color: '#9EA0A4',
+    },
+    iconContainer: {
+      top: 10,
+      right: 10,
     },
 
-  }
-
+  },
 });

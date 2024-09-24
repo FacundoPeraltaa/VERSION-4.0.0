@@ -16,34 +16,46 @@ export default function ListItem({data,listarControles}) {
  
 
   return (
-    <TouchableOpacity onPress={listarControles}>
-     
+    <TouchableOpacity onPress={listarControles} style={styles.touchable}>
       <View style={styles.container}>
-        <Text style={styles.text}>{fechaCon} - {estado?'CONFIRMADO':'PENDIENTE'}</Text>
+        <Text style={styles.text}>
+          {fechaCon} - {estado ? 'CONFIRMADO' : 'PENDIENTE'}
+        </Text>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
+  touchable: {
+    marginVertical: 5,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
   container: {
-    backgroundColor: '#e1e8ee',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    backgroundColor: '#f2f4f8',
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderColor: '#ddd',
+    borderWidth: 1,
   },
   text: {
     fontSize: 16,
-    color:'#070037'
+    color: '#070037',
+    fontWeight: '500',
   },
-  leftAction: { 
+  leftAction: {
     backgroundColor: '#FF0000',
     justifyContent: 'center',
+    alignItems: 'flex-start',
     flex: 1,
   },
   actionText: {
     fontSize: 16,
     color: '#FFF',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 
 });

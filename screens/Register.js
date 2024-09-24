@@ -1,16 +1,41 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from '../database/firebase';
-// import { signInWithEmailAndPassword } from "firebase/auth"
 import { useFormik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PasswordInputText from 'react-native-hide-show-password-input';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener esta importación
+
+const CustomPasswordInput = ({ onChangeText, value }) => {
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!isPasswordVisible);
+  };
+
+  return (
+    <View style={styles.passwordContainer}>
+      <TextInput
+        style={styles.passwordInput}
+        secureTextEntry={!isPasswordVisible}
+        onChangeText={onChangeText}
+        value={value}
+        placeholder="Contraseña"
+        placeholderTextColor="gray"
+      />
+      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+        <Ionicons 
+          name={isPasswordVisible ? 'eye-off' : 'eye'} 
+          size={20} 
+          color="gray" 
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default ({ navigation }) => {
-
   const [loading, setLoading] = useState(false);
   const [alerta, setAlerta] = useState({
     show: false,
@@ -18,25 +43,23 @@ export default ({ navigation }) => {
     mensaje: '',
     color: '#DD6B55'
   });
-  const validate = values => {
 
-    const errors = {}
+  const validate = values => {
+    const errors = {};
     if (!values.usuario) {
-      errors.usuario = "DEBE INGRESAR UN CORREO ELECTRONICO"
+      errors.usuario = "DEBE INGRESAR UN CORREO ELECTRONICO";
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.usuario)) {
       errors.usuario = 'Formato incorrecto';
     }
-    else if(!values.nombre) {
-      errors.nombre = "DEBE INGRESAR UN NOMBRE"
+    if (!values.nombre) {
+      errors.nombre = "DEBE INGRESAR UN NOMBRE";
     }
     if (!values.clave) {
-      errors.clave = "DEBE INGRESAR UNA CONTRASEÑA"
+      errors.clave = "DEBE INGRESAR UNA CONTRASEÑA";
     }
-    return errors
-  }
+    return errors;
+  };
 
-
-  //La funcion validate debe estar declarada antes del form sino no funciona
   const formLogin = useFormik({
     initialValues: {
       nombre: '',
@@ -46,6 +69,7 @@ export default ({ navigation }) => {
     validate,
     onSubmit: datos => Registrar(datos)
   });
+
   async function guardarUsuario(usuario, nombreUsuario) {
     try {
       await AsyncStorage.setItem('usuario', usuario);
@@ -55,198 +79,153 @@ export default ({ navigation }) => {
       setAlerta({
         show: true,
         titulo: '¡ERROR!',
-        mensaje: error,
+        mensaje: error.message,
         color: '#DD6B55'
-      })
-    }
-  }
-  async function guardarUsuario(usuario, nombreUsuario) {
-    try {
-      await AsyncStorage.setItem('usuario', usuario);
-      await AsyncStorage.setItem('nombre', nombreUsuario);
-      navigation.navigate('CONFIGURACION');
-    } catch (error) {
-      setAlerta({
-        show: true,
-        titulo: '¡ERROR!',
-        mensaje: error,
-        color: '#DD6B55'
-      })
-    }
-  }
-  async function Login(datos) {
-    setLoading(true);
-    const usuario1 = datos.usuario;
-    const clave = datos.clave;
-
-    console.log(usuario1);
-    console.log(clave);
-
-
-    await firebase.autenticacion.signInWithEmailAndPassword(usuario1, clave).then((userCredential) => {
-      //signInWithEmailAndPassword(autenticacion, user, clave).then(() => {
-      // Signed in
-
-      const user = userCredential.user;
-      const usuario = user.uid;
-      const nombreUsuario = user.displayName;
-      guardarUsuario(usuario, nombreUsuario);
-
-      //console.log('ccccc')
-
-    })
-      .catch((error) => {
-
-        setAlerta({
-          show: true,
-          titulo: '¡ERROR!',
-          mensaje: error.message + usuario1 + clave,
-          color: '#DD6B55'
-        })
-        setLoading(false);
       });
-
-
+    }
   }
+
   async function Registrar(datos) {
     setLoading(true);
-    const email = datos.usuario
-    const password = datos.clave
-    const nombre = datos.nombre
-    const nuevoUsuario = await firebase.autenticacion.createUserWithEmailAndPassword(email, password).then(
-      (res)=>{
-        res.user.updateProfile({
-          displayName:nombre
-        })
-      }
-      ).then(()=>navigation.navigate('EventosMenu'))
-  };
+    const { usuario: email, clave: password, nombre } = datos;
+
+    try {
+      const res = await firebase.autenticacion.createUserWithEmailAndPassword(email, password);
+      await res.user.updateProfile({ displayName: nombre });
+      await guardarUsuario(res.user.uid, nombre); // Llama a guardarUsuario aquí si es necesario
+      navigation.navigate('EventosMenu');
+    } catch (error) {
+      setAlerta({
+        show: true,
+        titulo: '¡ERROR!',
+        mensaje: error.message,
+        color: '#DD6B55'
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <View style={styles.container}>
-      <>
-        {loading ?
-          <ActivityIndicator size="large" color='#1b829b' />
-          :
-          <>
-            <View style={styles.form}>
-              <Image
-                style={styles.logo}
-                source={require('../assets/logolargo2.png')}
-              />
-              <TextInput
-                style={styles.entrada}
-                placeholder='Nombre Completo'
-                onChangeText={formLogin.handleChange('nombre')}
-                placeholderTextColor= 'gray' 
+      {loading ? (
+        <ActivityIndicator size="large" color='#1b829b' />
+      ) : (
+        <View style={styles.form}>
+          <Image
+            style={styles.logo}
+            source={require('../assets/logolargo2.png')}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder='Nombre Completo'
+            onChangeText={formLogin.handleChange('nombre')}
+            value={formLogin.values.nombre}
+            placeholderTextColor='gray'
+          />
+          {formLogin.errors.nombre && <Text style={styles.errorText}>{formLogin.errors.nombre}</Text>}
 
-              />
-              {formLogin.errors.nombre ? <Text style={styles.error}>{formLogin.errors.nombre}</Text> : null}
-              <TextInput
-                style={styles.entrada}
-                placeholder='Correo Electronico'
-                onChangeText={formLogin.handleChange('usuario')}
-                placeholderTextColor= 'gray' 
+          <TextInput
+            style={styles.input}
+            placeholder='Correo Electrónico'
+            onChangeText={formLogin.handleChange('usuario')}
+            value={formLogin.values.usuario}
+            placeholderTextColor='gray'
+          />
+          {formLogin.errors.usuario && <Text style={styles.errorText}>{formLogin.errors.usuario}</Text>}
 
-              />
-              {formLogin.errors.usuario ? <Text style={styles.error}>{formLogin.errors.usuario}</Text> : null}
+          <CustomPasswordInput
+            onChangeText={formLogin.handleChange('clave')}
+            value={formLogin.values.clave}
+          />
+          {formLogin.errors.clave && <Text style={styles.errorText}>{formLogin.errors.clave}</Text>}
 
-              <PasswordInputText
-                style={styles.clave}
-                iconColor='grey'
-                onChangeText={formLogin.handleChange('clave')}
-                label={'Contraseña'}
-              />
-              {formLogin.errors.clave ? <Text style={styles.error}>{formLogin.errors.clave}</Text> : null}
-              <Button
-                title="REGISTRARSE"
-                onPress={formLogin.handleSubmit}
-                buttonStyle={{ marginBottom: 20, height: 50, marginTop: 30, backgroundColor:'#96A400' }}
-              />
-            </View>
-
-          </>
-        }
-        <AwesomeAlert
-          show={alerta.show}
-          showProgress={false}
-          title={alerta.titulo}
-          message={alerta.mensaje}
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="No, cancelarar"
-          confirmText="ACEPTAR"
-          confirmButtonColor={alerta.color}
-          onCancelPressed={() => {
-            setAlerta({ show: false })
-          }}
-          onConfirmPressed={() => {
-            setAlerta({ show: false })
-          }}
-        />
-      </>
-    </View >
+          <Button
+            title="REGISTRARSE"
+            onPress={formLogin.handleSubmit}
+            buttonStyle={styles.button}
+          />
+        </View>
+      )}
+      <AwesomeAlert
+        show={alerta.show}
+        showProgress={false}
+        title={alerta.titulo}
+        message={alerta.mensaje}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="ACEPTAR"
+        confirmButtonColor={alerta.color}
+        onConfirmPressed={() => setAlerta({ show: false })}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-
-
+    backgroundColor: '#F9F9F9',
+    padding: 20,
+    justifyContent: 'center',
   },
   form: {
-    flex: 1,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
-  header: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#399dad'
-  },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
-
-  },
-
   logo: {
-    height: wp('20%'),
-    width: wp('80%'),
-    margin: 35,
-    alignSelf: 'center',  
+    width: '60%',
+    height: 100,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
-
-  entrada: {
-    marginTop: 45,
-    marginLeft: 5,
-    paddingLeft: 5,
-    marginRight: 5,
+  input: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     fontSize: 16,
-    borderBottomWidth: 1,
-    borderColor: '#B0BDB5',
-    height:40,
+    color: '#212121',
+    marginBottom: 15,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
   },
-  clave: {
-    marginTop: 20,
-    marginLeft: 5,
-    paddingLeft: 5,
-    marginRight: 5,
-
+  errorText: {
+    fontSize: 12,
+    color: '#FF5252',
+    marginBottom: 10,
   },
-
+  button: {
+    backgroundColor: '#4cb050',
+    borderRadius: 8,
+    height: 50,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#F5F5F5',
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: '#212121',
+  },
+  eyeIcon: {
+    padding: 10,
+  },
 });

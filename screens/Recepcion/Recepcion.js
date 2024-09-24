@@ -100,43 +100,49 @@ export default ({ navigation }) => {
   
   return (
     <View style={styles.container}>
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        <>
-          {recepciones.length == 0 && <Text style={styles.alerta}>NO SE ENCONTRARON REGISTROS</Text>}
-          <FlatList
-            data={recepciones}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <ListItem
-                data={item}
-                eliminarRecepcion={() => eliminarRecepcion(item)}
-              />
-            )
-            }
-            ItemSeparatorComponent={() => <Separator />}
+      <View style={styles.listado}></View>
+  
+      {loading || recepciones.length === 0 ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#1b829b" />
+          <Text style={styles.loaderText}>Cargando recepciones...</Text>
+        </View>
+      ) : recepciones.length === 0 ? (
+        <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+      ) : (
+        <FlatList
+          data={recepciones}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ListItem
+              data={item}
+              eliminarRecepcion={() => eliminarRecepcion(item)}
+            />
+          )}
+          ItemSeparatorComponent={Separator}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
+  
+      <Button
+        title="AGREGAR"
+        icon={
+          <Icon
+            name="plus-square"
+            size={25}
+            color="white"
+            style={styles.buttonIcon}
           />
-
-          <Button
-            title="  AGREGAR"
-            icon={
-              <Icon
-                name="plus-square"
-                size={35}
-                color="white"
-              />
-            }
-            onPress={() => {
-              navigation.push('RegistrarRecepcion', {
-                tambo: tambo,
-                usuario:usuario
-              })
-            }}
-          />
-        </>
-      }
+        }
+        onPress={() => {
+          navigation.push('RegistrarRecepcion', {
+            tambo: tambo,
+            usuario: usuario,
+          });
+        }}
+        buttonStyle={styles.button}
+      />
+  
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -146,34 +152,66 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="CANCELAR"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-        }}
+        onCancelPressed={() => setAlerta({ show: false })}
+        onConfirmPressed={() => setAlerta({ show: false })}
       />
     </View>
   );
 }
 
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
-
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-
+    fontSize: 16,
+    color: '#444',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  button: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  buttonIcon: {
+    marginRight: 10,
+  },
+  listado: {
+    flex: 1,
+    paddingTop: 10,
+    borderRadius: 20,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 50,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

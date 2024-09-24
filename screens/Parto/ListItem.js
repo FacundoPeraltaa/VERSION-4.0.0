@@ -1,47 +1,47 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-export default function ListItem({ data,registrarParto,registrarAborto }) {
+export default function ListItem({ data, registrarParto, registrarAborto }) {
   const [alerta, setAlerta] = useState(false);
-  const { id, rp,fservicio,estrep,estpro,diasPre,categoria } = data;
+  const { id, rp, fservicio, estrep, estpro, diasPre, categoria } = data;
   const [parto, setParto] = useState(false);
-  const [siglas, guardarSiglas] =useState({
-    cat:'VC',
+  const [siglas, guardarSiglas] = useState({
+    cat: 'VC',
     prod: 'S',
-    rep: 'V'
-  })
+    rep: 'V',
+  });
 
   useEffect(() => {
+    let c = 'VC';
+    let p = 'S';
+    let r = 'V';
 
-    let c='VC';
-    let p='S';
-    let r='V';
-
-    if (categoria!='Vaca') c='VQ';
-    if (estpro!='seca') p='O';
-    if (estrep!='vacia') r='P'
+    if (categoria !== 'Vaca') c = 'VQ';
+    if (estpro !== 'seca') p = 'O';
+    if (estrep !== 'vacia') r = 'P';
 
     guardarSiglas({
-      cat:c,
+      cat: c,
       prod: p,
-      rep: r
-    })
-      
+      rep: r,
+    });
   }, []);
 
-  const confirmar = ()=>{
-    setAlerta(true)
-  }
+  const confirmar = () => {
+    setAlerta(true);
+  };
 
   return (
     <>
       <TouchableOpacity style={styles.container} onPress={confirmar}>
-        <Text style={styles.text}>RP: {rp} ({siglas.cat}/{siglas.prod}/{siglas.rep}) - DIAS PREÑEZ: {diasPre} </Text>
-        </TouchableOpacity>
+        <Text style={styles.text}>
+          RP: {rp} ({siglas.cat}/{siglas.prod}/{siglas.rep}) - DIAS PREÑEZ: {diasPre}
+        </Text>
+      </TouchableOpacity>
 
-        <AwesomeAlert
-        show= {alerta}
+      <AwesomeAlert
+        show={alerta}
         showProgress={false}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={true}
@@ -49,94 +49,82 @@ export default function ListItem({ data,registrarParto,registrarAborto }) {
         showConfirmButton={true}
         cancelText="ABORTO"
         confirmText="PARTO"
-        onDismiss={()=>setAlerta(false)}
-        cancelButtonTextStyle={{
-          fontSize:50,
-          fontWeight:"bold",
-          textAlign:"center",         
-        }}
-        confirmButtonTextStyle={{
-          fontSize:50,
-          fontWeight:"bold",
-          textAlign:"center",         
-        }}
+        onDismiss={() => setAlerta(false)}
+        cancelButtonTextStyle={styles.buttonText}
+        confirmButtonTextStyle={styles.buttonText}
         confirmButtonColor="#3AD577"
         cancelButtonColor="#DD6B55"
-        contentContainerStyle={{
-          width:360,
-          height:300,
-          margin:0,
-          padding:0
-        }}
-        contentStyle={{
-          padding: 0,
-          margin: 0,
-        }}
-        actionContainerStyle={{
-          display:"flex",
-          flexDirection:"column-reverse",
-          justifyContent:"space-around",
-          gap:5,
-          alignItems:"center",
-          margin:0,
-          padding:0
-        }}
-        cancelButtonStyle={{
-          width:335,
-          height:145,
-          margin:0,
-          padding:0,
-          display:"flex",
-          justifyContent:"center",
-          alignItems:"center"
-        }}
-        confirmButtonStyle={{
-          width:335,
-          height:145,
-          margin:0,
-          padding:0,
-          display:"flex",
-          justifyContent:"center",
-          alignItems:"center"
-        }}
+        contentContainerStyle={styles.alertContentContainer}
+        contentStyle={styles.alertContent}
+        actionContainerStyle={styles.alertActions} // Aquí está el cambio
+        cancelButtonStyle={styles.cancelButton}
+        confirmButtonStyle={styles.confirmButton}
         onCancelPressed={() => {
-          setAlerta(false)
-          registrarAborto()
+          setAlerta(false);
+          registrarAborto();
         }}
         onConfirmPressed={() => {
-          setAlerta(false)
-          registrarParto()
+          setAlerta(false);
+          registrarParto();
         }}
       />
-      </>
-  )
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e1e8ee',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    backgroundColor: '#ffffff', // Fondo blanco para los elementos
+    borderRadius: 15, // Bordes redondeados
+    padding: 15, // Espacio interno
+    marginBottom: 1, // Espacio entre elementos
+    shadowColor: '#000', // Sombra para darle profundidad
+    shadowOffset: { width: 0, height: 5 }, // Offset de la sombra
+    shadowOpacity: 0.1, // Opacidad de la sombra
+    shadowRadius: 10, // Difusión de la sombra
+    elevation: 5, // Elevación en Android
+    borderWidth: 1, // Borde definido
+    borderColor: '#e0e0e0', // Color del borde
   },
   text: {
     fontSize: 16,
-    color: '#070037'
+    color: '#333', // Color oscuro para el texto
   },
-  leftAction: {
-    backgroundColor: '#249E31',
+  buttonText: {
+    fontSize: 40,
+    fontWeight: 'lighter',
+    textAlign: 'center',
+    color: '#fff',
+  },
+  alertContentContainer: {
+    width: 400,
+    height: 450,
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
+  alertContent: {
+    padding: 5,
+  },
+  alertActions: {
+    flexDirection: 'column-reverse', // Cambio aquí para que el botón de PARTO quede arriba
+    alignItems: 'center',
+    padding: 5,
+  },
+  cancelButton: {
+    backgroundColor: '#e12400',
+    width: 500,
+    height: 200,
+    borderRadius: 8,
     justifyContent: 'center',
-    flex: 1,
+    alignItems: 'center',
+    marginBottom: 50
   },
-  RightAction: {
-    backgroundColor: '#FF0000',
+  confirmButton: {
+    backgroundColor: '#4db150',
+    width: 500,
+    height: 200,
+    borderRadius: 8,
     justifyContent: 'center',
-    flex:1,
-    alignItems: 'flex-end'
+    alignItems: 'center',
   },
-  actionText: {
-    fontSize: 16,
-    color: '#FFF',
-    padding: 15,
-  },
-
 });

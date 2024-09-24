@@ -53,8 +53,8 @@ export default ({ navigation }) => {
 
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO SE PUEDE OBTENER EL USUARIO',
+        titulo: 'Error!',
+        mensaje: 'No se puede obtener el usuario',
         color: '#DD6B55'
       });
       setShowTambos(false);
@@ -86,8 +86,8 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO SE PUEDEN OBTENER LOS CONTROLES',
+        titulo: 'Error!',
+        mensaje: 'No se pueden obtener los controles',
         color: '#DD6B55'
       });
     }
@@ -142,9 +142,9 @@ export default ({ navigation }) => {
     if (cont.length > 0) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'YA EXISTE UN CONTROL REGISTRADO EN ESTA FECHA ',
-        color: '#3AD577'
+        titulo: 'Error!',
+        mensaje: 'Ya existe un control registrado en esta fecha',
+        color: '#DD6B55'
       });
 
     } else {
@@ -156,16 +156,16 @@ export default ({ navigation }) => {
         });
         setAlerta({
           show: true,
-          titulo: '¡ATENCIÓN!',
-          mensaje: 'CONTROL REGISTRADO CON ÉXITO ',
+          titulo: 'Atención!',
+          mensaje: 'Control registrado con éxito',
           color: '#3AD577'
         });
         obtenerControles();
       } catch (error) {
         setAlerta({
           show: true,
-          titulo: '¡ERROR!',
-          mensaje: 'NO SE PUDO REGISTRAR EL CONTROL',
+          titulo: 'Error!',
+          mensaje: 'No se pudo registrar el control',
           color: '#DD6B55'
         });
       }
@@ -299,7 +299,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelarar"
+        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

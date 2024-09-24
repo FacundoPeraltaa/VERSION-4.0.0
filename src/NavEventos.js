@@ -34,7 +34,7 @@ export default function MyStack() {
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#B5CD00',
+          backgroundColor: '#4cb050',
           shadowOffset: { width: 1, height: 1 },
           elevation: 3,
           borderBottomWidth: 1,

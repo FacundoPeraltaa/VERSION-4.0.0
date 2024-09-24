@@ -124,256 +124,164 @@ export default function ListItemTolvas({ data, animalesControl, updateControl, n
   }
 
   return (
-
     <View style={styles.container}>
-      <Text style={styles.text}>RP: {rp}  - Orden: {orden}</Text>
-      <Text style={styles.text}>eRP: {id} </Text>
-      <Text style={styles.text}>Lts.Mañana: {varLtsm}  - Lts.Tarde.: {varLtst}</Text>
-      <Text style={styles.text}>Anorm.: {varAnorm}</Text>
+      <Text style={styles.infoText}>RP: {rp} - Orden: {orden}</Text>
+      <Text style={styles.infoText}>eRP: {id}</Text>
+      <Text style={styles.infoText}>Lts. Mañana: {varLtsm} - Lts. Tarde: {varLtst}</Text>
+      <Text style={styles.infoText}>Anormalidad: {varAnorm}</Text>
 
       <Button
-        title=" REGISTRAR CONTROL"
-        style={styles.boton}
-        type="outline"
-        icon={
-          <Icon
-            name="edit"
-            size={30}
-            color="#3390FF"
-          />
-        }
+        title="Registrar Control"
         onPress={abrirRegistrarControl}
+        buttonStyle={styles.button}
+        type="outline"
+        icon={<Icon name="edit" size={30} color="#3390FF" />}
       />
+      
       <Modal
-        animationType='fade'
+        animationType="fade"
         transparent={true}
         visible={visible}
       >
-        <View style={styles.center}>
-          <View style={styles.content}>
-
-            <View style={styles.header}>
-              <Text style={styles.text2}>RP:{rp}</Text>
-              <Text style={styles.text2}>eRP:{id}</Text>
+        <View style={styles.modalCenter}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderText}>RP: {rp}</Text>
+              <Text style={styles.modalHeaderText}>eRP: {id}</Text>
             </View>
-
-            <View style={styles.columnas}>
-              <View style={styles.colizq}>
-                <Text style={styles.texto}>LTS. MAÑANA:</Text>
+            
+            <View style={styles.inputContainer}>
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>LTS. MAÑANA:</Text>
                 <TextInput
-                  style={styles.entrada}
+                  style={styles.textInput}
                   value={formControl.values.ltsm}
                   onChangeText={formControl.handleChange('ltsm')}
                   keyboardType="numeric"
                 />
               </View>
-              <View style={styles.colder}>
-                <Text style={styles.texto}>LTS. TARDE:</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>LTS. TARDE:</Text>
                 <TextInput
-                  style={styles.entrada}
+                  style={styles.textInput}
                   value={formControl.values.ltst}
                   onChangeText={formControl.handleChange('ltst')}
                   keyboardType="numeric"
                 />
               </View>
             </View>
-            {formControl.errors.lts ? <Text style={styles.error}>{formControl.errors.lts}</Text> : null}
-            <Text style={styles.texto}>ANORMALIDAD:</Text>
+            
+            {formControl.errors.lts && <Text style={styles.errorText}>{formControl.errors.lts}</Text>}
+            
+            <Text style={styles.inputLabel}>ANORMALIDAD:</Text>
             <TextInput
-              style={styles.entrada}
+              style={styles.textInput}
               value={formControl.values.anorm}
               onChangeText={formControl.handleChange('anorm')}
             />
-
-            <Text></Text>
+            
             <Button
               onPress={formControl.handleSubmit}
-
-              title=" GUARDAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={30}
-                  color="white"
-                />
-              }
+              title="Guardar"
+              buttonStyle={styles.button}
+              icon={<Icon name="check-square" size={30} color="white" />}
             />
-            <Text></Text>
+            
             <Button
               onPress={cerrar}
+              title="Cerrar"
               type="outline"
-              title=" CERRAR"
-              icon={
-                <Icon
-                  name="window-close"
-                  size={30}
-                  color="#2980B9"
-                />
-              }
+              buttonStyle={styles.outlineButton}
+              titleStyle={styles.outlineButtonTitle}
+              icon={<Icon name="window-close" size={30} color="#2980B9" />}
             />
-
           </View>
         </View>
       </Modal>
-
     </View>
-
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    flex: 1,
+    padding: 15,
     margin: 5,
-    borderWidth: 1,
-    borderColor: 'white',
     borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
-  text: {
-    fontSize: 15,
-    color: '#2980B9',
-    fontWeight: 'bold'
-  },
-  texto: {
+  infoText: {
     fontSize: 16,
-    paddingLeft: 5,
-    color: 'black'
-  },
-  text2: {
-    color: '#e1e8ee',
-    textAlign: 'center',
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 10
-
-  },
-  boton: {
-    margin: 5,
-    color: "#f194ff",
-  },
-  revisada: {
-    backgroundColor: '#62CD89',
-    fontSize: 16,
+    color: '#333',
     fontWeight: 'bold',
-    color: '#fff',
-    margin: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    borderRadius: 3,
+    marginBottom: 5,
+  },
+  button: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  modalCenter: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    textAlignVertical: 'center'
-
   },
-
-  entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
-    borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
-
-  },
-  boton: {
-    margin: 5,
-    padding: 5
-  },
-  center: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)'
-  },
-  content: {
-    backgroundColor: '#e1e8ee',
-    borderWidth: 1,
-    borderColor: 'white',
-    margin: 20,
-    marginTop: hp('15%'),
+  modalContent: {
+    backgroundColor: '#fff',
     borderRadius: 15,
+    padding: 20,
+    width: wp('80%'),
     height: hp('60%'),
-
   },
-  columnas: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  colder: {
-    flex: 1,
-  },
-  colizq: {
-    marginTop: 2,
-    flex: 3,
-  },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
-
-  },
-  header: {
-
+  modalHeader: {
     backgroundColor: '#2980B9',
     borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-
+    borderTopRightRadius: 15,
+    paddingVertical: 10,
+    alignItems: 'center',
   },
-  text2: {
-    color: '#e1e8ee',
-    textAlign: 'center',
+  modalHeaderText: {
+    color: '#fff',
     fontSize: 18,
-    marginTop: 5,
-    marginBottom: 5
-
+    marginVertical: 5,
   },
-  entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
-    borderWidth: 1,
-    borderColor: 'grey',
-    paddingLeft: 5
-
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
   },
-  columnas: {
-
-    flexDirection: 'row'
-  },
-  colder: {
+  inputGroup: {
     flex: 1,
-    marginTop: 2,
+    marginHorizontal: 5,
   },
-  colizq: {
-    marginTop: 2,
-    flex: 1,
-  },
-  texto: {
+  inputLabel: {
     fontSize: 16,
-    paddingLeft: 5,
-    color: 'black'
+    color: '#333',
+    marginBottom: 5,
   },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
+  textInput: {
+    borderColor: 'grey',
     borderWidth: 1,
-    borderColor: 'red'
-
+    borderRadius: 10,
+    padding: 10,
+    height: 50,
+    backgroundColor: '#fff',
+  },
+  errorText: {
+    fontSize: 13,
+    color: 'red',
+    marginVertical: 5,
+    textAlign: 'center',
+  },
+  outlineButton: {
+    borderColor: '#2980B9',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  outlineButtonTitle: {
+    color: '#2980B9',
   },
 });

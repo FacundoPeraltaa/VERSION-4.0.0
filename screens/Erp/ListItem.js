@@ -22,13 +22,21 @@ export default function ListItem({ data,cambiarErp}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e1e8ee',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    backgroundColor: '#ffffff', // Fondo blanco para los elementos
+    borderRadius: 15, // Bordes redondeados
+    padding: 15, // Espacio interno
+    marginBottom: 1, // Espacio entre elementos
+    shadowColor: '#000', // Sombra para darle profundidad
+    shadowOffset: { width: 0, height: 5 }, // Offset de la sombra
+    shadowOpacity: 0.1, // Opacidad de la sombra
+    shadowRadius: 10, // Difusión de la sombra
+    elevation: 5, // Elevación en Android
+    borderWidth: 1, // Borde definido
+    borderColor: '#e0e0e0', // Color del borde
   },
   text: {
     fontSize: 16,
-    color: '#070037'
+    color: '#333', // Color oscuro para el texto
   },
   leftAction: {
     backgroundColor: '#249E31',

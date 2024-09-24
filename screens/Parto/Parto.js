@@ -100,22 +100,27 @@ export default ({ navigation }) => {
       setLoading(false);
     };
 
-  return (
-    <View style={styles.container}>
-      <SearchBar
-        placeholder="Buscar por RP"
-        onChangeText={updateSearch}
-        value={rp}
-        lightTheme
-      />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
+    return (
+      <View style={styles.container}>
+       <View style={styles.colbarra}>
+          <SearchBar
+            placeholder="Buscar por RP"
+            onChangeText={updateSearch}
+            value={rp}
+            lightTheme
+            containerStyle={styles.searchContainer}
+            inputContainerStyle={styles.searchInput}
+          />
+        </View>
+        <View style={styles.listado}>
+        {loading || animalesFilter.length === 0 ?(
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color='#1b829b' />
+            <Text style={styles.loaderText}>Cargando animales...</Text>
+          </View>
+        ) :  (animalesFilter.length === 0 && !animales.length) ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
-
+        ) : (
           <FlatList
             data={animalesFilter}
             keyExtractor={item => item.id}
@@ -124,64 +129,82 @@ export default ({ navigation }) => {
               <ListItem
                 data={item}
                 registrarParto={() => {
-                  navigation.push('RegistrarParto', {
-                    animal: item,
-                    tambo: tambo,
-                    usuario: usuario,
-
-                  })
+                  navigation.push('RegistrarParto', { animal: item, tambo, usuario });
                 }}
                 registrarAborto={() => {
-                  navigation.push('RegistrarAborto', {
-                    animal: item,
-                    tambo: tambo,
-                    usuario: usuario,
-
-                  })
+                  navigation.push('RegistrarAborto', { animal: item, tambo, usuario });
                 }}
               />
-            )
-            }
-            ItemSeparatorComponent={() => <Separator />}
+            )}
+            ItemSeparatorComponent={Separator}
           />
-      }
-      <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        showConfirmButton={true}
-        cancelText="No, cancelar"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-        }}
-      />
-    </View>
-  );
-}
-
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#e1e8ee',
-
-  },
-  alerta: {
-    backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
+        )}
+        <AwesomeAlert
+          show={alerta.show}
+          showProgress={false}
+          title={alerta.titulo}
+          message={alerta.mensaje}
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="ACEPTAR"
+          confirmButtonColor={alerta.color}
+          onConfirmPressed={() => setAlerta({ show: false })}
+        />
+      </View>
+      </View>
+    );
+  }
+  
+  const Separator = () => <View style={styles.separator} />;
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#f7f7f7',
+      paddingHorizontal: 3,
+      paddingVertical: 3,
+    },
+    searchContainer: {
+      backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
     paddingHorizontal: 10,
-    paddingVertical: 15,
-
-  },
-});
+    elevation: 5,
+    borderWidth: 0,
+    },
+    searchInput: {
+      backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    },
+    listado: {
+      flex: 1,
+      paddingTop: 10,
+      borderRadius: 20,
+    },
+    alerta: {
+      textAlign: 'center',
+      backgroundColor: '#fce4ec',
+      fontSize: 16,
+      color: '#e91e63',
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      borderRadius: 15,
+      marginVertical: 10,
+    },
+    separator: {
+      height: 10,
+    },
+    loaderContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loaderText: {
+      marginTop: 10,
+      fontSize: 16,
+      color: '#1b829b',
+    },
+  });

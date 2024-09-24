@@ -161,50 +161,52 @@ export default ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-
       <SearchBar
         placeholder="Buscar por RP"
         onChangeText={updateSearch}
         value={rp}
         lightTheme
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.searchInput}
       />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
+       {loading || animalesFilter.length === 0 ?(
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color='#1b829b' />
+            <Text style={styles.loaderText}>Cargando animales...</Text>
+          </View>
+        ) :  (animalesFilter.length === 0 && !animales.length) ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
-          <>
-            <FlatList
-              data={animalesFilter}
-              keyExtractor={item => item.id}
-              initialNumToRender={100}
-              renderItem={({ item }) => (
-                <ListItem
-                  data={item}
-                  animales={animales}
-                  guardarAnimales={guardarAnimales}
-                />
-              )
-              }
-              ItemSeparatorComponent={() => <Separator />}
-            />
-
-
-            <Button
-              title="  ACEPTAR"
-              icon={
-                <Icon
-                  name="check-square"
-                  size={35}
-                  color="white"
-                />
-              }
-              onPress={secarAnimales}
-            />
-          </>
-      }
+      ) : (
+        <>
+          <FlatList
+            data={animalesFilter}
+            keyExtractor={item => item.id}
+            initialNumToRender={100}
+            renderItem={({ item }) => (
+              <ListItem
+                data={item}
+                animales={animales}
+                guardarAnimales={guardarAnimales}
+              />
+            )}
+            ItemSeparatorComponent={Separator}
+            contentContainerStyle={styles.listContainer}
+          />
+          <Button
+            title="ACEPTAR"
+            icon={
+              <Icon
+                name="check-square"
+                size={24}
+                color="white"
+                containerStyle={styles.buttonIcon}
+              />
+            }
+            buttonStyle={styles.button}
+            onPress={secarAnimales}
+          />
+        </>
+      )}
       <AwesomeAlert
         show={alerta.show}
         showProgress={false}
@@ -214,15 +216,11 @@ export default ({ navigation }) => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
         onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve == true) {
+          setAlerta({ show: false });
+          if (alerta.vuelve) {
             navigation.popToTop();
           }
         }}
@@ -231,20 +229,60 @@ export default ({ navigation }) => {
   );
 }
 
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
-
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+  },
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   alerta: {
-    backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
-    paddingHorizontal: 10,
+    textAlign: 'center',
+    backgroundColor: '#fce4ec',
+    fontSize: 16,
+    color: '#e91e63',
+    paddingHorizontal: 20,
     paddingVertical: 15,
-
+    borderRadius: 15,
+    marginVertical: 10,
+  },
+  listContainer: {
+    paddingBottom: 60, // Adding padding for the button
+  },
+  button: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginTop: 15,
+  },
+  buttonIcon: {
+    marginRight: 10,
+  },
+  separator: {
+    height: 5,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

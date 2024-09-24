@@ -103,7 +103,6 @@ export default ({ navigation }) => {
 
 
 
-
   return (
     <View style={styles.container}>
       <SearchBar
@@ -111,18 +110,22 @@ export default ({ navigation }) => {
         onChangeText={updateSearch}
         value={rp}
         lightTheme
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.searchInput}
       />
-      {loading ?
-        <ActivityIndicator size="large" color='#1b829b' />
-        :
-
-        animalesFilter.length == 0 ?
+  
+      <View style={styles.listado}>
+        {loading || animalesFilter.length === 0 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color="#1b829b" />
+            <Text style={styles.loaderText}>Cargando animales...</Text>
+          </View>
+        ) : animalesFilter.length === 0 && !animales.length ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-          :
-
+        ) : (
           <FlatList
             data={animalesFilter}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             initialNumToRender={100}
             renderItem={({ item }) => (
               <ListItem
@@ -130,55 +133,88 @@ export default ({ navigation }) => {
                 cambiarErp={() => {
                   navigation.push('CambiarBoton', {
                     animal: item,
-                    animales:animales,
-                    usuario: usuario
-                  })
+                    animales: animales,
+                    usuario: usuario,
+                  });
                 }}
-               
-
               />
-            )
-            }
-            ItemSeparatorComponent={() => <Separator />}
+            )}
+            ItemSeparatorComponent={Separator}
+            contentContainerStyle={styles.listContainer}
           />
-      }
+        )}
+      </View>
+  
       <AwesomeAlert
-     show={alerta.show}
-     showProgress={false}
-     title={alerta.titulo}
-     message={alerta.mensaje}
-     closeOnTouchOutside={false}
-     closeOnHardwareBackPress={false}
-     showCancelButton={false}
-     showConfirmButton={true}
-     cancelText="No, cancelarar"
-     confirmText="ACEPTAR"
-     confirmButtonColor={alerta.color}
-     onCancelPressed={() => {
-       setAlerta({ show: false })
-     }}
-     onConfirmPressed={() => {
-       setAlerta({ show: false })
-     }}
-   />
+        show={alerta.show}
+        showProgress={false}
+        title={alerta.titulo}
+        message={alerta.mensaje}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="ACEPTAR"
+        confirmButtonColor={alerta.color}
+        onConfirmPressed={() => setAlerta({ show: false })}
+      />
     </View>
   );
 }
 
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
-
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+  },
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-
+    fontSize: 16,
+    color: '#444',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  listado: {
+    flex: 1,
+    paddingTop: 10,
+    borderRadius: 20,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
   },
 });

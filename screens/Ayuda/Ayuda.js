@@ -1,107 +1,135 @@
 import React from "react";
-import { StyleSheet, Linking, View, FlatList, Text } from "react-native";
-import ListItem from "./ListItem";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+
 export default () => {
-    let call = require('../../assets/telefono.png');
-    let wsp = require('../../assets/whatsapp.png');
-    let mail = require('../../assets/email.png');
-    let yt = require('../../assets/yt.png');
-    let ig = require('../../assets/instagramicono.png');
-    let fb = require('../../assets/facebookicono.png');
-
-
-    const DATA = [
+  const CONTACT_METHODS = [
     {
-      id: "1",
       title: "Llamar",
-      logo: call,
+      logo: require('../../assets/telefono.png'),
       link: "tel:+5492227673372",
     },
     {
-      id: "2",
       title: "WhatsApp",
-      logo: wsp,
+      logo: require('../../assets/whatsapp.png'),
       link: "http://api.whatsapp.com/send?phone=5492227673372",
     },
     {
-      id: "3",
       title: "E-mail",
-      logo: mail,
+      logo: require('../../assets/email.png'),
       link: "mailto:infofarmerin@gmail.com",
     },
   ];
-  const Separator = () => (
-    <View style={{ flex: 1, height: 1, backgroundColor: "#2980B9" }}></View>
-    );
-    const navegar = (link) => Linking.openURL(link);
-  
+
+  const SOCIAL_MEDIA = [
+    {
+      title: "YouTube",
+      logo: require('../../assets/yt.png'),
+      link: "https://www.youtube.com/channel/UCPG5tI4805MPm6jshejr5vA"
+    },
+    {
+      title: "Facebook",
+      logo: require('../../assets/facebookicono.png'),
+      link: "https://www.facebook.com/farmerinarg"
+    },
+    {
+      title: "Instagram",
+      logo: require('../../assets/instagramicono.png'),
+      link: "https://www.instagram.com/farmerinar/"
+    }
+  ];
+
+  const navegar = (link) => Linking.openURL(link);
+
   return (
     <View style={styles.container}>
-        <View style={styles.titulo}><Text style={styles.textocon}>Contacto</Text></View>
-      <View style={styles.listado}>
-        <FlatList
-          data={DATA}
-          keyExtractor={(item) => item.id}
-          initialNumToRender={100}
-          renderItem={({ item }) => (
-            <ListItem data={item} linkeo={() => navegar(item.link)} />
-          )}
-        />
+      <Text style={styles.headerText}>Contacto</Text>
+      <View style={styles.contactContainer}>
+        {CONTACT_METHODS.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.contactButton}
+            onPress={() => navegar(item.link)}
+          >
+            <Image source={item.logo} style={styles.icon} />
+            <Text style={styles.buttonText}>{item.title}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
-      <View style={styles.linea}></View>
-      <View style={styles.titulo}><Text style={styles.textocon}>Redes</Text></View>
-      <ListItem
-        data={{
-          title: "YouTube",
-          logo: yt,
-        }}
-        linkeo={() =>
-          navegar("https://www.youtube.com/channel/UCPG5tI4805MPm6jshejr5vA")
-        }
-      />
-       <ListItem
-        data={{
-          title: "Facebook",
-          logo: fb,
-        }}
-        linkeo={() =>
-          navegar("https://www.facebook.com/farmerinarg")
-        }
-      />
-       <ListItem
-        data={{
-          title: "Instagram",
-          logo: ig,
-        }}
-        linkeo={() =>
-          navegar("https://www.instagram.com/farmerinar/")
-        }
-      />
+
+      <View style={styles.divider} />
+
+      <Text style={styles.headerText}>Redes Sociales</Text>
+      <View style={styles.socialContainer}>
+        {SOCIAL_MEDIA.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.socialButton}
+            onPress={() => navegar(item.link)}
+          >
+            <Image source={item.logo} style={styles.socialIcon} />
+            <Text style={styles.socialText}>{item.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e1e8ee",
+    backgroundColor: "#f4f6f8",
+    padding: 20,
   },
-linea:{
-    height: 1, 
-    backgroundColor: '#2980B9',
-    marginVertical: 5,
-},
-  listado: {
-  },
-  titulo:{
-    marginVertical: 15,
-    marginLeft: 23
-  },
-  textocon:{
-    backgroundColor: '#e1e8ee',
-    fontSize: 15,
-    textAlign: 'left',
+  headerText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1b829b',
+    marginBottom: 10,
     textTransform: "uppercase",
-    fontWeight: "bold",
-    color: '#002742',
-  }
+  },
+  contactContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  contactButton: {
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 8,
+    width: '30%',
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+  },
+  buttonText: {
+    fontSize: 14,
+    color: '#00796b',
+    fontWeight: '500',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 20,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  socialButton: {
+    alignItems: 'center',
+    padding: 10,
+    width: '30%',
+  },
+  socialIcon: {
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+  },
+  socialText: {
+    fontSize: 14,
+    color: '#444',
+  },
 });

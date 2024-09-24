@@ -1,52 +1,63 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener este paquete instalado
 import firebase from '../database/firebase';
-//import { signInWithEmailAndPassword } from "firebase/auth"
 import { useFormik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PasswordInputText from 'react-native-hide-show-password-input';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+
+const CustomPasswordInput = ({ onChangeText, value }) => {
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!isPasswordVisible);
+  };
+
+  return (
+    <View style={styles.passwordContainer}>
+      <TextInput
+        style={styles.passwordInput}
+        secureTextEntry={!isPasswordVisible}
+        onChangeText={onChangeText}
+        value={value}
+        placeholder="Contraseña"
+        placeholderTextColor="gray"
+      />
+      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+        <Ionicons 
+          name={isPasswordVisible ? 'eye-off' : 'eye'} 
+          size={20} 
+          color="gray" 
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default ({ navigation }) => {
-
   const [loading, setLoading] = useState(false);
   const [alerta, setAlerta] = useState({
     show: false,
     titulo: '',
     mensaje: '',
-    color: '#DD6B55'
+    color: '#FF5252'
   });
-  const validate = values => {
 
-    const errors = {}
+  const validate = values => {
+    const errors = {};
     if (!values.usuario) {
-      errors.usuario = "DEBE INGRESAR UN USUARIO"
+      errors.usuario = "Por favor, ingresa tu usuario.";
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.usuario)) {
-      errors.usuario = 'Formato incorrecto';
+      errors.usuario = 'Correo inválido.';
     }
     if (!values.clave) {
-      errors.clave = "DEBE INGRESAR UNA CONTRASEÑA"
+      errors.clave = "Por favor, ingresa tu contraseña.";
     }
-    return errors
-  }
-  const forgotPassword = (Email) => {
-    firebase.autenticacion.sendPasswordResetEmail(Email)
-      .then(function (user) {
-        setAlerta({
-          show: true,
-          titulo: '¡ATENCION!',
-          mensaje: "TE HEMOS ENVIADO UN MAIL PARA RESTABLECER TU CONTRASEÑA, SI NO LO HAS RECIBIDO REVISA EN SPAM",
-          color: '#DD6B55'
-        })
-      }).catch(function (e) {
-        console.log(e)
-      })
-  }
+    return errors;
+  };
 
-  //La funcion validate debe estar declarada antes del form sino no funciona
   const formLogin = useFormik({
     initialValues: {
       usuario: '',
@@ -64,192 +75,196 @@ export default ({ navigation }) => {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ ERROR !',
-        mensaje: error,
-        color: '#DD6B55'
-      })
+        titulo: 'Error',
+        mensaje: error.message,
+        color: '#FF5252'
+      });
     }
   }
 
   async function Login(datos) {
     setLoading(true);
-    const usuario1 = datos.usuario;
-    const clave = datos.clave;
+    const { usuario, clave } = datos;
 
-    console.log(usuario1);
-    console.log(clave);
-
-
-    await firebase.autenticacion.signInWithEmailAndPassword(usuario1, clave).then((userCredential) => {
-      //signInWithEmailAndPassword(autenticacion, user, clave).then(() => {
-      // Signed in
-
-      const user = userCredential.user;
-      const usuario = user.uid;
-      const nombreUsuario = user.displayName;
-      guardarUsuario(usuario, nombreUsuario);
-
-      //console.log('ccccc')
-
-    })
-      .catch((error) => {
-
+    await firebase.autenticacion.signInWithEmailAndPassword(usuario, clave)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        guardarUsuario(user.uid, user.displayName);
+      })
+      .catch(() => {
         setAlerta({
           show: true,
-          titulo: '¡ ERROR !',
-          mensaje: "CORREO O CONTRASEÑA INCORRECTOS",
-          color: '#DD6B55'
-        })
+          titulo: 'Error',
+          mensaje: "Usuario o contraseña incorrectos.",
+          color: '#FF5252'
+        });
         setLoading(false);
       });
-
-
   }
 
   return (
     <View style={styles.container}>
-      <>
-        {loading ?
-          <ActivityIndicator size="large" color='#1b829b' />
-          :
-          <>
-            <View style={styles.form}>
-              <Image
-                style={styles.logo}
-                source={require('../assets/logolargo2.png')}
-              />
-              <View>
-              <TextInput
-                style={styles.entrada}
-                placeholder='Correo Electronico'
-                placeholderTextColor= 'gray' 
-                onChangeText={formLogin.handleChange('usuario')}
-              />
-              {formLogin.errors.usuario ? <Text style={styles.error}>{formLogin.errors.usuario}</Text> : null}
-              </View>
-              <PasswordInputText
-                style={styles.clave}
-                iconColor='grey'
-                onChangeText={formLogin.handleChange('clave')}
-                label={'Contraseña'}
-              />
-              {formLogin.errors.clave ? <Text style={styles.error}>{formLogin.errors.clave}</Text> : null}
-              <Button
-              title="INGRESAR"
-              onPress={formLogin.handleSubmit}
-              buttonStyle={{marginBottom: 20,height:50,marginTop:30,backgroundColor:'#1988a5'}}
-              
+      {loading ? (
+        <ActivityIndicator size="large" color="#4cb050" />
+      ) : (
+        <>
+          <View style={styles.header}>
+            <Image source={require('../assets/logolargo2.png')} style={styles.logo} />
+          </View>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Correo Electrónico"
+              placeholderTextColor="#757575"
+              onChangeText={formLogin.handleChange('usuario')}
             />
+            {formLogin.errors.usuario && <Text style={styles.errorText}>{formLogin.errors.usuario}</Text>}
+
+            <CustomPasswordInput
+              onChangeText={formLogin.handleChange('clave')}
+              value={formLogin.values.clave}
+            />
+            {formLogin.errors.clave && <Text style={styles.errorText}>{formLogin.errors.clave}</Text>}
+
             <Button
-              title="REGISTRARSE"
-              onPress={()=>navigation.navigate('Registrar')}
-              buttonStyle={{height:50, backgroundColor:'#1988a5'}}
+              title="Ingresar"
+              onPress={formLogin.handleSubmit}
+              buttonStyle={styles.primaryButton}
+              titleStyle={styles.primaryButtonTitle}
             />
-            <View style={{display:"flex", alignItems:"center", marginTop:10}}>
-              <TouchableHighlight onPress={()=>navigation.navigate('Recuperar')}>
-            <Text 
-            style={{color:"gray",fontWeight:"bold", color:'00253D'}}>Olvidé mi contraseña</Text>
-            </TouchableHighlight>
-            </View>
-            </View>
-            <View >
-            <Text style={styles.textVersion} > Version 3.2.7 </Text>
-            <Text style={styles.textVersion} > Farmerin Division S.A. - &copy; 2020 </Text>
-            </View>
-          </>
-        }
-        <AwesomeAlert
-          show={alerta.show}
-          showProgress={false}
-          title={alerta.titulo}
-          message={alerta.mensaje}
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="No, cancelar"
-          confirmText="ACEPTAR"
-          confirmButtonColor={alerta.color}
-          onCancelPressed={() => {
-            setAlerta({ show: false })
-          }}
-          onConfirmPressed={() => {
-            setAlerta({ show: false })
-          }}
-        />
-      </>
-    </View >
+            <TouchableOpacity onPress={() => navigation.navigate('Recuperar')} style={styles.link}>
+              <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+            <Button
+              title="Registrarse"
+              onPress={() => navigation.navigate('Registrar')}
+              buttonStyle={styles.secondaryButton}
+              titleStyle={styles.secondaryButtonTitle}
+            />
+          </View>
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Versión 3.2.7</Text>
+            <Text style={styles.footerText}>Farmerin Division S.A. - &copy; 2020</Text>
+          </View>
+
+          <AwesomeAlert
+            show={alerta.show}
+            showProgress={false}
+            title={alerta.titulo}
+            message={alerta.mensaje}
+            closeOnTouchOutside={false}
+            closeOnHardwareBackPress={false}
+            showCancelButton={false}
+            showConfirmButton={true}
+            confirmText="Aceptar"
+            confirmButtonColor={alerta.color}
+            onConfirmPressed={() => setAlerta({ show: false })}
+          />
+        </>
+      )}
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-  },
-  form: {
-    flex: 1,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    justifyContent: 'center',
   },
   header: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#399dad'
+    alignItems: 'center',
+    marginBottom: 30,
   },
-  error: {
-    marginLeft: 5,
-    marginRight: 5,
-    fontSize: 13,
-    borderRadius: 5,
-    color: 'red',
-    backgroundColor: 'pink',
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'red'
-
-  },
-
   logo: {
-    height: wp('20%'),
-    width: wp('80%'),
-    margin: 75,
-    alignSelf: 'center', 
+    width: wp('50%'),
+    height: wp('25%'),
+    resizeMode: 'contain',
   },
-
-  entrada: {
-    marginTop: 15,
-    marginLeft: 5,
-    paddingLeft: 5,
-    marginRight: 5,
-    height:40,
+  form: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  input: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     fontSize: 16,
-    borderBottomWidth: 1,
-    borderColor: '#B0BDB5',
+    color: '#212121',
+    marginBottom: 15,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
   },
-  clave: {
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
+    marginBottom: 15,
+    height: 50,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: '#212121',
+  },
+  eyeIcon: {
+    padding: 10,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#FF5252',
+    marginBottom: 10,
+  },
+  primaryButton: {
+    backgroundColor: '#4cb050',
+    borderRadius: 8,
+    height: 50,
+    marginBottom: 15,
+  },
+  primaryButtonTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  secondaryButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    height: 50,
+    borderColor: '#1b8aa5',
+    borderWidth: 2,
+  },
+  secondaryButtonTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1b8aa5',
+  },
+  link: {
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  linkText: {
+    fontSize: 14,
+    color: '#1976D2',
+    textDecorationLine: 'underline',
+  },
+  footer: {
+    alignItems: 'center',
     marginTop: 20,
-    marginLeft: 5,
-    paddingLeft: 5,
-    marginRight: 5,
-    borderBottomWidth: 1,
-    borderColor: '#B0BDB5',
   },
-  contenedor:{
-    display: 'flex',
-    padding: 100,
+  footerText: {
+    fontSize: 12,
+    color: '#757575',
   },
-  textVersion: {
-    backgroundColor: '#e1e8ee',
-    fontSize: 10,
-    textAlign: 'center',
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    color: '#00253E',
-  },
-
-
 });

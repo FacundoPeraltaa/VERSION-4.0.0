@@ -175,16 +175,15 @@ let texto = format(fecha, 'yyyy-MM-dd');
 
   return (
     <View style={styles.container}>
-      <InfoAnimal
-        animal={animal}
-      />
-      <View style={styles.form}>
-        <Text style={styles.texto}>FECHA:</Text>
-        <TouchableHighlight style={styles.calendario} onPress={handlever}>
-          <View 
-          
-          ><Text style={styles.textocalendar}>{texto}</Text></View></TouchableHighlight>
-        {show && (
+    <InfoAnimal animal={animal} />
+    <View style={styles.form}>
+      <Text style={styles.texto}>FECHA:</Text>
+      <TouchableHighlight style={styles.calendario} onPress={handlever} underlayColor="#ddd">
+        <View>
+          <Text style={styles.textocalendar}>{texto}</Text>
+        </View>
+      </TouchableHighlight>
+      {show && (
         <DateTimePicker
           placeholder="Fecha"
           dateFormat="DD/MM/YYYY"
@@ -196,150 +195,158 @@ let texto = format(fecha, 'yyyy-MM-dd');
           onChange={cambiarFecha}
           customStyles={{
             dateInput: {
-              borderColor: 'white',
-              borderRadius: 10,
-              backgroundColor: 'white'
+              borderColor: '#d0d0d0',
+              borderRadius: 12,
+              backgroundColor: '#fff',
+              borderWidth: 1
             }
           }}
-        /> )}
-        <View>
-          <Text style={styles.texto}>TIPO:</Text>
-       
-          <RNPickerSelect
-              items={options}
-              onValueChange={formAborto.handleChange('tipo')}
-              value={formAborto.values.tipo}
-
-              placeholder={{}}
-              style={styles.pickerStyle}
-            />
-          <Text></Text>
-          <Text style={styles.texto}>TRATAMIENTO:</Text>
-      
-          <RNPickerSelect
-              items={tratamientoOptions}
-              onValueChange={formAborto.handleChange('tratamiento')}
-              value={formAborto.values.tratamiento}
-
-              placeholder={{}}
-              style={styles.pickerStyle}
-            />
-        </View>
-
+        />
+      )}
+      <View>
+        <Text style={styles.texto}>TIPO:</Text>
+        <RNPickerSelect
+          items={options}
+          onValueChange={formAborto.handleChange('tipo')}
+          value={formAborto.values.tipo}
+          placeholder={{}}
+          style={styles.pickerStyle}
+        />
+        <Text></Text>
+        <Text style={styles.texto}>TRATAMIENTO:</Text>
+        <RNPickerSelect
+          items={tratamientoOptions}
+          onValueChange={formAborto.handleChange('tratamiento')}
+          value={formAborto.values.tratamiento}
+          placeholder={{}}
+          style={styles.pickerStyle}
+        />
       </View>
-      <Button
-        title="  ACEPTAR"
-        icon={
-          <Icon
-            name="check-square"
-            size={35}
-            color="white"
-          />
+    </View>
+    <Button
+      title="ACEPTAR"
+      icon={
+        <Icon
+          name="check-square"
+          size={35}
+          color="#fff"
+        />
+      }
+      buttonStyle={styles.button}
+      onPress={formAborto.handleSubmit}
+    />
+    <AwesomeAlert
+      show={alerta.show}
+      showProgress={false}
+      title={alerta.titulo}
+      message={alerta.mensaje}
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      cancelText="No, cancelar"
+      confirmText="ACEPTAR"
+      confirmButtonColor={alerta.color}
+      onCancelPressed={() => {
+        setAlerta({ show: false })
+      }}
+      onConfirmPressed={() => {
+        setAlerta({ show: false })
+        if (alerta.vuelve == true) {
+          navigation.popToTop();
         }
-        onPress={formAborto.handleSubmit}
-      />
-      <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
-        closeOnTouchOutside={false}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        showConfirmButton={true}
-        cancelText="No, cancel"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
-        onConfirmPressed={() => {
-          setAlerta({ show: false })
-          if (alerta.vuelve == true) {
-            navigation.popToTop();
-          }
-        }}
-      />
-    </View >
+      }}
+    />
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-
-
+    padding: 15,
+    backgroundColor: '#f8f9fa',
   },
-  textocalendar:{
-    textAlign: "center"
+  textocalendar: {
+    textAlign: "center",
+    fontSize: 16,
+    color: '#333'
   },
   calendario: {
-    borderColor: 'grey',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    padding: 5,
-    width: 200,
-   marginVertical: 10,
-    marginLeft: 10
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    width: wp('90%'),
+    alignSelf: 'center',
+    marginVertical: 10,
   },
   form: {
-    flex: 7,
-    backgroundColor: '#e1e8ee',
-    flexDirection: 'column',
-    paddingTop: 5,
-
+    flex: 1,
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2
   },
   fecha: {
-    width: wp('100%'),
-    padding: 5,
-
-  },
-  lista: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white'
+    width: '100%',
+    marginTop: 10,
   },
   texto: {
-    marginLeft: 5,
-  },
-  header: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#399dad'
-  },
-  error: {
-    marginLeft: 5,
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: 'red'
-  },
-
-  entrada: {
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
   },
   pickerStyle: {
     inputIOS: {
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
     inputAndroid: {
-
-      marginLeft: 5,
-      marginRight: 5,
-      backgroundColor: 'white',
-      height: 50
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      height: 50,
+      borderColor: '#d0d0d0',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      color: '#333',
+      fontSize: 16,
+      marginBottom: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 3,
     },
-
+    placeholder: {
+      color: '#9EA0A4',
+    },
+    iconContainer: {
+      top: 10,
+      right: 10,
+    },
+  },
+  button: {
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    marginTop: 15,
   }
 
 });

@@ -263,7 +263,7 @@ try{
   return (
     <>
       <ImageBackground
-        source={require('../assets/fondo.png')}
+        source={require('../assets/menu3.jpeg')}
         style={styles.imagenfondo}
       >
 
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
   tambo: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#B5CD00',
+    backgroundColor: '#4cb050',
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     justifyContent: 'center'

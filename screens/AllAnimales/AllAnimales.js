@@ -18,10 +18,10 @@ export default ({ navigation }) => {
   const [rp, guardarRP] = useState('');
   //const [estado, setEstado] = useState('En Ordeñe');
 
-  const route = useRoute();
-  const {tambo} = route.params;
-  const {estado} = route.params;
-  const {usuario} = route.params;
+  const routeAni = useRoute();
+  const {animal} = routeAni.params;
+  const {tambo} = routeAni.params;
+  const {usuario} = routeAni.params;
 
   //const animalesHome = navigation.getParam('animales');
   const [loading, setLoading] = useState(true);
@@ -151,94 +151,121 @@ export default ({ navigation }) => {
  */
   return (
     <View style={styles.container}>
-      <View style={styles.barra}>
-        <View style={styles.colbarra}>
-          <SearchBar
-            placeholder="Buscar por RP"
-            onChangeText={updateSearch}
-            value={rp}
-            lightTheme
-          />
-        </View>
-
-      </View>
-      <View style={styles.listado}>
-        {loading ?
-            <ActivityIndicator size="large" color='#1b829b' />
-
-          :
-
-          animalesFilter.length == 0 ?
-            <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
-            :
-
-            <FlatList
-              data={animalesFilter}
-              keyExtractor={item => item.id}
-              initialNumToRender={100}
-              renderItem={({ item }) => (
-                <ListItem
-                  data={item}
-                  info={() => {
-                    setShowTambos(true)
-                    setSeleccionado(item)
-                  }}
-
-
-                />
-              )
-              }
-              ItemSeparatorComponent={() => <Separator />}
-            />
-        }
-      </View>
-      {showTambos && <VerInfo setShowTambos={setShowTambos} showTambos={showTambos} data={seleccionado} />}
-
-
+    <View style={styles.barra}>
+    <View style={styles.colbarra}>
+      <SearchBar
+        placeholder="Buscar por RP"
+        onChangeText={updateSearch}
+        value={rp}
+        lightTheme
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.searchInput}
+      />
     </View>
+    </View>
+    <View style={styles.listado}>
+      {loading || animalesFilter.length === 0 ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#1b829b" />
+          <Text style={styles.loaderText}>Cargando animales...</Text>
+        </View>
+      ) : animalesFilter.length === 0 && !animales.length ? (
+        <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+      ) : (
+        <FlatList
+          data={animalesFilter}
+          keyExtractor={(item) => item.id}
+          initialNumToRender={100}
+          renderItem={({ item }) => (
+            <ListItem
+              data={item}
+              info={() => {
+                setShowTambos(true);
+                setSeleccionado(item);
+              }}
+            />
+          )}
+          ItemSeparatorComponent={Separator}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
+    </View>
+
+    {showTambos && (
+      <VerInfo setShowTambos={setShowTambos} showTambos={showTambos} data={seleccionado} />
+    )}
+  </View>
   );
 }
 
-const Separator = () => <View style={{ flex: 1, height: 1, backgroundColor: '#2980B9' }}></View>
+const Separator = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
-
-  },
-  check: {
-    marginTop: 10,
-    backgroundColor: '#e1e8ee',
-
+    backgroundColor: '#f7f7f7',
+    paddingHorizontal: 3,
+    paddingVertical: 3,
   },
   barra: {
-    flex: 1,
     flexDirection: 'row',
-
+    alignItems: 'center',
+    marginBottom: 5,
+    paddingTop: 5,
   },
   colbarra: {
     flex: 2,
-
+    marginRight: 15,
   },
   colbarra2: {
-
     flex: 1,
-
-
   },
-
+  searchContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
   listado: {
-    flex: 8,
-
+    flex: 1,
+    paddingTop: 10,
+    borderRadius: 20,
+  },
+  loadingIndicator: {
+    marginTop: 20,
   },
   alerta: {
     backgroundColor: '#FFBF5A',
-    fontSize: 15,
-    color: '#868584',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-
+    fontSize: 16,
+    color: '#444',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginVertical: 10,
+    textAlign: 'center',
   },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
+  },
+
 });
