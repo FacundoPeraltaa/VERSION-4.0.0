@@ -1,19 +1,19 @@
-// /components/lists/AnimalesSeLeyoList.js
+// AnimalesSecosNaNList.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
-const AnimalesSeLeyoList = ({ animales }) => {
+const AnimalesSecosNaNList = ({ animales }) => {
   return (
-    <View style={styles.listContainer}>
-      <Text style={styles.listTitle}>Secos/NaN</Text>
+    <View>
+      <Text style={styles.title}>Animales Secos/NaN</Text>
       <FlatList
         data={animales}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.rfid}
         renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Text style={styles.rowText}>{item.RP || 'RP desconocido'}</Text>
-            <Text style={styles.rowText}>{item.RFID?.replace(/⛔/g, '') || 'RFID desconocido'}</Text>
-            <Text style={styles.rowText}>{item.DiasAusente}</Text>
+          <View style={styles.itemContainer}>
+            <Text>RFID: {item.rfid}</Text>
+            <Text>Estado de Reproducción: {item.estRep}</Text>
+            <Text>Estado de Producción: {item.estPro}</Text>
           </View>
         )}
       />
@@ -22,24 +22,16 @@ const AnimalesSeLeyoList = ({ animales }) => {
 };
 
 const styles = StyleSheet.create({
-  listContainer: {
-    marginVertical: 10,
-  },
-  listTitle: {
+  title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  itemContainer: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
-  rowText: {
-    fontSize: 16,
-  },
 });
 
-export default AnimalesSeLeyoList;
+export default AnimalesSecosNaNList;

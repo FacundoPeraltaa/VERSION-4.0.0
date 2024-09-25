@@ -82,6 +82,8 @@ function Grafico() {
       const nuncaPaso = data.filter(row => parseInt(row.DiasAusente) === -1);
       const filteredNuncaPaso = nuncaPaso.filter(row => !row.cells.includes('RFID'));
 
+      console.log('SECOS NAN', secosNaNData)
+
       setAnimalesSeLeyo(seLeyo);
       setAnimalesNoLeyo(noLeyo);
       setAnimalesAusentes(ausentes);
@@ -96,9 +98,9 @@ function Grafico() {
     }));
   };
 
-  const handleShowInfo = (animals) => {
-    setSelectedAnimals(animals); 
-    setShowInfoView(true); 
+  const handleShowInfo = (animals, listType) => {
+    setSelectedAnimals({ animals, listType });
+    setShowInfoView(true);
   };
 
   const handleCloseInfoView = () => {
@@ -147,7 +149,7 @@ function Grafico() {
         {animalesSeLeyo.length > 0 && (
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: '#1b829b' }]} 
-            onPress={() => handleShowInfo(animalesSeLeyo)}
+            onPress={() => handleShowInfo(animalesSeLeyo, 'seLeyo')}
           >
             <Text style={styles.buttonText}>Ver Se Leyó ({animalesSeLeyo.length})</Text>
           </TouchableOpacity>
@@ -155,7 +157,7 @@ function Grafico() {
         {animalesNoLeyo.length > 0 && (
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: '#c81d11' }]} 
-            onPress={() => handleShowInfo(animalesNoLeyo)}
+            onPress={() => handleShowInfo(animalesNoLeyo, 'noLeyo')}
           >
             <Text style={styles.buttonText}>Ver No Se Leyó ({animalesNoLeyo.length})</Text>
           </TouchableOpacity>
@@ -163,7 +165,7 @@ function Grafico() {
         {animalesAusentes.length > 0 && (
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: '#084d6e' }]} 
-            onPress={() => handleShowInfo(animalesAusentes)}
+            onPress={() => handleShowInfo(animalesAusentes, 'ausentes')}
           >
             <Text style={styles.buttonText}>Ver Ausentes ({animalesAusentes.length})</Text>
           </TouchableOpacity>
@@ -171,7 +173,7 @@ function Grafico() {
         {animalesNuncaPaso.length > 0 && (
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: '#f08a0c' }]} 
-            onPress={() => handleShowInfo(animalesNuncaPaso)}
+            onPress={() => handleShowInfo(animalesNuncaPaso, 'nuncaPaso')}
           >
             <Text style={styles.buttonText}>Ver Nunca Se Leyó ({animalesNuncaPaso.length})</Text>
           </TouchableOpacity>
@@ -179,12 +181,13 @@ function Grafico() {
         {secosNaNData.length > 0 && (
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: '#2d3323' }]} 
-            onPress={() => handleShowInfo(secosNaNData)}
+            onPress={() => handleShowInfo(secosNaNData, 'secosNaN')}
           >
             <Text style={styles.buttonText}>Ver Secos/NaN ({secosNaNData.length})</Text>
           </TouchableOpacity>
         )}
       </View>
+
       <View style={styles.listContainer}>
         {selectedLists.seLeyo && <AnimalesSeLeyoList animales={animalesSeLeyo} />}
         {selectedLists.noLeyo && <AnimalesNoLeyoList animales={animalesNoLeyo} />}
@@ -192,25 +195,28 @@ function Grafico() {
         {selectedLists.nuncaPaso && <AnimalesNuncaPasoList animales={animalesNuncaPaso} />}
         {selectedLists.secosNaN && <AnimalesSecosNaNList animales={secosNaNData} />}
       </View>
-      
+
       {showInfoView && (
-        <View style={styles.infoView}>
-          <Text style={styles.infoTitle}>Información de Animales</Text>
-          <FlatList
-            data={selectedAnimals}
-            keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()} 
-            renderItem={({ item }) => (
-              <View style={styles.infoItem}>
-                <Text>RP: {item.RP}</Text>
-                <Text>Boton Electronico (eRP): {item.RFID}</Text>
-                <Text>Días Ausente: {item.DiasAusente}</Text>
-              </View>
-            )}
-          />
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#f08a0c' }]} onPress={handleCloseInfoView}>
-            <Text style={styles.buttonText}>Cerrar</Text>
-          </TouchableOpacity>
-        </View>
+         <View style={styles.infoView}>
+         <Text style={styles.infoTitle}>Información de Animales</Text>
+         <FlatList
+           data={selectedAnimals.animals}
+           keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
+           renderItem={({ item }) => (
+             <View style={styles.infoItem}>
+               <Text>RP: {item.rp}</Text>
+               <Text>Boton Electronico (eRP): {item.RacionDiaria}</Text>
+               {/* Mostrar "Días Ausentes" solo si se trata de animales ausentes */}
+               {selectedAnimals.listType === 'ausentes' && (
+                 <Text>Días Ausente: {item.DiasAusente}</Text>
+               )}
+             </View>
+           )}
+         />
+         <TouchableOpacity style={styles.closeInfoButton} onPress={handleCloseInfoView}>
+           <Text style={styles.closeInfoText}>Cerrar</Text>
+         </TouchableOpacity>
+       </View>
       )}
     </ScrollView>
   );
@@ -219,93 +225,86 @@ function Grafico() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#f2f4f8',
-    paddingHorizontal: 15,
-    paddingVertical: 10
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10
+    padding: 20,
+    backgroundColor: '#f2f4f8'
   },
   chartContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-end', // Alinea los elementos hacia abajo
-    height: 250, // Mantiene la altura del gráfico
-    marginVertical: 30, // Agrega margen vertical para centrar mejor el gráfico en la pantalla
-    marginBottom: 15
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: 200,
+    marginVertical: 20,
   },
   barContainer: {
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginHorizontal: 5
-  },
-  bar: {
-    width: 40,
-    borderRadius: 5
-  },
-  barValue: {
-    marginTop: 5,
-    fontWeight: 'bold'
   },
   barLabel: {
     fontSize: 12,
-    marginTop: 5, // Espacio entre el valor y el label
-    textAlign: 'center'
+    marginBottom: 5,
+  },
+  bar: {
+    width: 40,
+  },
+  barValue: {
+    marginTop: 5,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 20
+    marginVertical: 20,
   },
   button: {
-    paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 8,
-    marginVertical: 10
+    marginVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
+    fontSize: 16,
   },
   listContainer: {
-    paddingBottom: 60
-  },
-  loadingText: {
-    textAlign: 'center',
-    fontSize: 18,
-    marginTop: 10
-  },
-  errorText: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: 'red'
-  },
-  noDataText: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: '#999'
+    marginTop: 20,
   },
   infoView: {
-    backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 10,
-    marginBottom: 20
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    marginTop: 20,
   },
   infoTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
   },
   infoItem: {
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
-  }
+    marginBottom: 10,
+  },
+  closeInfoButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#1b829b',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeInfoText: {
+    color: '#fff',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+  },
+  noDataText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
 });
 
 export default Grafico;
