@@ -3,17 +3,6 @@ import axios from 'axios';
 import firebase from '../../database/firebase';
 import { Parser } from 'htmlparser2';
 
-export const obtenerAnimalesPorErp = async (erp) => {
-  try {
-    const snapshot = await firebase.db.collection('animal').where('erp', '==', erp).get();
-    const animales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return animales;
-  } catch (error) {
-    console.error("Error al obtener animales:", error);
-    throw error; // Lanza el error para que pueda ser manejado en el componente
-  }
-};
-
 export const obtenerDatos = async (tambo) => {
   if (!tambo) {
     throw new Error("No se ha seleccionado un tambo");
@@ -83,7 +72,7 @@ const parseHTMLTable = (html) => {
               UltimaPasada = ""; // O asigna un valor por defecto
             }
 
-            data[data.length - 1] = { RP, DiasAusente }; // Ignorar RFID
+            data[data.length - 1] = { RP, DiasAusente, RFID }; // Ignorar RFID
           }
         }
       }

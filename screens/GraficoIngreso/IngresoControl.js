@@ -81,6 +81,7 @@ function Grafico() {
       const ausentes = data.filter(row => parseInt(row.DiasAusente) >= 2);
       const nuncaPaso = data.filter(row => parseInt(row.DiasAusente) === -1);
       const filteredNuncaPaso = nuncaPaso.filter(row => !row.cells.includes('RFID'));
+      
 
       console.log('SECOS NAN', secosNaNData)
 
@@ -138,7 +139,7 @@ function Grafico() {
     { label: 'NO SE LEYÓ', value: animalesNoLeyo.length, color: '#c81d11' },
     { label: 'AUSENTES', value: animalesAusentes.length, color: '#084d6e' },
     { label: 'NUNCA SE LEYÓ', value: animalesNuncaPaso.length, color: '#f08a0c' },
-    { label: 'SECOS/NaN', value: secosNaNData.length, color: '#2d3323' }
+    { label: 'SECOS/NR', value: secosNaNData.length, color: '#2d3323' }
   ];
 
   return (
@@ -183,7 +184,7 @@ function Grafico() {
             style={[styles.button, { backgroundColor: '#2d3323' }]} 
             onPress={() => handleShowInfo(secosNaNData, 'secosNaN')}
           >
-            <Text style={styles.buttonText}>Ver Secos/NaN ({secosNaNData.length})</Text>
+            <Text style={styles.buttonText}>Ver Secos/No Registrada ({secosNaNData.length})</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -204,8 +205,8 @@ function Grafico() {
            keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
            renderItem={({ item }) => (
              <View style={styles.infoItem}>
-               <Text>RP: {item.rp}</Text>
-               <Text>Boton Electronico (eRP): {item.RacionDiaria}</Text>
+               <Text>Caravana (RP): {item.RP}</Text>
+               <Text>Boton Electronico (eRP): {item.RFID}</Text>
                {/* Mostrar "Días Ausentes" solo si se trata de animales ausentes */}
                {selectedAnimals.listType === 'ausentes' && (
                  <Text>Días Ausente: {item.DiasAusente}</Text>
