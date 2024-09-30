@@ -59,10 +59,23 @@ function Grafico() {
       setLoading(true);
       setError(null);
       try {
+        // Obtener los datos del tambo
         const { parsedData, parsedNoRegsData } = await obtenerDatos(tambo);
-        setData(parsedData);
-        const filteredSecosNaNData = parsedNoRegsData.filter(row => row.cells[1] !== 'RFID');
-        setSecosNaNData(filteredSecosNaNData);
+
+        console.log('ARRAY ARRAY ARRAY', parsedNoRegsData)
+        // Filtrar y mapear los datos relevantes para Secos/No Registrados
+        const filteredSecosNaNData = parsedNoRegsData
+  .filter(row => row.cells[1] !== 'RFID')
+  .map(row => ({
+    RP: row.cells[0], 
+    RFID: row.cells[1],// RP del animal
+    estPro: row.cells[2], // Estado de Producción
+    estRep: row.cells[3], // Estado de Reproducción
+  }));
+  
+        setData(parsedData); // Datos principales
+        setSecosNaNData(filteredSecosNaNData); // Guardar Secos/No Registrados
+  
       } catch (error) {
         console.error("Error al obtener los datos:", error);
         setError(error.message);
@@ -70,7 +83,7 @@ function Grafico() {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [tambo]);
 
@@ -81,10 +94,9 @@ function Grafico() {
       const ausentes = data.filter(row => parseInt(row.DiasAusente) >= 2);
       const nuncaPaso = data.filter(row => parseInt(row.DiasAusente) === -1);
       const filteredNuncaPaso = nuncaPaso.filter(row => !row.cells.includes('RFID'));
-      
 
-      console.log('SECOS NAN', secosNaNData)
-
+       console.log('SECOS NAN', secosNaNData)
+       
       setAnimalesSeLeyo(seLeyo);
       setAnimalesNoLeyo(noLeyo);
       setAnimalesAusentes(ausentes);
@@ -100,7 +112,12 @@ function Grafico() {
   };
 
   const handleShowInfo = (animals, listType) => {
-    setSelectedAnimals({ animals, listType });
+    // Si la lista seleccionada es secosNaN, pasamos la data correspondiente
+    if (listType === 'secosNaN') {
+      setSelectedAnimals({ animals: secosNaNData, listType });
+    } else {
+      setSelectedAnimals({ animals, listType });
+    }
     setShowInfoView(true);
   };
 
@@ -181,11 +198,11 @@ function Grafico() {
         )}
         {secosNaNData.length > 0 && (
           <TouchableOpacity 
-            style={[styles.button, { backgroundColor: '#2d3323' }]} 
-            onPress={() => handleShowInfo(secosNaNData, 'secosNaN')}
-          >
-            <Text style={styles.buttonText}>Ver Secos/No Registrada ({secosNaNData.length})</Text>
-          </TouchableOpacity>
+          style={[styles.button, { backgroundColor: '#2d3323' }]} 
+          onPress={() => handleShowInfo(secosNaNData, 'secosNaN')} 
+      >
+          <Text style={styles.buttonText}>Ver Secos/No Registrada ({secosNaNData.length})</Text>
+      </TouchableOpacity>
         )}
       </View>
 
@@ -194,86 +211,113 @@ function Grafico() {
         {selectedLists.noLeyo && <AnimalesNoLeyoList animales={animalesNoLeyo} />}
         {selectedLists.ausentes && <AnimalesAusentesList animales={animalesAusentes} />}
         {selectedLists.nuncaPaso && <AnimalesNuncaPasoList animales={animalesNuncaPaso} />}
-        {selectedLists.secosNaN && <AnimalesSecosNaNList animales={secosNaNData} />}
+        {selectedLists.secosNaN && <AnimalesSecosNaNList animales={secosNaNData} />}  
       </View>
 
       {showInfoView && (
-         <View style={styles.infoView}>
-         <Text style={styles.infoTitle}>Información de Animales</Text>
-         <FlatList
-           data={selectedAnimals.animals}
-           keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
-           renderItem={({ item }) => (
-             <View style={styles.infoItem}>
-               <Text>Caravana (RP): {item.RP}</Text>
-               <Text>Boton Electronico (eRP): {item.RFID}</Text>
-               {/* Mostrar "Días Ausentes" solo si se trata de animales ausentes */}
-               {selectedAnimals.listType === 'ausentes' && (
-                 <Text>Días Ausente: {item.DiasAusente}</Text>
-               )}
-             </View>
-           )}
-         />
-         <TouchableOpacity style={styles.closeInfoButton} onPress={handleCloseInfoView}>
-           <Text style={styles.closeInfoText}>Cerrar</Text>
-         </TouchableOpacity>
-       </View>
+  <View style={styles.infoView}>
+    <Text style={styles.infoTitle}>Detalles de {selectedAnimals.listType}</Text>
+    <FlatList
+      data={selectedAnimals.animals.filter(item => {
+        // Filtrar según el tipo de lista seleccionada
+        if (selectedAnimals.listType === 'ausentes') {
+          return item.DiasAusente > 0; // Filtrar animales ausentes
+        }
+        if (selectedAnimals.listType === 'secosNaN') {
+          // Mostrar todos los animales de secosNaN, ya que se han manejado previamente
+          return true; // Para mostrar todos los elementos
+        }
+        return true; // Incluir todos los demás tipos de animales
+      })}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.infoItem}>
+          <Text>Caravana (RP): {item.RP}</Text>
+          <Text>Botón Electrónico (eRP): {item.RFID}</Text>
+          {/* Mostrar información adicional solo para "Secos/No Registrados" */}
+          {selectedAnimals.listType === 'secosNaN' && (
+            <>
+            
+              <Text>Estado de Reproducción: {item.estrep || 'No registrada'}</Text>
+              <Text>Estado de Producción: {item.estpro || 'No registrada'}</Text>
+            </>
+          )}
+        </View>
       )}
+    />
+    <Button title="Cerrar" onPress={handleCloseInfoView} />
+  </View>
+)}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: '#f2f4f8',
     flexGrow: 1,
-    padding: 20,
-    backgroundColor: '#f2f4f8'
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   chartContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: 200,
-    marginVertical: 20,
+    justifyContent: 'space-around',
+    marginBottom: 20,
   },
   barContainer: {
     alignItems: 'center',
   },
-  barLabel: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
   bar: {
     width: 40,
+    marginBottom: 5,
+  },
+  barLabel: {
+    fontSize: 12,
+    textAlign: 'center',
   },
   barValue: {
-    marginTop: 5,
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   buttonsContainer: {
-    marginVertical: 20,
+    marginBottom: 20,
   },
   button: {
-    paddingVertical: 10,
     borderRadius: 8,
-    marginVertical: 5,
-    justifyContent: 'center',
+    paddingVertical: 10,
+    marginTop: 15,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontWeight: 'bold',
   },
   listContainer: {
+    paddingBottom: 60,
+  },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    textAlign: 'center',
+    color: 'red',
+  },
+  noDataText: {
+    textAlign: 'center',
     marginTop: 20,
   },
   infoView: {
-    padding: 20,
     backgroundColor: '#fff',
+    padding: 20,
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
     marginTop: 20,
   },
   infoTitle: {
@@ -283,28 +327,6 @@ const styles = StyleSheet.create({
   },
   infoItem: {
     marginBottom: 10,
-  },
-  closeInfoButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: '#1b829b',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  closeInfoText: {
-    color: '#fff',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-  },
-  noDataText: {
-    fontSize: 16,
-    textAlign: 'center',
   },
 });
 

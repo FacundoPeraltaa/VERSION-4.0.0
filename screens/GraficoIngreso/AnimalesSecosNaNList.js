@@ -3,24 +3,24 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
 const AnimalesSecosNaNList = ({ animales }) => {
+  if (!animales || animales.length === 0) {
+    return <Text style={styles.noDataText}>No se encontraron animales secos o no registrados</Text>;
+  }
+
   return (
-    <View>
-      <Text style={styles.title}>Animales Secos/NaN</Text>
-      <FlatList
-        data={animales}
-        keyExtractor={(item) => item.rfid}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text>RFID: {item.rfid}</Text>
-            <Text>Estado de Reproducción: {item.estRep}</Text>
-            <Text>Estado de Producción: {item.estPro}</Text>
-          </View>
-        )}
-      />
-    </View>
+    <FlatList
+      data={animales}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemText}>RFID: {item.rp}</Text>
+          <Text>Boton Electronico (eRP): {item.cells[1]}</Text>
+          <Text style={styles.estpro}>Otro campo: {item.cells[2]}</Text> {/* Ajusta esto según los campos disponibles */}
+        </View>
+      )}
+    />
   );
 };
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 18,
