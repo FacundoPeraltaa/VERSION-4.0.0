@@ -154,7 +154,7 @@ export default ({ navigation }) => {
 
     }
 
-    //Si no es transferida
+    //Si no es TRANSFERIDA
     if (datos.motivo != 'Transferencia') {
       an = {
         fbaja: fstring,
@@ -271,7 +271,7 @@ let texto = format(fecha, 'yyyy-MM-dd');
         {
         formBaja.errors.motivo ? <Text style={styles.error}>{formBaja.errors.motivo}</Text> : null}
         
-        {(formBaja.values.motivo == 'Transferencia') && 
+        {(formBaja.values.motivo == '') && 
           <View>
             <Text style={styles.texto}>TAMBO:</Text>
           

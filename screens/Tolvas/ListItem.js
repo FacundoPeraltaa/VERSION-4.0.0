@@ -38,7 +38,7 @@ export default function ListItem({ data, host,racionMotor }) {
       const t = await api.json();
       setAlerta({
         show: true,
-        titulo: '¡ATENCIÓN!',
+        titulo: 'Atención!',
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
@@ -46,8 +46,8 @@ export default function ListItem({ data, host,racionMotor }) {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
+        titulo: 'Error!',
+        mensaje: 'No se puede conectar al tambo',
         color: '#DD6B55'
       });
     }
@@ -71,7 +71,7 @@ export default function ListItem({ data, host,racionMotor }) {
       setEstado('REVISADO');
       setAlerta({
         show: true,
-        titulo: '¡ATENCIÓN!',
+        titulo: 'Atención!',
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
@@ -81,14 +81,21 @@ export default function ListItem({ data, host,racionMotor }) {
     } catch (error) {
       setAlerta({
         show: true,
-        titulo: '¡ERROR!',
-        mensaje: 'NO SE PUEDE CONECTAR AL TAMBO',
+        titulo: 'Error!',
+        mensaje: 'No se puede conectar al tambo',
         color: '#DD6B55'
       });
 
     }
   };
-
+  console.log('ORDEN', Orden);
+  console.log('IdModbus', IdModbus);
+  console.log('SECTOR', Sector);
+  console.log('Id Motor', IdMotor);
+  console.log('Racion Motor', racionMotor);
+  console.log('host', host);
+  console.log('Datos del motor:', data); 
+  
   return (
 
     <View style={styles.container}>
@@ -132,7 +139,7 @@ export default function ListItem({ data, host,racionMotor }) {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
+        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
         onCancelPressed={() => {

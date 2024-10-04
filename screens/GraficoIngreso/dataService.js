@@ -2,10 +2,6 @@ import axios from 'axios';
 import firebase from '../../database/firebase';
 import { Parser } from 'htmlparser2';
 
-// Almacena los datos de los animales encontrados
-let animalDetails = [];
-
-// Función principal para obtener datos del tambo
 export const obtenerDatos = async (tambo) => {
   if (!tambo) {
     throw new Error("No se ha seleccionado un tambo");
@@ -16,7 +12,8 @@ export const obtenerDatos = async (tambo) => {
     throw new Error("El documento del tambo no existe");
   }
 
-  const { raciones: racionesURL, noreg: noRegsURL } = docSnapshot.data();
+  const racionesURL = docSnapshot.data().raciones;
+  const noRegsURL = docSnapshot.data().noreg;
 
   if (!racionesURL || !noRegsURL) {
     throw new Error("Los campos raciones o noregs no contienen URLs válidas");
@@ -28,12 +25,14 @@ export const obtenerDatos = async (tambo) => {
     axios.get(noRegsURL)
   ]);
 
-  // Parsear los datos de raciones y no regs
+  // Parsear los datos de raciones
   const parsedData = parseHTMLTable(racionesResponse.data);
+  
+  // Manejar los datos de noregs con la lógica de Firebase
   const parsedNoRegsData = await parseNoRegsData(noRegsResponse.data);
-
-  // Devolver ambos resultados y los detalles de los animales
-  return { parsedData, parsedNoRegsData, animalDetails }; // Asegúrate de retornar animalDetails
+  
+  // Devolver ambos resultados
+  return { parsedData, parsedNoRegsData };
 };
 
 // Función para parsear datos de raciones
@@ -62,16 +61,16 @@ const parseHTMLTable = (html) => {
         if (lastRow && lastRow.cells) {
           const filteredCells = lastRow.cells.filter(cell => cell.trim() !== "");
 
-          // Ignorar la fila de encabezado
           if (isHeaderRow) {
-            isHeaderRow = false;
+            isHeaderRow = false; // Ignorar la fila de encabezado
             return;
           }
+
+          console.log('DATOS LIMPIOS', filteredCells);
 
           if (filteredCells.length >= 5) {
             let [RFID, RP, RacionDiaria, UltimaPasada, DiasAusente] = filteredCells;
 
-            // Manejar caso especial de UltimaPasada
             if (UltimaPasada === "-1") {
               DiasAusente = "-1";
               UltimaPasada = ""; // O asigna un valor por defecto
@@ -90,11 +89,8 @@ const parseHTMLTable = (html) => {
   return data;
 };
 
-// Función para parsear datos de no regs
 const parseNoRegsData = async (html) => {
   const data = [];
-  let isHeaderRow = true;
-
   const parser = new Parser({
     onopentag(name) {
       if (name === 'tr') {
@@ -126,10 +122,6 @@ const parseNoRegsData = async (html) => {
               animalSnapshot.forEach(doc => {
                 const animalData = doc.data();
 
-                // Almacena los detalles del animal
-                animalDetails.push(animalData); // Agrega el animalData a animalDetails
-
-                // Verificar el estado del campo mbaja
                 if (!animalData.mbaja) {
                   const { rp, erp, estpro, estrep } = animalData;
                   data[data.length - 1] = { RP: rp, ERP: erp, estPro: estpro, estRep: estrep };
@@ -149,8 +141,6 @@ const parseNoRegsData = async (html) => {
   parser.write(html);
   parser.end();
 
-  return data; 
+  // Esperar a que todas las promesas se resuelvan antes de retornar los datos
+  return Promise.all(data).then(() => data);
 };
-
-// Exportar los detalles de los animales
-export const obtenerDetallesAnimales = () => animalDetails;

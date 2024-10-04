@@ -1,37 +1,44 @@
-// AnimalesSecosNaNList.js
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
-const AnimalesSecosNaNList = ({ animales }) => {
-  if (!animales || animales.length === 0) {
-    return <Text style={styles.noDataText}>No se encontraron animales secos o no registrados</Text>;
-  }
+const NoRegsTable = ({ html }) => {
+  const [data, setData] = useState([]);
+console.log('DATAAAAAA', data)
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await parseNoRegsData(html);
+      setData(result);
+    };
+
+    fetchData();
+  }, [html]);
 
   return (
-    <FlatList
-      data={animales}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => (
-        <View style={styles.itemContainer}>
-          <Text style={styles.itemText}>RFID: {item.rp}</Text>
-          <Text>Boton Electronico (eRP): {item.cells[1]}</Text>
-          <Text style={styles.estpro}>Otro campo: {item.cells[2]}</Text> {/* Ajusta esto según los campos disponibles */}
-        </View>
-      )}
-    />
+    <div>
+      <h2>Datos No Registrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>RP</th>
+            <th>ERP</th>
+            <th>Estado Pro</th>
+            <th>Estado Rep</th>
+            <th>Mensaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>{item.RP || '-'}</td>
+              <td>{item.ERP || '-'}</td>
+              <td>{item.estPro || '-'}</td>
+              <td>{item.estRep || '-'}</td>
+              <td>{item.mensaje || '-'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  itemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-});
 
-export default AnimalesSecosNaNList;
+export default NoRegsTable;
