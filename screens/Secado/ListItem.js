@@ -2,118 +2,70 @@ import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function ListItem({ data, animales, guardarAnimales }) {
-
-  const { id, rp, estrep, fservicio, diasPre, secar, categoria, estpro } = data;
-  const [siglas, guardarSiglas] = useState({
-    cat: 'VC',
-    prod: 'S',
-    rep: 'V'
-  })
+  const { id, rp, estrep, diasPre, secar, categoria, estpro } = data;
+  const [siglas, guardarSiglas] = useState({ cat: 'VC', prod: 'S', rep: 'V' });
 
   useEffect(() => {
+    const c = categoria !== 'Vaca' ? 'VQ' : 'VC';
+    const p = estpro !== 'seca' ? 'O' : 'S';
+    const r = estrep !== 'vacia' ? 'P' : 'V';
 
-    let c = 'VC';
-    let p = 'S';
-    let r = 'V';
+    guardarSiglas({ cat: c, prod: p, rep: r });
+  }, [categoria, estpro, estrep]);
 
-    if (categoria != 'Vaca') c = 'VQ';
-    if (estpro != 'seca') p = 'O';
-    if (estrep != 'vacia') r = 'P'
+  const toggleSecado = () => {
+    const nuevosAnimales = animales.map(a =>
+      a.id === id ? { ...a, secar: !a.secar } : a
+    );
 
-    guardarSiglas({
-      cat: c,
-      prod: p,
-      rep: r
-    })
-
-
-  }, []);
-
-
-
-
-  function cancelSecado() {
-    if (secar) {
-      const animalesAct = animales.map(a => {
-        // Revisamos que la llave recibida coincida con el elemento que queremos actualizar
-        if (a.id === id) {
-          a.secar = false;
-        }
-        // Si no es el elemento que deseamos actualizar lo regresamos tal como está
-        return a;
-      });
-
-      guardarAnimales(animalesAct);
-    }
-  }
-
-  function secado() {
-
-    if (!secar) {
-      const animalesAct = animales.map(a => {
-        // Revisamos que la llave recibida coincida con el elemento que queremos actualizar
-        if (a.id === id) {
-          a.secar = true;
-        }
-        // Si no es el elemento que deseamos actualizar lo regresamos tal como está
-        return a;
-      });
-
-      guardarAnimales(animalesAct);
-
-    }
-  }
+    guardarAnimales(nuevosAnimales);
+  };
 
   return (
-    <>
-      {secar ?
-        <TouchableOpacity style={styles.containerSecar} onPress={cancelSecado}>
-          <Text style={styles.textSecar}>SECAR - RP: {rp}</Text>
-        </TouchableOpacity>
-        :
-        <TouchableOpacity style={styles.container} onPress={secado}>
-          <Text style={styles.text}>RP: {rp} ({siglas.cat}/{siglas.prod}/{siglas.rep}) - DIAS PREÑEZ: {diasPre} </Text>
-        </TouchableOpacity>
-
-      }
-    </>
-  )
+    <TouchableOpacity
+      style={secar ? styles.containerSecar : styles.container}
+      onPress={toggleSecado}
+    >
+      <Text style={secar ? styles.textSecar : styles.text}>
+        {secar ? `SECAR - RP: ${rp}` : `RP: ${rp} (${siglas.cat}/${siglas.prod}/${siglas.rep}) - DIAS PREÑEZ: ${diasPre}`}
+      </Text>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff', // Fondo blanco para los elementos
-    borderRadius: 15, // Bordes redondeados
-    padding: 15, // Espacio interno
-    marginBottom: 1, // Espacio entre elementos
-    shadowColor: '#000', // Sombra para darle profundidad
-    shadowOffset: { width: 0, height: 5 }, // Offset de la sombra
-    shadowOpacity: 0.1, // Opacidad de la sombra
-    shadowRadius: 10, // Difusión de la sombra
-    elevation: 5, // Elevación en Android
-    borderWidth: 1, // Borde definido
-    borderColor: '#e0e0e0', // Color del borde
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   containerSecar: {
-    backgroundColor: '#4db150', // Fondo blanco para los elementos
-    borderRadius: 15, // Bordes redondeados
-    padding: 15, // Espacio interno
-    marginBottom: 1, // Espacio entre elementos
-    shadowColor: '#000', // Sombra para darle profundidad
-    shadowOffset: { width: 0, height: 5 }, // Offset de la sombra
-    shadowOpacity: 0.1, // Opacidad de la sombra
-    shadowRadius: 10, // Difusión de la sombra
-    elevation: 5, // Elevación en Android
-    borderWidth: 1, // Borde definido
-    borderColor: '#e0e0e0', // Color del borde
+    backgroundColor: '#4db150',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   text: {
     fontSize: 16,
-    color: '#333', // Color oscuro para el texto
+    color: '#333',
   },
   textSecar: {
     fontSize: 16,
     color: '#FFF',
   },
-
 });

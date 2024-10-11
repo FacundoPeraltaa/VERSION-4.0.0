@@ -1,38 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 
 export default function ListItem({ data, registrarServicio }) {
-  const { rp, nservicio, diasServicio } = data;
-  const [estilo, setEstilo] = useState(15);
-  const [siglas, guardarSiglas] = useState({
-    cat: 'VC',
-    prod: 'S',
-    rep: 'V'
-  });
+  const { rp, nservicio, diasServicio, categoria, estpro, estrep } = data;
 
-  useEffect(() => {
-    let c = 'VC';
-    let p = 'S';
-    let r = 'V';
+  // Usar useMemo para calcular siglas
+  const siglas = useMemo(() => {
+    const c = categoria === 'Vaca' ? 'VC' : 'VQ';
+    const p = estpro === 'seca' ? 'S' : 'O';
+    const r = estrep === 'vacia' ? 'V' : 'P';
 
-    if (data.categoria !== 'Vaca') c = 'VQ';
-    if (data.estpro !== 'seca') p = 'O';
-    if (data.estrep !== 'vacia') r = 'P';
-
-    guardarSiglas({
-      cat: c,
-      prod: p,
-      rep: r
-    });
-  }, [data]);
+    return { cat: c, prod: p, rep: r };
+  }, [categoria, estpro, estrep]);
 
   return (
     <TouchableHighlight
       onPress={registrarServicio}
-      underlayColor="#e1e8ee" // Color de fondo cuando se toca el elemento
+      underlayColor="#e1e8ee"
+      accessible={true}
+      accessibilityLabel={`Registro: ${rp}, Servicio: ${nservicio}, Días de Servicio: ${diasServicio}`}
     >
       <View style={styles.item}>
-        <Text style={styles.itemText}>RP: {rp} - N° SERV.: {nservicio} - DIAS SERV.: {diasServicio}</Text>
+        <Text style={styles.itemText}>
+          RP: {rp} - N° SERV.: {nservicio} - DIAS SERV.: {diasServicio}
+        </Text>
       </View>
     </TouchableHighlight>
   );
@@ -40,30 +31,20 @@ export default function ListItem({ data, registrarServicio }) {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#ffffff', // Fondo blanco para los elementos
-    borderRadius: 15, // Bordes redondeados
-    padding: 15, // Espacio interno
-    marginBottom: 1, // Espacio entre elementos
-    shadowColor: '#000', // Sombra para darle profundidad
-    shadowOffset: { width: 0, height: 5 }, // Offset de la sombra
-    shadowOpacity: 0.1, // Opacidad de la sombra
-    shadowRadius: 10, // Difusión de la sombra
-    elevation: 5, // Elevación en Android
-    borderWidth: 1, // Borde definido
-    borderColor: '#e0e0e0', // Color del borde
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   itemText: {
     fontSize: 16,
-    color: '#333', // Color oscuro para el texto
-  },
-  leftAction: { 
-    backgroundColor: '#249E31',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  actionText: {
-    fontSize: 16,
-    color: '#FFF',
-    padding: 15,
+    color: '#333',
   },
 });

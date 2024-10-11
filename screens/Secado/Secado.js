@@ -11,12 +11,10 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
-export default ({ navigation }) => {
-  const [movies, setMovies] = useContext(MovieContext)
-
+export default function AnimalListScreen({ navigation }) {
+  const [movies, setMovies] = useContext(MovieContext);
   const route = useRoute();
-  const {tambo} = route.params;
-  const {usuario} = route.params;
+  const { tambo, usuario } = route.params;
 
   const [animales, guardarAnimales] = useState([]);
   const [animalesFilter, guardarAnimalesFilter] = useState([]);
@@ -28,136 +26,96 @@ export default ({ navigation }) => {
     titulo: '',
     mensaje: '',
     color: '#DD6B55',
-    vuelve: false
+    vuelve: false,
   });
 
   useEffect(() => {
-
-    //busca los animales en ordeñe
+    // Busca los animales en ordeñe
     obtenerAnim();
   }, []);
 
   useEffect(() => {
     guardarAnimalesFilter(animales);
-
-  }, [animales])
+  }, [animales]);
 
   function updateSearch(rp) {
-    if (rp) {
-      const cond = rp.toLowerCase();
-      const filtro = animales.filter(animal => {
-        return (
-          animal.rp.toString().toLowerCase().includes(cond)
-        )
-      });
-      guardarAnimalesFilter(filtro);
-      guardarRP(rp);
-    } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      guardarAnimalesFilter(animales);
-      guardarRP(rp);
-    }
+    const cond = rp.toLowerCase();
+    const filtro = rp
+      ? animales.filter(animal => animal.rp.toString().toLowerCase().includes(cond))
+      : animales;
 
+    guardarAnimalesFilter(filtro);
+    guardarRP(rp);
   };
 
-  function obtenerAnim() {
+  async function obtenerAnim() {
     setLoading(true);
-    //Filtro los animales con el estado requerido
-    const anProd = movies.filter(animal => {
-      return (
-        animal && (animal.estpro != "seca")
-      )
-    });
-    //calculo dias de servicio y lactancia
+    // Filtra los animales con el estado requerido
+    const anProd = movies.filter(animal => animal && animal.estpro !== "seca");
+
+    // Calcula días de servicio y lactancia
     const an = anProd.map(a => {
       let d = 0;
-      if (a.estrep != "vacia") {
-
+      if (a.estrep !== "vacia") {
         try {
           d = differenceInDays(Date.now(), new Date(a.fservicio));
         } catch (error) {
           d = 0;
         }
+      }
+      return { id: a.id, diasPre: d, secar: false, ...a };
+    });
 
-      }
-      return {
-        id: a.id,
-        diasPre: d,
-        secar: false,
-        ...a
-      }
-
-    })
-    function compare(a, b) {
-      if (a.diasPre < b.diasPre) {
-        return 1;
-      }
-      if (a.diasPre > b.diasPre) {
-        return -1;
-      }
-      return 0;
-    }
-
-    an.sort(compare);
+    an.sort((a, b) => b.diasPre - a.diasPre);
     guardarAnimales(an);
     setLoading(false);
   };
 
-
-
-  function secarAnimales() {
+  async function secarAnimales() {
     let e = false;
     let haySecado = false;
-    animales.forEach(a => {
+
+    for (const a of animales) {
       if (a.secar) {
         haySecado = true;
-
         try {
-          const an = {
-            estpro: 'seca'
-          };
-          let objIndex = movies.findIndex((obj => obj.id == a.id));
-          const copia = [...movies]
-          copia[objIndex].estpro = "seca"
-          setMovies(copia)
-          firebase.db.collection('animal').doc(a.id).update(an);
-          console.log('espera');
-          firebase.db.collection('animal').doc(a.id).collection('eventos').add({
+          const an = { estpro: 'seca' };
+          let objIndex = movies.findIndex(obj => obj.id === a.id);
+          const copia = [...movies];
+          copia[objIndex].estpro = "seca";
+          setMovies(copia);
+          await firebase.db.collection('animal').doc(a.id).update(an);
+
+          await firebase.db.collection('animal').doc(a.id).collection('eventos').add({
             fecha: hoy,
             tipo: 'Secado',
             detalle: 'Secado',
-            usuario: usuario
-          })
+            usuario: usuario,
+          });
         } catch (error) {
           e = true;
           setAlerta({
             show: true,
             titulo: '¡ERROR!',
-            mensaje: 'NO SE PUEDE SECAR EL RP: ' + a.rp,
-            color: '#DD6B55'
+            mensaje: `NO SE PUEDE SECAR EL RP: ${a.rp}`,
+            color: '#DD6B55',
           });
-
         }
-
       }
-    })
+    }
+
     if (!e && haySecado) {
       setAlerta({
         show: true,
         titulo: '¡ATENCIÓN!',
         mensaje: 'ANIMALES SECADOS CON ÉXITO',
         color: '#3AD577',
-        vuelve: true
+        vuelve: true,
       });
-
     } else {
       navigation.popToTop();
     }
-
   }
-
-
 
   return (
     <View style={styles.container}>
@@ -169,42 +127,46 @@ export default ({ navigation }) => {
         containerStyle={styles.searchContainer}
         inputContainerStyle={styles.searchInput}
       />
-       {loading || animalesFilter.length === 0 ?(
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color='#1b829b' />
-            <Text style={styles.loaderText}>Cargando animales...</Text>
-          </View>
-        ) :  (animalesFilter.length === 0 && !animales.length) ? (
-          <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+      {loading || animalesFilter.length === 0 ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color='#1b829b' />
+          <Text style={styles.loaderText}>Cargando animales...</Text>
+        </View>
       ) : (
         <>
-          <FlatList
-            data={animalesFilter}
-            keyExtractor={item => item.id}
-            initialNumToRender={100}
-            renderItem={({ item }) => (
-              <ListItem
-                data={item}
-                animales={animales}
-                guardarAnimales={guardarAnimales}
+          {animalesFilter.length === 0 && !animales.length ? (
+            <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+          ) : (
+            <>
+              <FlatList
+                data={animalesFilter}
+                keyExtractor={item => item.id}
+                initialNumToRender={100}
+                renderItem={({ item }) => (
+                  <ListItem
+                    data={item}
+                    animales={animales}
+                    guardarAnimales={guardarAnimales}
+                  />
+                )}
+                ItemSeparatorComponent={Separator}
+                contentContainerStyle={styles.listContainer}
               />
-            )}
-            ItemSeparatorComponent={Separator}
-            contentContainerStyle={styles.listContainer}
-          />
-          <Button
-            title="ACEPTAR"
-            icon={
-              <Icon
-                name="check-square"
-                size={24}
-                color="white"
-                containerStyle={styles.buttonIcon}
+              <Button
+                title="ACEPTAR"
+                icon={
+                  <Icon
+                    name="check-square"
+                    size={24}
+                    color="white"
+                    containerStyle={styles.buttonIcon}
+                  />
+                }
+                buttonStyle={styles.button}
+                onPress={secarAnimales}
               />
-            }
-            buttonStyle={styles.button}
-            onPress={secarAnimales}
-          />
+            </>
+          )}
         </>
       )}
       <AwesomeAlert

@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { useFormik } from 'formik';
 import InfoAnimal from '../InfoAnimal';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import 'expo-firestore-offline-persistence';
 import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,19 +14,13 @@ import RNPickerSelect from 'react-native-picker-select';
 import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
-export default ({ navigation }) => {
+export default function RegistroAborto({ navigation }) {
   const [fecha, setFecha] = useState(new Date());
-  const [movies, setMovies,trata] = useContext(MovieContext)
-  
+  const [movies, setMovies, trata] = useContext(MovieContext);
   const route = useRoute();
-  const {animal} = route.params;
-  const {tambo} = route.params;
-
+  const { animal, usuario } = route.params;
 
   const [show, setShow] = useState(false);
-
-  const {usuario} = route.params;
-
   const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
   const [options, setOptions] = useState([
     { value: 'Aborto', label: 'ABORTO' },
@@ -37,173 +31,119 @@ export default ({ navigation }) => {
     titulo: '',
     mensaje: '',
     color: '#DD6B55',
-    vuelve: false
+    vuelve: false,
   });
 
   const formAborto = useFormik({
     initialValues: {
       fecha: new Date(),
       tipo: 'Aborto inicia lactancia',
-      tratamiento: ''
+      tratamiento: '',
     },
-    onSubmit: datos => guardar(datos)
+    onSubmit: guardar,
   });
 
-  const validate = values => {
-    const errors = {}
-    return errors
-  }
-
   useEffect(() => {
-
     if (animal.diasPre < 150) {
       formAborto.setFieldValue('tipo', 'Aborto');
-      setOptions([
-        { value: 'Aborto', label: 'ABORTO' }
-        
-      ])
+      setOptions([{ value: 'Aborto', label: 'ABORTO' }]);
     }
-    //busca los tratamientos de abortos
     obtenerTratamientos();
-
   }, []);
 
-  function obtenerTratamientos() {
+  const obtenerTratamientos = () => {
     const filtrado = trata.filter(e => e.tipo === "tratamiento");
-  
-    filtrado.forEach(doc => {
-      let tr = {
-        key: doc.descripcion,  // Utiliza el id del documento como clave única
-        value: doc.descripcion,
-        label: doc.descripcion
-      };
-  
-      setTratamientoOptios(tratamientoOptions => [...tratamientoOptions, tr]);
-    });
-  }
+    const nuevosTratamientos = filtrado.map(doc => ({
+      key: doc.descripcion,
+      value: doc.descripcion,
+      label: doc.descripcion,
+    }));
+    setTratamientoOptios(prev => [...prev, ...nuevosTratamientos]);
+  };
 
-  const guardarAnimal = (anim)=> {
-    setMovies([...movies, anim])
-}
-  function guardar(datos) {
-
-    //Formatea fecha 
-    const tipof = typeof datos.fecha;
-    let fstring;
-    let fdate;
-    if (tipof == 'string') {
-      let parts = datos.fecha.split('/');
-      fstring = (parts[2]) + '-' + (parts[1]) + '-' + parts[0];
-      let fs = fstring + 'T04:00:00';
-      fdate = new Date(fs);
-    } else {
-      fstring = format(datos.fecha, 'yyyy-MM-dd');
-      fdate = datos.fecha;
-
-    }
-
-    //actualizar animal
-    let cat = animal.categoria;
-    let lact = parseInt(animal.lactancia);
-    let estado = animal.estpro;
-
-    //si inicia lactancia, aumento las mismas y paso a Ordeñe
-    if (datos.tipo != 'Aborto') {
-      lact++;
-      estado = 'En Ordeñe';
-      if (lact > 1) {
-        cat = 'Vaca'
-      } else {
-        cat = 'Vaquillona';
-      }
-    }
-
-
-    let an = {
-      lactancia: lact,
-      estpro: estado,
-      estrep: 'vacia',
-      fparto: fstring,
-      fservicio: '',
-      categoria: cat,
-      nservicio: 0
-    }
+  const guardar = async (datos) => {
     try {
-      let objIndex = movies.findIndex((obj => obj.id == animal.id));
-      const copia = [...movies]
-      const obj = copia[objIndex]
-      const nuevo = Object.assign({},obj, an)
-      copia[objIndex]=nuevo
-      setMovies(copia)
-      firebase.db.collection('animal').doc(animal.id).update(an);
-      firebase.db.collection('animal').doc(animal.id).collection('eventos').add({
+      const fdate = formatFecha(datos.fecha);
+      const an = actualizarAnimal(datos, fdate);
+      const objIndex = movies.findIndex(obj => obj.id === animal.id);
+      const copia = [...movies];
+      copia[objIndex] = { ...copia[objIndex], ...an };
+      setMovies(copia);
+
+      await firebase.db.collection('animal').doc(animal.id).update(an);
+      await firebase.db.collection('animal').doc(animal.id).collection('eventos').add({
         fecha: fecha,
         tipo: datos.tipo,
         detalle: datos.tratamiento,
-        usuario: usuario
-      })
-
-      setAlerta({
-        show: true,
-        titulo: '¡ATENCION!',
-        mensaje: 'ABORTO REGISTRADO CON ÉXITO ',
-        color: '#3AD577',
-        vuelve: true
+        usuario: usuario,
       });
 
+      mostrarAlerta('¡ATENCION!', 'ABORTO REGISTRADO CON ÉXITO', '#3AD577', true);
     } catch (error) {
+      mostrarAlerta('¡ ERROR !', 'NO SE PUDO REGISTRAR EL ABORTO', '#DD6B55');
+    }
+  };
 
-      setAlerta({
-        show: true,
-        titulo: '¡ ERROR !',
-        mensaje: 'NO SE PUDO REGISTRAR EL ABORTO',
-        color: '#DD6B55'
-      });
+  const formatFecha = (fecha) => {
+    if (typeof fecha === 'string') {
+      const parts = fecha.split('/');
+      return new Date(`${parts[2]}-${parts[1]}-${parts[0]}T04:00:00`);
+    }
+    return fecha;
+  };
+
+  const actualizarAnimal = (datos, fdate) => {
+    let lact = parseInt(animal.lactancia);
+    let estado = animal.estpro;
+
+    if (datos.tipo !== 'Aborto') {
+      lact++;
+      estado = 'En Ordeñe';
     }
 
-  }
-  function cambiarFecha(event, date) {
-    const currentDate = date;
-    setShow(false); 
-    setFecha(currentDate);
-    formAborto.handleChange('fecha')
+    return {
+      lactancia: lact,
+      estpro: estado,
+      estrep: 'vacia',
+      fparto: format(fdate, 'yyyy-MM-dd'),
+      fservicio: '',
+      categoria: lact > 1 ? 'Vaca' : 'Vaquillona',
+      nservicio: 0,
+    };
   };
-const handlever = ()=> {
-  setShow(true);
-}
-let texto = format(fecha, 'yyyy-MM-dd');
+
+  const mostrarAlerta = (titulo, mensaje, color, vuelve = false) => {
+    setAlerta({ show: true, titulo, mensaje, color, vuelve });
+  };
+
+  const cambiarFecha = (event, date) => {
+    setShow(false);
+    setFecha(date);
+    formAborto.setFieldValue('fecha', date);
+  };
+
+  const handlever = () => setShow(true);
+  const texto = format(fecha, 'yyyy-MM-dd');
 
   return (
     <View style={styles.container}>
-    <InfoAnimal animal={animal} />
-    <View style={styles.form}>
-      <Text style={styles.texto}>FECHA:</Text>
-      <TouchableHighlight style={styles.calendario} onPress={handlever} underlayColor="#ddd">
-        <View>
+      <InfoAnimal animal={animal} />
+      <View style={styles.form}>
+        <Text style={styles.texto}>FECHA:</Text>
+        <TouchableHighlight style={styles.calendario} onPress={handlever} underlayColor="#ddd">
           <Text style={styles.textocalendar}>{texto}</Text>
-        </View>
-      </TouchableHighlight>
-      {show && (
-        <DateTimePicker
-          placeholder="Fecha"
-          dateFormat="DD/MM/YYYY"
-          maximumDate={new Date()}
-          showIcon={true}
-          androidMode="spinner"
-          style={styles.fecha}
-          value={fecha}
-          onChange={cambiarFecha}
-          customStyles={{
-            dateInput: {
-              borderColor: '#d0d0d0',
-              borderRadius: 12,
-              backgroundColor: '#fff',
-              borderWidth: 1
-            }
-          }}
-        />
-      )}
-      <View>
+        </TouchableHighlight>
+        {show && (
+          <DateTimePicker
+            dateFormat="DD/MM/YYYY"
+            maximumDate={new Date()}
+            androidMode="spinner"
+            style={styles.fecha}
+            value={fecha}
+            onChange={cambiarFecha}
+            customStyles={styles.datePicker}
+          />
+        )}
         <Text style={styles.texto}>TIPO:</Text>
         <RNPickerSelect
           items={options}
@@ -212,7 +152,6 @@ let texto = format(fecha, 'yyyy-MM-dd');
           placeholder={{}}
           style={styles.pickerStyle}
         />
-        <Text></Text>
         <Text style={styles.texto}>TRATAMIENTO:</Text>
         <RNPickerSelect
           items={tratamientoOptions}
@@ -222,42 +161,26 @@ let texto = format(fecha, 'yyyy-MM-dd');
           style={styles.pickerStyle}
         />
       </View>
+      <Button
+        title="ACEPTAR"
+        icon={<Icon name="check-square" size={35} color="#fff" />}
+        buttonStyle={styles.button}
+        onPress={formAborto.handleSubmit}
+      />
+      <AwesomeAlert
+        show={alerta.show}
+        title={alerta.titulo}
+        message={alerta.mensaje}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmButtonColor={alerta.color}
+        onConfirmPressed={() => {
+          setAlerta({ show: false });
+          if (alerta.vuelve) navigation.popToTop();
+        }}
+      />
     </View>
-    <Button
-      title="ACEPTAR"
-      icon={
-        <Icon
-          name="check-square"
-          size={35}
-          color="#fff"
-        />
-      }
-      buttonStyle={styles.button}
-      onPress={formAborto.handleSubmit}
-    />
-    <AwesomeAlert
-      show={alerta.show}
-      showProgress={false}
-      title={alerta.titulo}
-      message={alerta.mensaje}
-      closeOnTouchOutside={false}
-      closeOnHardwareBackPress={false}
-      showCancelButton={false}
-      showConfirmButton={true}
-      cancelText="No, cancelar"
-      confirmText="ACEPTAR"
-      confirmButtonColor={alerta.color}
-      onCancelPressed={() => {
-        setAlerta({ show: false })
-      }}
-      onConfirmPressed={() => {
-        setAlerta({ show: false })
-        if (alerta.vuelve == true) {
-          navigation.popToTop();
-        }
-      }}
-    />
-  </View>
   );
 }
 
@@ -336,17 +259,13 @@ const styles = StyleSheet.create({
       elevation: 3,
     },
     placeholder: {
-      color: '#9EA0A4',
-    },
-    iconContainer: {
-      top: 10,
-      right: 10,
+      color: '#9B9B9B',
     },
   },
   button: {
-    backgroundColor: '#1b829b',
+    backgroundColor: '#007BFF',
     borderRadius: 8,
     marginTop: 15,
-  }
-
+    paddingVertical: 10,
+  },
 });

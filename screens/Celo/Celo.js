@@ -5,92 +5,69 @@ import firebase from '../../database/firebase';
 import ListItem from './ListItem';
 import { SearchBar } from 'react-native-elements';
 import differenceInDays from 'date-fns/differenceInDays';
-import { MovieContext } from "../Contexto"
+import { MovieContext } from "../Contexto";
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { useRoute } from '@react-navigation/core';
 
-
 export default ({ navigation }) => {
-  const [movies, setMovies] = useContext(MovieContext)
+  const [movies, setMovies] = useContext(MovieContext);
   const [animales, guardarAnimales] = useState([]);
   const [animalesFilter, guardarAnimalesFilter] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rp, guardarRP] = useState('');
 
   const route = useRoute();
-  const {usuario} = route.params;
+  const { usuario } = route.params;
 
   const [alerta, setAlerta] = useState({
     show: false,
     titulo: '',
     mensaje: '',
     color: '#DD6B55',
-    vuelve:false
+    vuelve: false,
   });
 
   useEffect(() => {
-
-    //busca los animales que no sean rechazados
     obtenerAnim();
   }, []);
 
   useEffect(() => {
     guardarAnimalesFilter(animales);
-  }, [animales])
+  }, [animales]);
 
-  function updateSearch(rp) {
-    if (rp) {
-      const cond = rp.toLowerCase();
-      const filtro = animales.filter(animal => {
-        return (
-          animal.rp.toString().toLowerCase().includes(cond)
-        )
-      });
-      guardarAnimalesFilter(filtro);
-      guardarRP(rp);
-    } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      guardarAnimalesFilter(animales);
-      guardarRP(rp);
-    }
+  const updateSearch = (rp) => {
+    const cond = rp.toLowerCase();
+    const filtro = rp
+      ? animales.filter(animal => animal.rp.toString().toLowerCase().includes(cond))
+      : animales;
 
+    guardarAnimalesFilter(filtro);
+    guardarRP(rp);
   };
 
   const hoy = new Date();
 
-  function obtenerAnim() {
+  const obtenerAnim = () => {
     setLoading(true);
-    //Filtro los animales con el estado requerido
-    const anProd = movies.filter(animal => {
-      return (
-        animal && animal.estpro != ""
-      )
-    });
-    //calculo dias de servicio y lactancia
+    const anProd = movies.filter(animal => animal && animal.estpro !== "");
     const an = anProd.map(a => {
-
       let d = 0;
-      if (a.estrep != "vacia") {
-
+      if (a.estrep !== "vacia") {
         try {
           d = differenceInDays(Date.now(), new Date(a.fservicio));
         } catch (error) {
           d = 0;
         }
-
       }
-
       return {
         id: a.id,
         diasPre: d,
         celar: false,
-        ...a
-      }
-
-    })
+        ...a,
+      };
+    });
     guardarAnimales(an);
     setLoading(false);
   };
@@ -102,18 +79,16 @@ export default ({ navigation }) => {
       if (a.celar) {
         hayCelo = true;
         try {
-          const an = {
-            celo: true
-          }
-          let objIndex = movies.findIndex((obj => obj.id == a.id));
-          const copia = [...movies]
-          copia[objIndex].celo = true
-          setMovies(copia)
+          const an = { celo: true };
+          const objIndex = movies.findIndex(obj => obj.id === a.id);
+          const copia = [...movies];
+          copia[objIndex].celo = true;
+          setMovies(copia);
           firebase.db.collection('animal').doc(a.id).update(an);
           firebase.db.collection('animal').doc(a.id).collection('eventos').add({
             fecha: hoy,
             tipo: 'Celo',
-            usuario: usuario
+            usuario: usuario,
           });
         } catch (error) {
           e = true;
@@ -121,31 +96,30 @@ export default ({ navigation }) => {
             show: true,
             titulo: '¡ERROR!',
             mensaje: 'NO SE PUDO REGISTRAR EL CELO',
-            color: '#DD6B55'
+            color: '#DD6B55',
           });
         }
       }
-    })
+    });
+
     if (!e && hayCelo) {
       setAlerta({
         show: true,
         titulo: '¡ATENCIÓN!',
         mensaje: 'CELOS REGISTRADOS CON ÉXITO',
         color: '#3AD577',
-        vuelve: true
+        vuelve: true,
       });
-
-    }else{
+    } else {
       setAlerta({
         show: true,
         titulo: '¡ATENCIÓN!',
         mensaje: 'NO SE REGISTARON CELOS',
         color: '#3AD577',
-        vuelve:true
+        vuelve: true,
       });
-      
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -159,12 +133,12 @@ export default ({ navigation }) => {
         placeholderTextColor="#888"
       />
       {loading ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color='#1b829b' />
-            <Text style={styles.loaderText}>Cargando animales...</Text>
-          </View>
-        ) : animalesFilter.length === 0 && !animales.length ? (
-          <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color='#1b829b' />
+          <Text style={styles.loaderText}>Cargando animales...</Text>
+        </View>
+      ) : animalesFilter.length === 0 && !animales.length ? (
+        <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
       ) : (
         <>
           <FlatList
@@ -216,7 +190,7 @@ export default ({ navigation }) => {
       />
     </View>
   );
-}
+};
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -224,14 +198,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f7f7f7',
-    paddingHorizontal: 3,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   searchContainer: {
     backgroundColor: '#ffffff',
     borderRadius: 15,
     paddingVertical: 8,
-    paddingHorizontal: 10,
     elevation: 5,
     borderWidth: 0,
   },
@@ -251,7 +224,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   listContainer: {
-    paddingBottom: 60, // Adding padding for the button
+    paddingBottom: 80, // Increased padding for the button
   },
   button: {
     backgroundColor: '#1b829b',
@@ -275,3 +248,4 @@ const styles = StyleSheet.create({
     color: '#1b829b',
   },
 });
+

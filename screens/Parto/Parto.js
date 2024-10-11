@@ -10,15 +10,13 @@ import { MovieContext } from "../Contexto";
 import { useRoute } from '@react-navigation/core';
 
 export default ({ navigation }) => {
-  const [movies] = useContext(MovieContext)
+  const [movies] = useContext(MovieContext);
   const [animales, guardarAnimales] = useState([]);
   const [animalesFilter, guardarAnimalesFilter] = useState([]);
   const [rp, guardarRP] = useState('');
   
   const route = useRoute();
-  const {tambo} = route.params;
-  const {estado} = route.params;
-  const {usuario} = route.params;
+  const { tambo, estado, usuario } = route.params;
 
   const [loading, setLoading] = useState(true);
   const [alerta, setAlerta] = useState({
@@ -29,119 +27,82 @@ export default ({ navigation }) => {
   });
 
   useEffect(() => {
-
-    //busca los animales preñados
     obtenerAnim();
   }, []);
 
   useEffect(() => {
     guardarAnimalesFilter(animales);
-  }, [animales])
+  }, [animales]);
 
   function updateSearch(rp) {
-    if (rp) {
-      const cond = rp.toLowerCase();
-      const filtro = animales.filter(animal => {
-        return (
-          animal.rp.toString().toLowerCase().includes(cond)
-        )
-      });
-      guardarAnimalesFilter(filtro);
-      guardarRP(rp);
-    } else {
-      // Inserted text is blank
-      // Update FilteredDataSource with masterDataSource
-      guardarAnimalesFilter(animales);
-      guardarRP(rp);
-    }
-
-  };
-
-    function obtenerAnim() {
-      setLoading(true);
-      //Filtro los animales con el estado requerido
-      const anProd = movies.filter(animal => {
-        return (
-          animal && animal.estrep === "preñada"
-        )
-      });
-      //calculo dias de servicio y lactancia
-      const an = anProd.map(a => {
-
-        let d = 0;
-        if (a.estrep != "vacia") {
-  
-          try {
-            d = differenceInDays(Date.now(), new Date(a.fservicio));
-          } catch (error) {
-            d = 0;
-          }
-  
-        }
-        return {
-          id: a.id,
-          diasPre: d,
-          ...a
-        }
-  
-      })
-      function compare( a, b ) {
-        if ( a.diasPre <  b.diasPre ){
-          return 1;
-        }
-        if (  a.diasPre >  b.diasPre ){
-          return -1;
-        }
-        return 0;
-      }
+    const cond = rp.toLowerCase();
+    const filtro = rp
+      ? animales.filter(animal => animal.rp.toString().toLowerCase().includes(cond))
+      : animales;
       
-      an.sort( compare );
-      guardarAnimales(an);
-      setLoading(false);
-    };
+    guardarAnimalesFilter(filtro);
+    guardarRP(rp);
+  }
 
-    return (
-      <View style={styles.container}>
-       <View style={styles.colbarra}>
-          <SearchBar
-            placeholder="Buscar por RP"
-            onChangeText={updateSearch}
-            value={rp}
-            lightTheme
-            containerStyle={styles.searchContainer}
-            inputContainerStyle={styles.searchInput}
-          />
-        </View>
-        <View style={styles.listado}>
-        {loading || animalesFilter.length === 0 ?(
+  function obtenerAnim() {
+    setLoading(true);
+    const anProd = movies.filter(animal => animal && animal.estrep === "preñada");
+    
+    const an = anProd.map(a => {
+      let d = 0;
+      if (a.estrep !== "vacia") {
+        try {
+          d = differenceInDays(Date.now(), new Date(a.fservicio));
+        } catch (error) {
+          d = 0;
+        }
+      }
+      return { id: a.id, diasPre: d, ...a };
+    }).sort((a, b) => b.diasPre - a.diasPre); // Ordenar por diasPre de forma descendente
+
+    guardarAnimales(an);
+    setLoading(false);
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <SearchBar
+          placeholder="Buscar por RP"
+          onChangeText={updateSearch}
+          value={rp}
+          lightTheme
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.searchInput}
+        />
+      </View>
+      <View style={styles.listado}>
+        {loading ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color='#1b829b' />
             <Text style={styles.loaderText}>Cargando animales...</Text>
           </View>
-        ) :  (animalesFilter.length === 0 && !animales.length) ? (
-          <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
         ) : (
-          <FlatList
-            data={animalesFilter}
-            keyExtractor={item => item.id}
-            initialNumToRender={100}
-            renderItem={({ item }) => (
-              <ListItem
-                data={item}
-                registrarParto={() => {
-                  navigation.push('RegistrarParto', { animal: item, tambo, usuario });
-                }}
-                registrarAborto={() => {
-                  navigation.push('RegistrarAborto', { animal: item, tambo, usuario });
-                }}
-              />
-            )}
-            ItemSeparatorComponent={Separator}
-          />
+          animalesFilter.length === 0 ? (
+            <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
+          ) : (
+            <FlatList
+              data={animalesFilter}
+              keyExtractor={item => item.id}
+              initialNumToRender={100}
+              renderItem={({ item }) => (
+                <ListItem
+                  data={item}
+                  registrarParto={() => navigation.push('RegistrarParto', { animal: item, tambo, usuario })}
+                  registrarAborto={() => navigation.push('RegistrarAborto', { animal: item, tambo, usuario })}
+                />
+              )}
+              ItemSeparatorComponent={Separator}
+            />
+          )
         )}
         <AwesomeAlert
           show={alerta.show}
-          showProgress={false}
           title={alerta.titulo}
           message={alerta.mensaje}
           closeOnTouchOutside={false}
@@ -153,58 +114,56 @@ export default ({ navigation }) => {
           onConfirmPressed={() => setAlerta({ show: false })}
         />
       </View>
-      </View>
-    );
-  }
-  
-  const Separator = () => <View style={styles.separator} />;
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#f7f7f7',
-      paddingHorizontal: 3,
-      paddingVertical: 3,
-    },
-    searchContainer: {
-      backgroundColor: '#ffffff',
+    </View>
+  );
+}
+
+const Separator = () => <View style={styles.separator} />;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f7f7f7',
+    padding: 5,
+  },
+  searchContainer: {
+    marginBottom: 10,
+  },
+  searchBarContainer: {
+    backgroundColor: '#fff',
     borderRadius: 15,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
     elevation: 5,
     borderWidth: 0,
-    },
-    searchInput: {
-      backgroundColor: '#f1f3f6',
+  },
+  searchInput: {
+    backgroundColor: '#f1f3f6',
     borderRadius: 10,
     paddingHorizontal: 10,
-    },
-    listado: {
-      flex: 1,
-      paddingTop: 10,
-      borderRadius: 20,
-    },
-    alerta: {
-      textAlign: 'center',
-      backgroundColor: '#fce4ec',
-      fontSize: 16,
-      color: '#e91e63',
-      paddingHorizontal: 20,
-      paddingVertical: 15,
-      borderRadius: 15,
-      marginVertical: 10,
-    },
-    separator: {
-      height: 10,
-    },
-    loaderContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loaderText: {
-      marginTop: 10,
-      fontSize: 16,
-      color: '#1b829b',
-    },
-  });
+  },
+  listado: {
+    flex: 1,
+    borderRadius: 20,
+  },
+  alerta: {
+    textAlign: 'center',
+    backgroundColor: '#fce4ec',
+    fontSize: 16,
+    color: '#e91e63',
+    padding: 15,
+    borderRadius: 15,
+    marginVertical: 10,
+  },
+  separator: {
+    height: 10,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1b829b',
+  },
+});

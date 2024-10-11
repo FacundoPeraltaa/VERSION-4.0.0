@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import 'expo-firestore-offline-persistence';
 import firebase from '../../database/firebase';
@@ -11,13 +11,13 @@ import { useRoute } from '@react-navigation/core';
 
 export default ({ navigation }) => {
   const [movies] = useContext(MovieContext);
-  const [animalesFilter, guardarAnimalesFilter] = useState([]);
-  const [rp, guardarRP] = useState('');
+  const [animalesFilter, setAnimalesFilter] = useState([]);
+  const [rp, setRP] = useState('');
 
   const route = useRoute();
   const { tambo, estado, usuario } = route.params;
 
-  const [animales, guardarAnimales] = useState([]);
+  const [animales, setAnimales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [alerta, setAlerta] = useState({
@@ -28,69 +28,70 @@ export default ({ navigation }) => {
   });
 
   useEffect(() => {
-    obtenerAnim();
+    obtenerAnimales();
   }, []);
 
   useEffect(() => {
     if (!loading) {
-      guardarAnimalesFilter(animales);
+      setAnimalesFilter(animales);
     }
   }, [animales, loading]);
 
-  function updateSearch(rp) {
-    if (rp) {
-      const cond = rp.toLowerCase();
-      const filtro = animales.filter(animal => animal.rp.toString().toLowerCase().includes(cond));
-      guardarAnimalesFilter(filtro);
-      guardarRP(rp);
-    } else {
-      guardarAnimalesFilter(animales);
-      guardarRP(rp);
-    }
-  }
+  const updateSearch = useCallback((rp) => {
+    const lowerCaseRP = rp ? rp.toLowerCase() : '';
+    const filtro = lowerCaseRP
+      ? animales.filter(animal => animal.rp.toString().toLowerCase().includes(lowerCaseRP))
+      : animales;
+      
+    setAnimalesFilter(filtro);
+    setRP(rp);
+  }, [animales]);
 
-  function buscarCelo() {
+  const buscarCelo = useCallback(() => {
     if (checked) {
-      guardarAnimalesFilter(animales);
+      setAnimalesFilter(animales);
       setChecked(false);
     } else {
       const filtro = animales.filter(animal => animal.celo);
-      guardarAnimalesFilter(filtro);
+      setAnimalesFilter(filtro);
       setChecked(true);
     }
-  }
+  }, [checked, animales]);
 
-  function obtenerAnim() {
+  const obtenerAnimales = useCallback(() => {
     setLoading(true);
     const anProd = movies.filter(animal => animal && animal.estrep === "vacia");
     const an = anProd.map(a => {
-      let d = 0, dl = 0;
+      let diasServicio = 0, diasLact = 0;
+
       if (a.estrep === "vacia") {
-        try {
-          d = differenceInDays(Date.now(), new Date(a.fservicio));
-          if (isNaN(d)) d = 0;
-        } catch (error) {
-          d = 0;
-        }
+        diasServicio = getDifferenceInDays(a.fservicio);
       }
+
       if (a.estpro === "En Ordeñe") {
-        try {
-          dl = differenceInDays(Date.now(), new Date(a.fparto));
-          if (isNaN(dl)) dl = 0;
-        } catch (error) {
-          dl = 0;
-        }
+        diasLact = getDifferenceInDays(a.fparto);
       }
+
       return {
         id: a.id,
-        diasServicio: d,
-        diasLact: dl,
+        diasServicio,
+        diasLact,
         ...a
       };
     });
-    guardarAnimales(an);
+
+    setAnimales(an);
     setLoading(false);
-  }
+  }, [movies]);
+
+  const getDifferenceInDays = (fecha) => {
+    try {
+      const dias = differenceInDays(Date.now(), new Date(fecha));
+      return isNaN(dias) ? 0 : dias;
+    } catch {
+      return 0;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -116,12 +117,12 @@ export default ({ navigation }) => {
         </View>
       </View>
       <View style={styles.listado}>
-        {loading || animalesFilter.length === 0 ?(
+        {loading || animalesFilter.length === 0 ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color='#1b829b' />
             <Text style={styles.loaderText}>Cargando animales...</Text>
           </View>
-        ) :  (animalesFilter.length === 0 && !animales.length) ? (
+        ) : (animalesFilter.length === 0 && !animales.length) ? (
           <Text style={styles.alerta}>NO SE ENCONTRARON ANIMALES</Text>
         ) : (
           <FlatList
@@ -134,10 +135,12 @@ export default ({ navigation }) => {
                 registrarServicio={() => {
                   try {
                     navigation.push('RegistrarServicio', {
-                      animal: item, tambo: tambo, usuario: usuario
+                      animal: item,
+                      tambo: tambo,
+                      usuario: usuario
                     });
                   } catch (error) {
-                    Alert.alert(JSON.stringify(error));
+                    Alert.alert('Error al registrar el servicio. Intenta nuevamente.');
                   }
                 }}
               />

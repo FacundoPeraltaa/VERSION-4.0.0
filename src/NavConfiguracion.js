@@ -13,46 +13,41 @@ import Monitor from '../screens/Monitor';
 import Preferencias from '../screens/Preferencias/Preferencias';
 import Logueos from '../screens/Preferencias/Logueos';
 import Notificaciones from '../screens/Preferencias/Notificaciones';
-import Grafico from '../screens/GraficoIngreso/IngresoControl'
+import Grafico from '../screens/GraficoIngreso/IngresoControl';
 import React from 'react';
-
 
 const Stack = createStackNavigator();
 
-
+const screenOptions = {
+  headerTintColor: 'white',
+  headerStyle: {
+    backgroundColor: '#4cb050',
+    shadowOffset: { width: 1, height: 1 },
+  },
+  headerTitleAlign: 'center',
+};
 
 export default function MyConfigStack() {
   return (
     <Stack.Navigator
-      initialRouteName="Configuracion"
-      screenOptions={{
-        hideTabBar: true,
-        headerTintColor: 'white',
-        headerStyle: {
-          backgroundColor: '#4cb050',
-          shadowOffset: { width: 1, height: 1 },
-        },
-        headerTintColor: '#fff',
-        headerTitleAlign: 'center',
-        
-      }}
+      initialRouteName="ListaConfig"
+      screenOptions={screenOptions}
     >
       <Stack.Screen
         name="ListaConfig"
         component={ConfigScreen}
         options={{
           headerBackTitle: 'Volver',
-          title: 'CONFIGURACIÓN ', // Cambia el título de la pantalla
-          headerShown: false
+          title: 'CONFIGURACIÓN',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="CambiarBotonElec"
-        component={ErpScreen} // Asigna el componente ErpScreen a esta pantalla
+        component={ErpScreen}
         options={{
-          headerShown: true,
           headerBackTitle: 'Volver',
-          headerTitle: "CAMBIAR BOTON (eRP)",
+          title: "CAMBIAR BOTON (eRP)",
         }}
       />
       <Stack.Screen
@@ -60,15 +55,15 @@ export default function MyConfigStack() {
         component={CambiarErpScreen}
         options={{
           headerBackTitle: 'Volver',
-          title: 'Cambiar Boton (eRP)', 
+          title: 'Cambiar Boton (eRP)',
         }}
       />
       <Stack.Screen
         name="MantdeComederos"
         component={TolvaScreen}
-        options={{ 
+        options={{
           headerBackTitle: 'Volver',
-          title: 'MANTENIMIENTO COMEDEROS', 
+          title: 'MANTENIMIENTO COMEDEROS',
         }}
       />
       <Stack.Screen
@@ -76,7 +71,7 @@ export default function MyConfigStack() {
         component={Preferencias}
         options={{
           headerBackTitle: 'Volver',
-          title: 'PREFERENCIAS', 
+          title: 'PREFERENCIAS',
         }}
       />
       <Stack.Screen
@@ -84,7 +79,7 @@ export default function MyConfigStack() {
         component={LadoTolvaScreen}
         options={{
           headerBackTitle: 'Volver',
-          title: 'COMEDEROS', 
+          title: 'COMEDEROS',
         }}
       />
       <Stack.Screen
@@ -100,7 +95,7 @@ export default function MyConfigStack() {
         component={CalibracionScreen}
         options={{
           headerBackTitle: 'Volver',
-          title: 'CALIBRACION DE COMEDEROS', 
+          title: 'CALIBRACION DE COMEDEROS',
         }}
       />
       <Stack.Screen
@@ -108,7 +103,7 @@ export default function MyConfigStack() {
         component={ControlScreen}
         options={{
           headerBackTitle: 'Volver',
-          title: 'CONTROL LECHERO', 
+          title: 'CONTROL LECHERO',
         }}
       />
       <Stack.Screen
@@ -116,23 +111,23 @@ export default function MyConfigStack() {
         component={AllAnimales}
         options={{
           headerBackTitle: 'Volver',
-          title: 'ANIMALES', 
+          title: 'ANIMALES',
         }}
       />
       <Stack.Screen
-      name='MonitorIngreso'
-      component={Monitor}
-      options={{
-        headerBackTitle: 'Volver',
-        title:'MONITOR DE INGRESO',
-      }}
+        name="MonitorIngreso"
+        component={Monitor}
+        options={{
+          headerBackTitle: 'Volver',
+          title: 'MONITOR DE INGRESO',
+        }}
       />
       <Stack.Screen
         name="Ayuda"
         component={Ayuda}
         options={{
           headerBackTitle: 'Volver',
-          title: 'AYUDA', 
+          title: 'AYUDA',
         }}
       />
       <Stack.Screen
@@ -140,7 +135,7 @@ export default function MyConfigStack() {
         component={Logueos}
         options={{
           headerBackTitle: 'Volver',
-          title: 'Logueos', 
+          title: 'Logueos',
         }}
       />
       <Stack.Screen
@@ -148,10 +143,9 @@ export default function MyConfigStack() {
         component={Notificaciones}
         options={{
           headerBackTitle: 'Volver',
-          title: 'NOTIFICACION', 
+          title: 'NOTIFICACION',
         }}
       />
-      
       <Stack.Screen
         name="ControlLecheros"
         component={ListarControlesScreen}
@@ -160,8 +154,6 @@ export default function MyConfigStack() {
           title: 'CONTROLES LECHEROS',
         }}
       />
-  
-      
     </Stack.Navigator>
   );
 }

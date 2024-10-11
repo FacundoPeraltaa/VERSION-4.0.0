@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { useFormik } from 'formik';
 import InfoAnimal from '../InfoAnimal';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import firebase from '../../database/firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { format } from 'date-fns';
@@ -14,52 +14,40 @@ import { useRoute } from '@react-navigation/core';
 import RNPickerSelect from 'react-native-picker-select';
 
 export default ({ navigation }) => {
-  const [show, setShow] = useState(false);
-  const [fecha, setFecha] = useState(new Date());
-  const [movies, setMovies, trata, torosx] = useContext(MovieContext);
-
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [movies, setMovies, tratamientos, torosData] = useContext(MovieContext);
+  const [isPregnant, setIsPregnant] = useState(false);
   const route = useRoute();
   const { animal, tambo, usuario } = route.params;
 
-  const [formValues, setFormValues] = useState({
-    tipo: '',
-  });
-
-  const handleChange = fieldName => value => {
-    setFormValues(prevValues => ({
-      ...prevValues,
-      [fieldName]: value,
-    }));
-  };
-
-  const [tratamientoOptions, setTratamientoOptios] = useState([{ value: '-', label: '' }]);
+  const [tratamientoOptions, setTratamientoOptions] = useState([{ value: '-', label: '' }]);
   const [toros, setToros] = useState([{ key: 1, value: 'Robo', label: 'ROBO' }]);
-  const tipo = [
+  const tipoOptions = [
     { key: 1, value: 'Convencional', label: 'CONVENCIONAL' },
     { key: 2, value: 'Sexado', label: 'SEXADO' }
   ];
-  const [alerta, setAlerta] = useState({
+  
+  const [alertData, setAlertData] = useState({
     show: false,
-    titulo: '',
-    mensaje: '',
+    title: '',
+    message: '',
     color: '#DD6B55',
-    vuelve: false,
+    goBack: false,
   });
 
   useEffect(() => {
-    obtenerTratamientos();
-    obtenerToros();
+    fetchTratamientos();
+    fetchToros();
   }, []);
 
   const validate = values => {
     const errors = {};
+    // Puedes agregar validaciones aquí si es necesario
     return errors;
   };
 
-  const formServicio = useFormik({
+  const formik = useFormik({
     initialValues: {
       fecha: new Date(),
       tratamiento: '',
@@ -68,140 +56,121 @@ export default ({ navigation }) => {
       obs: ''
     },
     validate,
-    onSubmit: datos => guardar(datos)
+    onSubmit: handleSave
   });
 
-  function obtenerTratamientos() {
-    const filtrado = trata.filter(e => e.tipo === "servicio");
+  const fetchTratamientos = () => {
+    const filteredTratamientos = tratamientos.filter(e => e.tipo === "servicio");
 
-    filtrado.forEach(doc => {
-      let tr = {
-        key: doc.id,
-        value: doc.descripcion,
-        label: doc.descripcion
-      };
+    const newOptions = filteredTratamientos.map(doc => ({
+      key: doc.id,
+      value: doc.descripcion,
+      label: doc.descripcion
+    }));
 
-      setTratamientoOptios(tratamientoOptions => [...tratamientoOptions, tr]);
-    });
-  }
+    setTratamientoOptions(prev => [...prev, ...newOptions]);
+  };
 
-  function obtenerToros() {
+  const fetchToros = () => {
     try {
-      firebase.db.collection('macho').where('idtambo', '==', tambo.id).where('cat', '==', 'toro').get().then(snapshotToro)
+      firebase.db.collection('macho')
+        .where('idtambo', '==', tambo.id)
+        .where('cat', '==', 'toro')
+        .get()
+        .then(snapshot => {
+          const newToros = snapshot.docs.map(doc => ({
+            key: doc.id,
+            value: doc.data().hba,
+            label: doc.data().hba
+          }));
+          setToros(prev => [...prev, ...newToros]);
+        });
     } catch (error) {
-      setAlerta({
-        show: true,
-        titulo: '¡ ERROR !',
-        mensaje: 'NO SE PUEDEN OBTENER LOS TOROS',
-        color: '#DD6B55'
-      });
+      showAlert('¡ ERROR !', 'NO SE PUEDEN OBTENER LOS TOROS');
     }
-  }
+  };
 
-  function snapshotToro(snapshot) {
-    snapshot.docs.map(doc => {
-      let t = {
-        key: doc.id,
-        value: doc.data().hba,
-        label: doc.data().hba
-      };
-
-      setToros(toros => [...toros, t]);
-    });
-  }
-
-  function guardar(datos) {
-    const tipof = typeof datos.fecha;
-    let fstring;
-    let fdate;
-    if (tipof == 'string') {
-      let parts = datos.fecha.split('/');
-      fstring = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      let fs = `${fstring}T04:00:00`;
-      fdate = new Date(fs);
-    } else {
-      fstring = format(fecha, 'yyyy-MM-dd');
-      fdate = datos.fecha;
-    }
+  const handleSave = (datos) => {
+    const formattedDate = formatDate(datos.fecha);
 
     const detalle = `Toro: ${datos.toro} / Tipo: ${datos.tipo} / Tratamiento: ${datos.tratamiento} / Obs: ${datos.obs}`;
     const serv = animal.nservicio;
-    let estadorepro = isEnabled ? "preñada" : "vacia";
-    const an = {
-      fservicio: fstring,
+    const estadoRepro = isPregnant ? "preñada" : "vacia";
+    
+    const animalUpdate = {
+      fservicio: formattedDate,
       nservicio: serv + 1,
       celo: false,
-      estrep: estadorepro
+      estrep: estadoRepro
     };
 
     try {
-      let objIndex = movies.findIndex(obj => obj.id == animal.id);
-      const copia = [...movies];
-      const obj = copia[objIndex];
-      const nuevo = { ...obj, ...an };
-      copia[objIndex] = nuevo;
-      setMovies(copia);
-      console.log(nuevo);
-      firebase.db.collection('animal').doc(animal.id).update(an);
+      const objIndex = movies.findIndex(obj => obj.id === animal.id);
+      const updatedMovies = [...movies];
+      updatedMovies[objIndex] = { ...updatedMovies[objIndex], ...animalUpdate };
+
+      setMovies(updatedMovies);
+      firebase.db.collection('animal').doc(animal.id).update(animalUpdate);
       firebase.db.collection('animal').doc(animal.id).collection('eventos').add({
-        fecha: fecha,
+        fecha: selectedDate,
         tipo: 'Servicio',
         detalle: detalle,
         usuario: usuario
       });
-      setAlerta({
-        show: true,
-        titulo: '¡ ATENCIÓN !',
-        mensaje: 'SERVICIO REGISTRADO CON ÉXITO',
-        color: '#3AD577',
-        vuelve: true,
-      });
+      showAlert('¡ ATENCIÓN !', 'SERVICIO REGISTRADO CON ÉXITO', '#3AD577', true);
 
     } catch (error) {
-      setAlerta({
-        show: true,
-        titulo: '¡ ERROR !',
-        mensaje: 'NO SE PUEDE REGISTRAR EL SERVICIO',
-        color: '#DD6B55',
-        vuelve: false
-      });
+      showAlert('¡ ERROR !', 'NO SE PUEDE REGISTRAR EL SERVICIO');
     }
-  }
-
-  function cambiarFecha(event, date) {
-    setShow(false);
-    setFecha(date);
-    formServicio.handleChange('fecha');
-  }
-
-  const handleVer = () => {
-    setShow(true);
   };
 
-  const texto = format(fecha, 'yyyy-MM-dd');
+  const formatDate = (date) => {
+    if (typeof date === 'string') {
+      const parts = date.split('/');
+      return `${parts[2]}-${parts[1]}-${parts[0]}T04:00:00`;
+    }
+    return format(selectedDate, 'yyyy-MM-dd');
+  };
+
+  const showAlert = (title, message, color = '#DD6B55', goBack = false) => {
+    setAlertData({
+      show: true,
+      title,
+      message,
+      color,
+      goBack,
+    });
+  };
+
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date) {
+      setSelectedDate(date);
+      formik.setFieldValue('fecha', date);
+    }
+  };
+
+  const handleDatePress = () => {
+    setShowDatePicker(true);
+  };
 
   return (
     <View style={styles.container}>
-      <InfoAnimal
-        animal={animal}
-        datos='servicio'
-      />
+      <InfoAnimal animal={animal} datos='servicio' />
       <View style={styles.formContainer}>
         <ScrollView>
           <Text style={styles.label}>FECHA:</Text>
-          <TouchableOpacity style={styles.calendario} onPress={handleVer}>
-            <Text style={styles.textoCalendar}>{texto}</Text>
+          <TouchableOpacity style={styles.calendario} onPress={handleDatePress}>
+            <Text style={styles.textoCalendar}>{format(selectedDate, 'yyyy-MM-dd')}</Text>
           </TouchableOpacity>
-          {show && (
+          {showDatePicker && (
             <DateTimePicker
-              placeholder="Fecha"
               dateFormat="DD/MM/YYYY"
               maximumDate={new Date()}
-              showIcon={true}
               androidMode="spinner"
               style={styles.fecha}
-              value={fecha}
-              onChange={cambiarFecha}
+              value={selectedDate}
+              onChange={handleDateChange}
               customStyles={{
                 dateInput: {
                   borderColor: '#1b829b',
@@ -212,95 +181,65 @@ export default ({ navigation }) => {
               }}
             />
           )}
-          <View>
-            <Text style={styles.label}>TRATAMIENTO:</Text>
-            <RNPickerSelect
-              items={tratamientoOptions}
-              onValueChange={formServicio.handleChange('tratamiento')}
-              value={formServicio.values.tratamiento}
-              placeholder={{
-                label: 'SELECCIONAR TRATAMIENTO',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={styles.pickerSelectStyles}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>TORO:</Text>
-            <RNPickerSelect
-              items={toros}
-              onValueChange={formServicio.handleChange('toro')}
-              value={formServicio.values.toro}
-              placeholder={{
-                label: 'SELECCIONAR TORO',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={styles.pickerSelectStyles}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>TIPO SEMEN:</Text>
-            <RNPickerSelect
-              items={tipo}
-              onValueChange={formServicio.handleChange('tipo')}
-              value={formServicio.values.tipo}
-              placeholder={{
-                label: 'SELECCIONAR TIPO DE SEMEN',
-                value: null,
-                color: '#9EA0A4',
-              }}
-              style={styles.pickerSelectStyles}
-            />
-          </View>
-          <View>
-            <Text style={styles.label}>OBSERVACIONES:</Text>
-            <TextInput
-              style={styles.entrada}
-              onChangeText={formServicio.handleChange('obs')}
-              value={formServicio.values.obs}
-              multiline
-            />
-          </View>
+          <PickerField label="TRATAMIENTO:" items={tratamientoOptions} formik={formik} fieldName="tratamiento" />
+          <PickerField label="TORO:" items={toros} formik={formik} fieldName="toro" />
+          <PickerField label="TIPO SEMEN:" items={tipoOptions} formik={formik} fieldName="tipo" />
+          <TextField label="OBSERVACIONES:" formik={formik} fieldName="obs" />
         </ScrollView>
       </View>
       <Button
         title="  ACEPTAR"
-        icon={
-          <Icon
-            name="check-square"
-            size={35}
-            color="white"
-          />
-        }
+        icon={<Icon name="check-square" size={35} color="white" />}
         buttonStyle={styles.button}
-        onPress={formServicio.handleSubmit}
+        onPress={formik.handleSubmit}
       />
       <AwesomeAlert
-        show={alerta.show}
-        showProgress={false}
-        title={alerta.titulo}
-        message={alerta.mensaje}
+        show={alertData.show}
+        title={alertData.title}
+        message={alertData.message}
         closeOnTouchOutside={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancelar"
-        confirmText="ACEPTAR"
-        confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false });
-        }}
+        confirmButtonColor={alertData.color}
         onConfirmPressed={() => {
-          setAlerta({ show: false });
-          if (alerta.vuelve) {
+          setAlertData({ show: false });
+          if (alertData.goBack) {
             navigation.pop();
           }
         }}
       />
     </View>
   );
-}
+};
+
+const PickerField = ({ label, items, formik, fieldName }) => (
+  <View>
+    <Text style={styles.label}>{label}</Text>
+    <RNPickerSelect
+      items={items}
+      onValueChange={formik.handleChange(fieldName)}
+      value={formik.values[fieldName]}
+      placeholder={{
+        label: `SELECCIONAR ${label}`,
+        value: null,
+        color: '#9EA0A4',
+      }}
+      style={styles.pickerSelectStyles}
+    />
+  </View>
+);
+
+const TextField = ({ label, formik, fieldName }) => (
+  <View>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={styles.entrada}
+      onChangeText={formik.handleChange(fieldName)}
+      value={formik.values[fieldName]}
+      multiline
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -311,95 +250,62 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: '#ffffff',
-    borderRadius: 12,
+    borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 5,
-    marginHorizontal: 10,
   },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  texto: {
+  label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    color: '#444',
     marginBottom: 5,
   },
   calendario: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    backgroundColor: '#f9f9f9',
     padding: 10,
-    width: wp('90%'),
-    alignSelf: 'center',
-    marginVertical: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#1b829b',
+    marginBottom: 15,
   },
-  textocalendar: {
-    textAlign: "center",
+  textoCalendar: {
     fontSize: 16,
-    color: '#333',
-  },
-  fecha: {
-    width: '100%',
-    padding: 5,
-    height: 50,
+    color: '#444',
   },
   entrada: {
+    backgroundColor: '#ffffff',
     borderRadius: 8,
-    backgroundColor: '#f9f9f9',
     borderWidth: 1,
     borderColor: '#ccc',
-    paddingLeft: 10,
-    height: 50,
-  },
-  pickerSelectStyles: {
-    inputIOS: {
-      backgroundColor: '#ffffff',
-      borderRadius: 12,
-      height: 50,
-      borderColor: '#d0d0d0',
-      borderWidth: 1,
-      paddingHorizontal: 15,
-      color: '#333',
-      fontSize: 16,
-      marginBottom: 15,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
-    },
-    inputAndroid: {
-      backgroundColor: '#ffffff',
-      borderRadius: 12,
-      height: 50,
-      borderColor: '#d0d0d0',
-      borderWidth: 1,
-      paddingHorizontal: 15,
-      color: '#333',
-      fontSize: 16,
-      marginBottom: 15,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
-    },
-    placeholder: {
-      color: '#9EA0A4',
-    },
-    iconContainer: {
-      top: 10,
-      right: 10,
-    },
+    height: 80,
+    padding: 10,
+    marginBottom: 15,
   },
   button: {
     backgroundColor: '#1b829b',
     borderRadius: 8,
     marginTop: 15,
+    paddingVertical: 15,
+  },
+  pickerSelectStyles: {
+    inputIOS: {
+      color: '#000',
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      marginBottom: 15,
+    },
+    inputAndroid: {
+      color: '#000',
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 8,
+      marginBottom: 15,
+    },
   },
 });
+

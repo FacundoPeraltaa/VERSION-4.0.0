@@ -1,21 +1,21 @@
 import 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import store from './src/store';
-import { MovieProvider } from './screens/Contexto';
-import registerNNPushToken from 'native-notify';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
-import 'expo-firestore-offline-persistence';   // Habilita offline persistence 
+import registerNNPushToken from 'native-notify';
+import 'expo-firestore-offline-persistence'; // Habilita offline persistence
 
 // Importa los stacks desde sus archivos correspondientes
+import store from './src/store';
+import { MovieProvider } from './screens/Contexto';
 import HomeScreen from './src/NavEventos';
 import ConfigScreen from './src/NavConfiguracion';
-import LoginScreen from "./screens/Login"; // Asume que tienes un stack para LoginScreen
+import LoginScreen from "./screens/Login";
 import Recuperar from "./screens/Recuperar";
 import Register from "./screens/Register";
 import WelcomeScreen from './src/Welcome';
@@ -28,12 +28,7 @@ const LoggedInTabs = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName;
-          if (route.name === 'BarraEventos') {
-            iconName = 'calendar';
-          } else if (route.name === 'BarraConfig') {
-            iconName = 'cog';
-          }
+          const iconName = route.name === 'BarraEventos' ? 'calendar' : 'cog';
           return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#2980B9',
@@ -65,7 +60,7 @@ const LoggedInTabs = () => {
   );
 };
 
-export default function App() {
+const App = () => {
   registerNNPushToken(4382, 'XSlDDRiRyq1qAZLssswMTu');
 
   // Define una variable de estado para manejar el estado de login
@@ -74,23 +69,19 @@ export default function App() {
 
   // Verifica la autenticación al iniciar la app
   useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const usuario = await AsyncStorage.getItem('usuario');
+        setIsLoggedIn(usuario !== null);
+      } catch (error) {
+        console.error("Error al verificar la autenticación: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     checkAuthentication();
   }, []);
-
-  // Función para verificar la autenticación
-  const checkAuthentication = async () => {
-    try {
-      const usuario = await AsyncStorage.getItem('usuario');
-      if (usuario !== null) {
-        setIsLoggedIn(true);
-      }
-    } catch (error) {
-      console.error("Error al verificar la autenticación: ", error);
-    } finally {
-      // Asegúrate de establecer loading en falso al final
-      setLoading(false);
-    }
-  };
 
   // Si loading es verdadero, muestra la pantalla de bienvenida
   if (loading) {
@@ -117,40 +108,12 @@ export default function App() {
               }}
             >
               {isLoggedIn ? (
-                // Pantallas para usuarios logueados
-                <Stack.Screen name="EventosMenu" component={LoggedInTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="MenuEventos" component={LoggedInTabs} options={{ headerShown: false }} />
               ) : (
-                // Pantallas de autenticación
                 <Stack.Group>
-                  <Stack.Screen
-                    name="MenuInicio"
-                    component={LoginScreen}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Recuperar"
-                    component={Recuperar}
-                    options={{
-                      title: 'RESTABLECER CONTRASEÑA',
-                    }}
-                  />
-                  <Stack.Screen
-                    name="Registrar"
-                    component={Register}
-                    options={{
-                      title: 'REGISTRARSE EN FARMERIN',
-                    }}
-                  />
-                  <Stack.Screen
-                    name="EventosMenu"
-                    component={LoggedInTabs}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="CerrarSesiones"
-                    component={LoginScreen}
-                    options={{ headerShown: false }}
-                  />
+                  <Stack.Screen name="MenuInicio" component={LoginScreen} options={{ headerShown: false }} />
+                  <Stack.Screen name="Recuperar" component={Recuperar} options={{ title: 'RESTABLECER CONTRASEÑA' }} />
+                  <Stack.Screen name="Registrar" component={Register} options={{ title: 'REGISTRARSE EN FARMERIN' }} />
                 </Stack.Group>
               )}
             </Stack.Navigator>
@@ -159,4 +122,6 @@ export default function App() {
       </MovieProvider>
     </Provider>
   );
-}
+};
+
+export default App;

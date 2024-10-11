@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, View, Text, FlatList, Modal } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, Text, FlatList, Modal, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '../database/firebase';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -112,20 +112,22 @@ export default function App({ setShowTambos, showTambos, selectTambo }) {
                 </View>
 
                 <FlatList
-                  data={tambos}
-                  keyExtractor={item => item.id}
-                  renderItem={({ item }) => (
-                    <ListItem
-                      data={item}
-                      seleccionar={() => {
-                        selectTambo(item)
-                        setShowTambos(false)
-                      }}
-                    />
-                  )
-                  }
-
-                />
+              data={tambos}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity 
+                  style={styles.card} 
+                  onPress={() => {
+                    selectTambo(item);
+                    setShowTambos(false);
+                  }}
+                >
+                  <Text style={styles.cardTitle}>{item.nombre}</Text>
+                </TouchableOpacity>
+              )}
+              contentContainerStyle={styles.listContainer}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+            />
               </>
             }
           </View>
@@ -160,40 +162,60 @@ export default function App({ setShowTambos, showTambos, selectTambo }) {
 
 
 const styles = StyleSheet.create({
-
   text2: {
     color: '#e1e8ee',
-    backgroundColor:'#287fb9',
+    backgroundColor: '#287fb9',
     textAlign: 'center',
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 10
-
+    fontSize: 20, // Aumentado
+    marginTop: 15, // Aumentado
+    marginBottom: 15, // Aumentado
   },
-
   center: {
     flex: 1,
+    justifyContent: 'center', // Centrar el contenido verticalmente
+    alignItems: 'center', // Centrar horizontalmente
     backgroundColor: 'rgba(0,0,0,0.3)',
-    paddingTop: Platform.OS === 'ios' ? 20 : 0, // Ajuste específico para iOS
-
   },
   header: {
-
     backgroundColor: '#287fb9',
     borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-
+    borderTopRightRadius: 15,
+    paddingVertical: 10, // Agrega más padding
   },
   content: {
     backgroundColor: '#e1e8ee',
     borderWidth: 1,
     borderColor: 'white',
-    margin: 20,
-    marginTop: hp('20%'),
+    margin: 10, // Reducir márgenes laterales
+    width: '90%', // Usar más espacio horizontalmente
+    height: '60%', // Aumentar el tamaño del contenedor
     borderRadius: 15,
-    height: hp('45%'),
-    paddingBottom:10
-
+    paddingBottom: 10,
   },
-
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10, // Aumentar bordes redondeados
+    paddingVertical: 15, // Aumentar espacio interno
+    paddingHorizontal: 20, // Aumentar espacio interno
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 }, // Aumentar sombra
+    shadowOpacity: 0.1,
+    shadowRadius: 4, // Aumentar sombra
+    elevation: 3, // Aumentar sombra en Android
+    marginHorizontal: 5, // Aumentar separación horizontal
+    marginVertical: 5, // Aumentar separación vertical
+  },
+  cardTitle: {
+    fontSize: 16, // Aumentar tamaño del texto
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  listContainer: {
+    paddingVertical: 5, // Agrega más espacio al final de la lista
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 1, // Aumentar espacio entre elementos
+  },
 });

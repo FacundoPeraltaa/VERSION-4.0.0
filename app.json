@@ -4,11 +4,11 @@
     "slug": "farmerinApps",
     "version": "3.2.6",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ICONOWHITE.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logolargo2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1b8aa5",
+      "backgroundColor": "#FFFFFF",
       "text": "AS"
     },
     "assetBundlePatterns": [
@@ -21,8 +21,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1b8aa5"
+        "foregroundImage": "./assets/Newadaptive-iconwhite.png",
+        "backgroundColor": "#FFFFFF"
       },
       "package": "com.farmerin.farmerinasd",
       "versionCode": 37,

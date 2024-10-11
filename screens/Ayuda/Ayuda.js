@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from "react-native";
+import MapView, { Marker } from 'react-native-maps'; // Importamos MapView y Marker
 
 export default () => {
   const CONTACT_METHODS = [
@@ -71,6 +72,20 @@ export default () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      <View style={styles.divider} />
+
+      <Text style={styles.headerText}>Nuestra Ubicación</Text>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: -35.0052466,  // Aquí puedes poner las coordenadas de tu ubicación
+          longitude: -59.2740125,
+          latitudeDelta: 0.0005,  // Valores más pequeños = mayor zoom
+         longitudeDelta: 0.0005,
+        }}
+      >
+      </MapView>
     </View>
   );
 };
@@ -131,5 +146,10 @@ const styles = StyleSheet.create({
   socialText: {
     fontSize: 14,
     color: '#444',
+  },
+  map: {
+    width: '100%',
+    height: 200, // Ajusta el tamaño del mapa
+    borderRadius: 8,
   },
 });
