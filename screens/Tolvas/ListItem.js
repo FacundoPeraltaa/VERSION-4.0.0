@@ -108,7 +108,7 @@ export default function ListItem({ data, host,racionMotor }) {
           <Icon
             name="refresh"
             size={30}
-            color="#3390FF"
+            color="#287fb9"
           />
         }
         onPress={mover}
@@ -177,10 +177,10 @@ const styles = StyleSheet.create({
   boton: {
     marginTop: 5,
     marginBottom: 5,
-    color: "#f194ff",
+    color: "#287fb9",
   },
   boton2: {
-    backgroundColor: "#ff8000",
+    backgroundColor: "#287fb9",
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
 
   },
   revisada: {
-    backgroundColor: '#62CD89',
+    backgroundColor: '#4db051',
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',

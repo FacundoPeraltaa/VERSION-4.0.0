@@ -93,7 +93,7 @@ export default ({ navigation }) => {
       const res = await firebase.autenticacion.createUserWithEmailAndPassword(email, password);
       await res.user.updateProfile({ displayName: nombre });
       await guardarUsuario(res.user.uid, nombre); // Llama a guardarUsuario aquí si es necesario
-      navigation.navigate('EventosMenu');
+      navigation.navigate('MenuEventos');
     } catch (error) {
       setAlerta({
         show: true,

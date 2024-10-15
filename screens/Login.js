@@ -71,7 +71,7 @@ export default ({ navigation }) => {
     try {
       await AsyncStorage.setItem('usuario', usuario);
       await AsyncStorage.setItem('nombre', nombreUsuario);
-      navigation.navigate('EventosMenu');
+      navigation.navigate('MenuEventos');
     } catch (error) {
       setAlerta({
         show: true,
