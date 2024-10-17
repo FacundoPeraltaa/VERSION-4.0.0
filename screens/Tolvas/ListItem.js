@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Animated, TouchableOpacity, Pressable } from 'r
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import firebase from '../../database/firebase';
 
-export default function ListItem({ data, host,racionMotor }) {
+export default function ListItem({ data, host, racionMotor, id }) {
 
   const { Sector, Orden, SumaRaciones, MantTolva, IdModbus, IdMotor, kgMantenimiento } = data;
   const [estado, setEstado] = useState('REVISADO');
+  const [isOldVersion, setIsOldVersion] = useState(false); // Nuevo estado para controlar la versión
   const [alerta, setAlerta] = useState({
     show: false,
     titulo: '',
@@ -16,18 +18,37 @@ export default function ListItem({ data, host,racionMotor }) {
   });
 
   useEffect(() => {
+    verificarVersionTambo(); // Verificar la versión cuando se monta el componente
 
-    if ((SumaRaciones - MantTolva) > kgMantenimiento) setEstado('MANTENIMIENTO');
-   
+    if ((SumaRaciones - MantTolva) > kgMantenimiento) {
+      setEstado('MANTENIMIENTO');
+    }
   }, []);
 
-  async function mover() {
+  // Nueva función para verificar la versión del tambo
+  async function verificarVersionTambo() {
+    try {
+      const snapshot = await firebase.db.collection('tambo').doc(id).get();
+      if (snapshot.exists) {
+        const data = snapshot.data();
+        if (data.version === 'old') {
+          setIsOldVersion(true);
+        }
+      }
+    } catch (error) {
+      console.log('Error verificando versión del tambo:', error);
+    }
+  }
 
-    const url = 'http://' + host + '/moverMotor/' + IdModbus + '&' + IdMotor+'&'+racionMotor;
+  // Modificación de la función mover
+  async function mover() {
+    const url = isOldVersion
+      ? 'http://' + host + '/moverMotor/' + IdModbus + '&' + IdMotor + '&' + racionMotor
+      : 'http://' + host + '/moverMotor/' + Sector + '&' + Orden + '&' + racionMotor;
+
     const login = 'farmerin';
     const password = 'Farmerin*2021';
     try {
-
       const api = await fetch(url, {
         headers: {
           'Authorization': 'Basic ' + btoa(`${login}:${password}`),
@@ -42,7 +63,6 @@ export default function ListItem({ data, host,racionMotor }) {
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
-
     } catch (error) {
       setAlerta({
         show: true,
@@ -53,13 +73,21 @@ export default function ListItem({ data, host,racionMotor }) {
     }
   };
 
+  console.log('ORDEN', Orden);
+  console.log('IdModbus', IdModbus);
+  console.log('SECTOR', Sector);
+  console.log('Id Motor', IdMotor);
+  console.log('Racion Motor', racionMotor);
+  console.log('host', host);
+  console.log('Datos del motor:', data); 
+
+
   async function setRevisado() {
     const url = 'http://' + host + '/limpiarTolva/' + Orden + '&' + Sector;
 
     const login = 'farmerin';
     const password = 'Farmerin*2021';
     try {
-
       const api = await fetch(url, {
         headers: {
           'Authorization': 'Basic ' + btoa(`${login}:${password}`),
@@ -75,9 +103,6 @@ export default function ListItem({ data, host,racionMotor }) {
         mensaje: t[0].mensaje,
         color: '#3AD577'
       });
-   
-
-
     } catch (error) {
       setAlerta({
         show: true,
@@ -85,19 +110,10 @@ export default function ListItem({ data, host,racionMotor }) {
         mensaje: 'No se puede conectar al tambo',
         color: '#DD6B55'
       });
-
     }
   };
-  console.log('ORDEN', Orden);
-  console.log('IdModbus', IdModbus);
-  console.log('SECTOR', Sector);
-  console.log('Id Motor', IdMotor);
-  console.log('Racion Motor', racionMotor);
-  console.log('host', host);
-  console.log('Datos del motor:', data); 
-  
-  return (
 
+  return (
     <View style={styles.container}>
       <Text style={styles.text}>MOTOR: {Orden} </Text>
       <Button
@@ -115,11 +131,7 @@ export default function ListItem({ data, host,racionMotor }) {
       />
 
       {(estado == 'MANTENIMIENTO') ?
-        <Pressable
-
-          onPress={setRevisado}
-        >
-
+        <Pressable onPress={setRevisado}>
           <Text style={styles.boton2}>
             &nbsp;MANTENIMIENTO
           </Text>
@@ -139,20 +151,14 @@ export default function ListItem({ data, host,racionMotor }) {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText="No, cancel"
         confirmText="ACEPTAR"
         confirmButtonColor={alerta.color}
-        onCancelPressed={() => {
-          setAlerta({ show: false })
-        }}
         onConfirmPressed={() => {
-          setAlerta({ show: false })
+          setAlerta({ show: false });
         }}
       />
-
     </View>
-
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -188,10 +194,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     borderRadius: 3,
-    alignItems: 'center',
     textAlign: 'center',
     textAlignVertical: 'center'
-
   },
   revisada: {
     backgroundColor: '#4db051',
@@ -202,10 +206,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     borderRadius: 3,
-    alignItems: 'center',
     textAlign: 'center',
     textAlignVertical: 'center'
-
   },
-
 });
